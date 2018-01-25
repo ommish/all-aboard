@@ -1,9 +1,9 @@
 import React from 'react';
 import { HashRouter, Route } from 'react-router-dom';
-import { QuoteForm } from './form.jsx';
-import { Provider } from 'redux';
+import QuoteForm from './form.jsx';
+import { Provider } from 'react-redux';
 
-export const App = ({store}) => {
+const App = ({store}) => {
   return (
     <Provider store={store}>
       <HashRouter>
@@ -12,3 +12,5 @@ export const App = ({store}) => {
     </Provider>
   );
 };
+
+export default App;

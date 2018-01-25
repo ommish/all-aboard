@@ -1,12 +1,15 @@
-const path = require('path');
 const webpack = require('webpack');
+const path = require('path');
 
-module.exports = {
-  context: __dirname,
-  entry: './frontend/entry.jsx',
+module.exports =  {
+  devtool: 'inline-source-map',
+  entry: [
+    path.resolve(__dirname, 'app', 'entry.jsx')
+  ],
   output: {
-    path: path.resolve(__dirname, 'frontend'),
-    filename: 'bundle.js'
+    path: path.resolve(__dirname),
+    publicPath: '/',
+    filename: 'bundle.js',
   },
   resolve: {
     extensions: ['.js', '.jsx', '*']
@@ -15,13 +18,12 @@ module.exports = {
     loaders: [
       {
         test: /\.jsx?$/,
-        exclude: /(node_modules|bower_components)/,
+        exclude: /(node_modules)/,
         loader: 'babel-loader',
         query: {
           presets: ['react', 'es2015']
         }
       }
     ]
-  },
-  devtool: 'source-map',
+  }
 };
