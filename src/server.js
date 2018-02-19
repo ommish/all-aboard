@@ -8,12 +8,11 @@ let userSchema, User;
 db.on('error', (err) => {console.error(err)});
 db.once('open', () => {
   userSchema = new mongoose.Schema({
-    name: String,
+    googleUsername: String,
+    googleId: Number,
   });
   User = mongoose.model('User', userSchema);
 });
-
-const bodyParser = require('body-parser');
 
 const webpack = require('webpack')
 const config = require('./webpack.config.dev');
@@ -21,27 +20,57 @@ const compiler = webpack(config);
 
 const express = require('express');
 const app = express();
-app.use(bodyParser.urlencoded({extended: true}))
+const bodyParser = require('body-parser');
+const session = require('express-session');
+const passport = require('passport');
+const GoogleStrategy = require('passport-google-oauth20').Strategy;
+app.use(bodyParser.urlencoded({extended: true}));
+app.use(session({secret: "train"}));
+app.use(passport.initialize());
+app.use(passport.session());
+let currentUser, currentUserAccessToken, currentUserRefreshToken;
+passport.use(new GoogleStrategy({
+  clientID: process.env.CLIENT_ID,
+  clientSecret: process.env.CLIENT_SECRET,
+  callbackURL: "http://localhost:3000/auth/google/callback"
+  },
+  (accessToken, refreshToken, profile, cb) => {
+    currentUserAccessToken, currentUserRefreshToken = accessToken, refreshToken;
+    currentUser = User.find({username: profile.username});
+    if (!currentUser) {
+      currentUser = new User({googleId: profile.id, googleUsername: profile.username});
+      currentUser.save((err, user) => {
+        return cb(err, user);
+      });
+    } else {
+      return cb(err, user);
+    }
+  }
+));
 app.use(require('webpack-dev-middleware')(compiler, {
-  noInfo: true,
-  publicPath: config.output.publicPath
-}));
+    noInfo: true,
+    publicPath: config.output.publicPath
+  }
+));
 
 app.get('/', (req, res) => {
-  User.find((err, userCollection) => {
-    if (err) {
-      console.log(err);
-    } else {
-      console.log(userCollection);
-    }
-  });
+  // if (currentUser) res.cookie("user", JSON.stringify(currentUser));
   res.sendFile(path.resolve(__dirname + '/app/index.html'));
 });
 
-app.post('/quotes', (req, res) => {
-  console.log(req.body.quote);
-});
+app.get('/auth/google',
+  passport.authenticate('google',
+    {scope: ['profile']}
+  )
+);
+app.get('/auth/google/callback',
+  passport.authenticate('google',
+    {failureRedirect: '/auth/google'}
+  ),
+  (req, res) => {
+    res.redirect('/');
+  }
+);
 
 app.listen(3000, () => {
-  console.log("hi");
 });

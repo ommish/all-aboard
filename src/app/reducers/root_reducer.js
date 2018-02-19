@@ -1,8 +1,8 @@
 import { combineReducers } from 'redux';
-import QuoteReducer from './quote_reducer';
+import SessionReducer from './session_reducer';
 
 const RootReducer = combineReducers({
-  quotes: QuoteReducer,
+  session: SessionReducer,
 });
 
 export default RootReducer;
