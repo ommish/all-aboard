@@ -4,7 +4,7 @@ const path = require('path');
 module.exports =  {
   devtool: 'inline-source-map',
   entry: [
-    path.resolve(__dirname, 'app', 'entry.jsx')
+    path.resolve(__dirname, 'frontend', 'entry.jsx')
   ],
   output: {
     path: path.resolve(__dirname),

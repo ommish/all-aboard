@@ -1,4 +1,2 @@
-/dist/asset/bundle.js
-/dist/assets/bundle.js.map
 node_modules/
 /src/.env
