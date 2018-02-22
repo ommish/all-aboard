@@ -2,19 +2,19 @@
   "name": "all-aboard",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "./src/index.js",
   "scripts": {
-    "start": "node ./src/server.js"
+    "start": "node ./src/index.js",
+    "dev": "nodemon ./src/index.js"
   },
   "author": "Ommi Shimizu",
   "license": "ISC",
   "dependencies": {
     "cookie-session": "^2.0.0-beta.3",
-    "dotenv": "^5.0.0",
     "express": "^4.16.2",
-    "express-session": "^1.15.6",
     "mongodb": "^3.0.1",
     "mongoose": "^5.0.3",
+    "nodemon": "^1.15.1",
     "passport": "^0.4.0",
     "passport-google-oauth20": "^1.0.0",
     "path": "^0.12.7",

@@ -1,5 +1,5 @@
 const path = require('path');
-const variables = require('./config/keys')
+const variables = require('../config/keys')
 
 const passport = require('passport');
 const GoogleStrategy = require('passport-google-oauth20').Strategy;
