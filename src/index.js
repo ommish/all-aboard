@@ -21,7 +21,7 @@ require('./services/passport');
 require('./routes/auth_routes')(app);
 
 app.get('/', (req, res) => {
-  res.sendFile(path.resolve(__dirname + '/frontend/index.html'));
+  res.send('landed')
 });
 
 app.listen(3000, () => {
