@@ -1,13 +1,19 @@
 import React from 'react';
-import { HashRouter, Route } from 'react-router-dom';
+import { HashRouter, Route, Switch } from 'react-router-dom';
 import { Provider } from 'react-redux';
-import MainPage from './components/main_page';
+import UserHome from './components/user_home';
+import Splash from './components/splash';
 
 const App = ({store}) => {
   return (
     <Provider store={store}>
       <HashRouter>
-        <Route path='/' component={MainPage}/>
+        [
+          <Switch>
+            <ProtectedRoute exact path='/home' component={UserHome}/>,
+            <AuthRoute path='/' component={Splash}/>
+          </Switch>
+        ]
       </HashRouter>
     </Provider>
   );
