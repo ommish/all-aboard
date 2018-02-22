@@ -1,4 +1,4 @@
 node_modules/
 /src/.env
-/config/dev.js
-/config/pro.js
+/src/config/dev.js
+/src/config/pro.js
