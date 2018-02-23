@@ -7,7 +7,7 @@ class Splash extends React.Component {
   render() {
     return (
       <div>Welcome!
-        <a href="https://all-aboard123.herokuapp.com/auth/google">Log In or Sign Up with Google</a>
+        <a href="/auth/google">Log In or Sign Up with Google</a>
       </div>
     );
   }
