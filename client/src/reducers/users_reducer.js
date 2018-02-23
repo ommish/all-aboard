@@ -12,6 +12,7 @@ const UsersReducer = (state = {}, action) => {
       newState[action.user.id] = action.user;
       break;
     default:
+      newState = state;
       break;
   }
   return newState;

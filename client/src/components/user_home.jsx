@@ -1,15 +1,8 @@
 import React from 'react';
-import { Route, Redirect } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { receiveCurrentUser } from '../actions/session_actions';
 
 class UserHome extends React.Component {
-  constructor(props) {
-    super(props);
-  }
-
-  componentDidMount() {
-  }
 
   render() {
     return (

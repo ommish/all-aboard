@@ -2,6 +2,13 @@ import React from 'react';
 import { merge, camelCase} from 'lodash';
 
 const _ABILITIES = ["Strength", "Dexterity", "Constitution", "Intelligence", "Wisdom", "Charisma"];
+const _EDITABLE_NUMERICAL_FIELDS = {
+  "Level": { min: 1, max: 20 },
+  "Max Health": { min: 1, max: 999 },
+  "Current Health": { min: 0, max: 999 },
+  "Speed": { min: 0, max: 100 },
+};
+const _CALCULATED_NUMERICAL_FIELDS = ["Initiative", "Armor Class", "Passive Wisdom"];
 const _SKILLS = {
   "Acrobatics": "Dexterity",
   "Animal Handling": "Wisdom",
@@ -83,8 +90,12 @@ class CharacterSheet {
 
   calculateArmorClass(newState) {
     newState = newState || merge({}, this.state);
-    // barbarian without armor?
-    // 10 + dexMod + armor + shield + special items/feats
+    newState.character.armorClass = newState.character.armor.ac;
+    newState.character.armorClass += character.dexterityModifier;
+    newState.character.armorClass += newState.character.hasShield ? 2 : 0;
+    if (newState.character.class === "Barbarian") {
+    } else {
+    }
   }
 
   calculateSavingThrows(newState) {
@@ -103,6 +114,10 @@ class CharacterSheet {
     });
   }
 
+  calculateInitiative(newState) {
+    newState.character.initiative = newstate.character.dexterityModifier;
+  }
+
   addSpecialBonuses(newState) {
     newState.character.specialBonuses.forEach((bonus) => {
       newState.character[bonus.field] += bonus.change;
@@ -110,9 +125,9 @@ class CharacterSheet {
   }
 
   renderBasicTextInfo() {
-    const fields = ["name", "race", "class", "subclass", "background", "alignment"];
+    const fields = ["Name", "Race", "Class", "Subclass", "Background", "Alignment"];
     return fields.map((field) => {
-      <label>{field.toUpperCase()}
+      <label>{field}
         <input type="text" value={this.state.character[field]} onChange={this.handleChange(field)}/>
       </label>
     });
@@ -126,8 +141,20 @@ class CharacterSheet {
     });
   }
 
-  renderBasicNumberInfo() {
-    const fields = ["level", "maxHealth", "currentHealth", "speed", "initiative", "passiveWisdom", "armorClass"];
+  renderEditableNumericalFields() {
+    return Object.keys(_EDITABLE_NUMERICAL_FIELDS).map((field) => (
+      <label>{field}
+        <input value={this.state.character[camelCase(field)]} min={_EDITABLE_NUMERICAL_FIELDS[field].min} max={_EDITABLE_NUMERICAL_FIELDS[field].max} />
+      </label>
+    ));
+  }
+
+  renderCalculatedNumericalFields() {
+    return _CALCULATED_NUMERICAL_FIELDS.map((field) => (
+      <label>
+        {this.state.character[camelCase(field)]}
+      </label>
+    ));
   }
 
   renderSavingThrows() {
@@ -150,7 +177,7 @@ class CharacterSheet {
 
   renderSpecialBonuses() {
     // should be form within form?
-    return this.state.character.specialBonuses.map((bonus) => {
+    return this.state.character.specialBonuses.map((bonus) => (
       <label>Name
         <input type="text"/>
       </label>
@@ -162,7 +189,7 @@ class CharacterSheet {
           <option value={armorClass}>Armor Class</option>
         </select>
       </label>
-    });
+    ));
   }
 
   render() {

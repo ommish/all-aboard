@@ -1,5 +1,5 @@
 import React from 'react';
-import { HashRouter, Route, Switch } from 'react-router-dom';
+import { HashRouter, Switch } from 'react-router-dom';
 import { Provider } from 'react-redux';
 import UserHome from './components/user_home';
 import Splash from './components/splash';
