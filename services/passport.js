@@ -12,10 +12,9 @@ passport.serializeUser((user, done) => {
 	done(null, user.id);
 });
 
-passport.deserializeUser((userId, done) => {
-	User.findById(userId).then((user) => {
-		done(null, user);
-	});
+passport.deserializeUser(async (userId, done) => {
+	const user = User.findById(userId);
+	done(null, user);
 });
 
 passport.use(
