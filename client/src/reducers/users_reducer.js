@@ -1,5 +1,5 @@
 import { RECEIVE_USER } from '../actions/user_actions';
-import { RECEIVE_CURRENT_USER } from '../actions/session_actions';
+import { RECEIVE_CURRENT_USER, LOGOUT } from '../actions/session_actions';
 import { merge } from 'lodash';
 
 const UsersReducer = (state = {}, action) => {
@@ -10,6 +10,9 @@ const UsersReducer = (state = {}, action) => {
       break;
     case RECEIVE_CURRENT_USER:
       newState[action.user._id] = action.user;
+      break;
+    case LOGOUT:
+      newState = {};
       break;
     default:
       newState = state;
