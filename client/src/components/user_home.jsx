@@ -6,14 +6,14 @@ class UserHome extends React.Component {
 
   render() {
     return (
-      <h1>Welcome {this.props.currentUser.username}!</h1>
+      <h1>Welcome {this.props.currentUser.displayName}!</h1>
     );
   }
 }
 
 const mapStateToProps = (state) => {
   return {
-    currentUser: state.users[state.session.currentUser.id],
+    currentUser: state.users[state.session.currentUser._id],
   };
 };
 

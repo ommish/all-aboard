@@ -1,8 +1,12 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { receiveCurrentUser } from '../actions/session_actions';
+import { fetchCurrentUser } from '../actions/session_actions';
 
 class Splash extends React.Component {
+
+  componentDidMount() {
+    this.props.fetchCurrentUser();
+  }
 
   render() {
     return (
@@ -16,7 +20,7 @@ class Splash extends React.Component {
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    receiveCurrentUser: (user) => dispatch(receiveCurrentUser(user)),
+    fetchCurrentUser: () => dispatch(fetchCurrentUser()),
   };
 };
 
