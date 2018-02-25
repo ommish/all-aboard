@@ -1,7 +1,6 @@
 import axios from 'axios';
 
 export const RECEIVE_CURRENT_USER = 'RECEIVE_CURRENT_USER';
-export const LOGOUT = 'LOGOUT';
 
 export const receiveCurrentUser = (user) => {
 	return {
@@ -9,12 +8,6 @@ export const receiveCurrentUser = (user) => {
 		user
 	};
 };
-
-export const logout = () => {
-	return {
-		type: LOGOUT,
-	}
-}
 
 export const fetchCurrentUser = () => {
 	return async (dispatch) => {
