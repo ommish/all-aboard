@@ -1,7 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { fetchCharacters, createCharacter } from '../actions/character_actions';
-// import { Character } from './character';
+import { NavLink } from 'react-router-dom';
 
 class UserHome extends React.Component {
 
@@ -13,6 +13,10 @@ class UserHome extends React.Component {
 			<main>
 				<h1>Welcome {this.props.currentUser.displayName}!</h1>
 				<a href="/api/logout">Log Out</a>
+        <input type="text" placeholder="Search"/>
+        <nav>
+          <NavLink to={`/users/${this.props.match.params.userId}/characters`}>Characters</NavLink>
+        </nav>
         <button onClick={() => this.props.createCharacter({})}>CREATE CHARACTER</button>
 			</main>
 		);
