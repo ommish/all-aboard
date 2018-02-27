@@ -1,5 +1,5 @@
 import { merge } from 'lodash';
-import { RECEIVE_CHARACTERS } from '../actions/character_actions';
+import { RECEIVE_CHARACTERS, RECEIVE_CHARACTER } from '../actions/character_actions';
 
 const CharactersReducer = (state = {}, action) => {
   let newState = merge({}, state);
@@ -8,6 +8,9 @@ const CharactersReducer = (state = {}, action) => {
       action.characters.forEach((character) => {
         newState[character._id] = character;
       });
+      break;
+    case RECEIVE_CHARACTER:
+      newState[action.character._id] = action.character;
       break;
     default:
     break;

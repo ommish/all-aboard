@@ -5,10 +5,8 @@ const Character = mongoose.model('characters');
 
 module.exports = (app) => {
 	app.post('/api/characters', requireLogin, async (req, res) => {
-		let newChar = new Character({
-			googleId: profile.id,
-			displayName: profile.displayName
-		});
+		let newChar = new Character(req.body);
+		newChar._user = req.user._id;
 		try {
 			newChar = await newChar.save();
 			res.send(newChar);

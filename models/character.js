@@ -4,7 +4,7 @@ const characterSchema = new Schema({
   _user: { type: Schema.Types.ObjectId, ref: 'User' },
 	name: { type: String, default: '' },
 	race: { type: String, default: '' },
-	class: { type: String, default: '' },
+	charClass: { type: String, default: '' },
 	subclass: { type: String, default: '' },
 	background: { type: String, default: '' },
 	alignment: { type: String, default: '' },

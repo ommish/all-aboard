@@ -1,6 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { fetchCharacters } from '../actions/character_actions';
+import { fetchCharacters, createCharacter } from '../actions/character_actions';
 // import { Character } from './character';
 
 class UserHome extends React.Component {
@@ -13,6 +13,7 @@ class UserHome extends React.Component {
 			<main>
 				<h1>Welcome {this.props.currentUser.displayName}!</h1>
 				<a href="/api/logout">Log Out</a>
+        <button onClick={() => this.props.createCharacter({})}>CREATE CHARACTER</button>
 			</main>
 		);
 	}
@@ -28,6 +29,7 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = (dispatch, ownProps) => {
 	return {
     fetchCharacters: () => dispatch(fetchCharacters(ownProps.match.params.userId)),
+    createCharacter: (data) => dispatch(createCharacter(data)),
   };
 };
 
