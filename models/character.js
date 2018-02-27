@@ -50,4 +50,4 @@ const characterSchema = new Schema({
 	otherProficienciesAndLanguages: { type: String, default: '' }
 });
 
-mongoose.model('characters', characterSchema);
+mongoose.model('Character', characterSchema);

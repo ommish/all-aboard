@@ -1,7 +1,7 @@
 const requireLogin = require('../middlewares/require_login');
 const mongoose = require('mongoose');
-const User = mongoose.model('users');
-const Character = mongoose.model('characters');
+const User = mongoose.model('User');
+const Character = mongoose.model('Character');
 
 module.exports = (app) => {
 	app.post('/api/characters', requireLogin, async (req, res) => {
