@@ -7,6 +7,7 @@ const app = express();
 const mongoose = require('mongoose');
 mongoose.connect(`${variables.DATABASE}`);
 require('./models/user');
+require('./models/character');
 
 const cookieSession = require('cookie-session');
 const passport = require('passport');
@@ -19,6 +20,7 @@ app.use(passport.session())
 require('./services/passport');
 
 require('./routes/auth_routes')(app);
+require('./routes/character_routes')(app);
 
 app.get('/', (req, res) => {
   res.sendFile(path.resolve(__dirname, 'client', 'public', 'index.html'));

@@ -11,7 +11,7 @@ const App = ({store}) => {
     <Provider store={store}>
       <HashRouter>
         <Switch>
-          <ProtectedRoute exact path='/home' component={UserHome}/>,
+          <ProtectedRoute exact path='/users/:userId' component={UserHome}/>,
           <AuthRoute path='/' component={Splash}/>
         </Switch>
       </HashRouter>

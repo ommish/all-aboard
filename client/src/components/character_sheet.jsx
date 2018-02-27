@@ -2,13 +2,15 @@ import React from 'react';
 import { merge, camelCase} from 'lodash';
 
 const _ABILITIES = ["Strength", "Dexterity", "Constitution", "Intelligence", "Wisdom", "Charisma"];
+
 const _EDITABLE_NUMERICAL_FIELDS = {
   "Level": { min: 1, max: 20 },
   "Max Health": { min: 1, max: 999 },
   "Current Health": { min: 0, max: 999 },
   "Speed": { min: 0, max: 100 },
+  "Armor Class", { min: 0, max: 50 }
 };
-const _CALCULATED_NUMERICAL_FIELDS = ["Initiative", "Armor Class", "Passive Wisdom"];
+const _CALCULATED_NUMERICAL_FIELDS = ["Initiative", "Passive Wisdom"];
 const _SKILLS = {
   "Acrobatics": "Dexterity",
   "Animal Handling": "Wisdom",
