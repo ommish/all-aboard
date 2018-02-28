@@ -1,7 +1,9 @@
 const mongoose = require('mongoose');
 const { Schema } = mongoose;
+const armor = require('./armor');
 const characterSchema = new Schema({
 	_user: { type: Schema.Types.ObjectId, ref: 'User' },
+	armor: { type: armor.armorSchema },
 	name: { type: String, default: '' },
 	race: { type: String, default: '' },
 	charClass: { type: String, default: '' },

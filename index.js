@@ -9,6 +9,7 @@ const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
 mongoose.connect(`${variables.DATABASE}`);
 require('./models/user');
+require('./models/armor');
 require('./models/character');
 
 const cookieSession = require('cookie-session');
