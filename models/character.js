@@ -11,6 +11,7 @@ const characterSchema = new Schema({
 	background: { type: String, default: '' },
 	alignment: { type: String, default: '' },
 	playerName: { type: String, default: '' },
+	shield: { type: Boolean, default: false },
 	level: { type: Number, min: 1, max: 20, default: 1 },
 	inspiration: { type: Number, min: 0, max: 10, default: 0 },
 	maxHealth: { type: Number, min: 0, max: 999, default: 0 },
