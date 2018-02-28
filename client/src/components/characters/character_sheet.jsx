@@ -8,7 +8,7 @@ const _EDITABLE_NUMERICAL_FIELDS = {
   "Max Health": { min: 1, max: 999 },
   "Current Health": { min: 0, max: 999 },
   "Speed": { min: 0, max: 100 },
-  "Armor Class", { min: 0, max: 50 }
+  "Armor Class": { min: 0, max: 50 }
 };
 const _CALCULATED_NUMERICAL_FIELDS = ["Initiative", "Passive Wisdom"];
 const _SKILLS = {
@@ -32,7 +32,7 @@ const _SKILLS = {
   "Survival": "Wisdom"
 };
 
-class CharacterSheet {
+class CharacterSheet extends React.Component {
 
   constructor(props) {
     super(props);
@@ -62,7 +62,7 @@ class CharacterSheet {
     this.calculateSavingThrows(newState);
     this.calculateSkills(newState);
     this.addSpecialBonuses(newState);
-    this.setState(newState);
+    this.setState(newState, () => window.character = this.state);
   }
 
   handleChange(field) {
@@ -92,8 +92,8 @@ class CharacterSheet {
 
   calculateArmorClass(newState) {
     newState = newState || merge({}, this.state);
-    newState.character.armorClass = newState.character.armor.ac;
-    newState.character.armorClass += character.dexterityModifier;
+    // newState.character.armorClass = newState.character.armor.ac;
+    newState.character.armorClass += newState.character.dexterityModifier;
     newState.character.armorClass += newState.character.hasShield ? 2 : 0;
     if (newState.character.class === "Barbarian") {
     } else {
@@ -117,7 +117,7 @@ class CharacterSheet {
   }
 
   calculateInitiative(newState) {
-    newState.character.initiative = newstate.character.dexterityModifier;
+    newState.character.initiative = newState.character.dexterityModifier;
   }
 
   addSpecialBonuses(newState) {
@@ -138,7 +138,7 @@ class CharacterSheet {
   renderAbilityScores() {
     return _ABILITIES.map((ability) => {
       <label>{ability.toUpperCase()}
-        <input type="number" min="0" max="20" value={this.state.character[ability] onChange={this.handleChange(ability)}}/>
+        <input type="number" min="0" max="20" value={this.state.character[ability]} onChange={this.handleChange(ability)}/>
       </label>
     });
   }
@@ -171,7 +171,7 @@ class CharacterSheet {
   renderSkills() {
     return Object.keys(_SKILLS).map((skill) => (
       <label>{skill} ({_SKILLS[skill].slice(0, 3)})
-        <input type="checkbox" checked={this.state.character{`${camelCase(skill)}Proficiency`}}/>
+        <input type="checkbox" checked={this.state.character[`${camelCase(skill)}Proficiency`]}/>
         +{this.state.character[`${camelCase(skill)}Bonus`]}
       </label>
     ));
@@ -180,25 +180,28 @@ class CharacterSheet {
   renderSpecialBonuses() {
     // should be form within form?
     return this.state.character.specialBonuses.map((bonus) => (
-      <label>Name
-        <input type="text"/>
-      </label>
-      <label>Field
-        <select name="field">
-          {Object.keys(_SKILLS).map((skill) => {
-            <option>{skill}</option>
-          })}
-          <option value={armorClass}>Armor Class</option>
-        </select>
-      </label>
+      <form>
+        <label>Name
+          <input type="text"/>
+        </label>
+        <label>Field
+          <select name="field">
+            {Object.keys(_SKILLS).map((skill) => {
+              <option>{skill}</option>
+            })}
+            <option value="armorClass">Armor Class</option>
+          </select>
+        </label>
+      </form>
     ));
   }
 
   render() {
-    <form>
-      {this.renderTextInputs()}
-      {this.renderAbilityScores()}
-    </form>
+    return (
+      <form>
+        character sheet form
+      </form>
+    );
   }
 }
 
@@ -206,3 +209,5 @@ class CharacterSheet {
 // effects => ability score, health, proficiency,
 
 // noneditable fields: proficiency bonuses, saving throws,
+
+export default CharacterSheet;

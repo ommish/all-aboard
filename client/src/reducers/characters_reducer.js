@@ -6,6 +6,7 @@ const CharactersReducer = (state = {}, action) => {
   switch (action.type) {
     case RECEIVE_CHARACTERS:
       action.characters.forEach((character) => {
+        character.specialBonuses = JSON.parse(character.specialBonuses);
         newState[character._id] = character;
       });
       break;

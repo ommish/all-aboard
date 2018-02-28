@@ -1,10 +1,11 @@
 import React from 'react';
 import { HashRouter, Switch } from 'react-router-dom';
 import { Provider } from 'react-redux';
-import UserHome from './components/user_home';
+import UserProfile from './components/user_profile';
 import Splash from './components/splash';
 import { AuthRoute, ProtectedRoute } from './util/route_util';
 import CharacterIndex from './components/characters/character_index';
+import CharacterSheet from './components/characters/character_sheet_container';
 import './App.css';
 
 const App = ({store}) => {
@@ -13,7 +14,8 @@ const App = ({store}) => {
       <HashRouter>
         <div>
           <Switch>
-            <ProtectedRoute path='/users/:userId' component={UserHome}/>,
+            <ProtectedRoute path='/users/:userId' component={UserProfile}/>
+            <ProtectedRoute path='/characters/:characterId' component={CharacterSheet}/>
             <AuthRoute path='/' component={Splash}/>
           </Switch>
           <ProtectedRoute exact path='/users/:userId/characters' component={CharacterIndex}/>
