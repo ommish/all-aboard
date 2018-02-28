@@ -46,7 +46,7 @@ const characterSchema = new Schema({
 	sleightOfHandProficiency: { type: Boolean, default: false },
 	stealthProficiency: { type: Boolean, default: false },
 	survivalProficiency: { type: Boolean, default: false },
-	specialBonuses: { type: String, default: '{}' },
+	specialBonuses: { type: String, default: '[]' },
 	otherProficienciesAndLanguages: { type: String, default: '' }
 });
 
