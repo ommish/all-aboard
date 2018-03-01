@@ -1,5 +1,5 @@
 import React from 'react';
-import { HashRouter, Switch } from 'react-router-dom';
+import { BrowserRouter, Switch } from 'react-router-dom';
 import { Provider } from 'react-redux';
 import UserProfile from './components/user_profile';
 import Splash from './components/splash';
@@ -11,7 +11,7 @@ import './App.css';
 const App = ({store}) => {
   return (
     <Provider store={store}>
-      <HashRouter>
+      <BrowserRouter>
         <div>
           <Switch>
             <ProtectedRoute path='/users/:userId' component={UserProfile}/>
@@ -20,7 +20,7 @@ const App = ({store}) => {
           </Switch>
           <ProtectedRoute exact path='/users/:userId/characters' component={CharacterIndex}/>
         </div>
-      </HashRouter>
+      </BrowserRouter>
     </Provider>
   );
 };

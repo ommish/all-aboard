@@ -9,7 +9,6 @@ class Splash extends React.Component {
   }
 
   render() {
-    debugger
     return (
       <div>Welcome!
         <a href={`${window.location.origin}/auth/google`}>Log In or Sign Up with Google</a>
