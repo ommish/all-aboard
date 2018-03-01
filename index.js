@@ -31,14 +31,11 @@ require('./routes/auth_routes')(app);
 require('./routes/character_routes')(app);
 require ('./routes/compendium_routes')(app);
 
-// app.get('/', (req, res) => {
-// 	res.sendFile(path.resolve(__dirname, 'client', 'public', 'index.html'));
-// });
-
 if (process.env.NODE_ENV === 'production') {
 	app.use(express.static('client/build'));
 	const path = require('path');
 	app.get('/', (req, res) => {
+		console.log("here but shouldn't be");
 		res.sendFile(path.resolve(__dirname, 'client', 'build', 'index.html'));
 	});
 }
