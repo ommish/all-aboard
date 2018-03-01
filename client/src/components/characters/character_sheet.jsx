@@ -1,7 +1,8 @@
 import React from 'react';
 import { merge, camelCase } from 'lodash';
 import { Link } from 'react-router-dom';
-import BonusForm from './bonus_form';
+import BonusForm from './form_components/bonus_form';
+import RaceMenu from './form_components/race_menu';
 import './character_sheet.css';
 
 const _ABILITIES = [
@@ -35,17 +36,21 @@ const _SKILLS = {
 const _EDITABLE_FIELDS = {
 	Name: { type: 'text' },
 	Level: { type: 'number', min: 1, max: 20 },
-	Race: { type: 'text' },
 	Class: { type: 'text' },
 	Subclass: { type: 'text' },
 	Background: { type: 'text' },
 	Alignment: { type: 'text' }
 };
 const _CALCULATED_FIELDS = [
-	'Proficiency Bonus',
+	'Modifiers',
+	'ProficiencyBonus',
+	'SavingThrows',
+	'Skills',
 	'Initiative',
-	'Passive Wisdom',
-	'Armor Class'
+	'PassiveWisdom',
+	'ArmorClass',
+	'Speed',
+	'Bonuses'
 ];
 
 class CharacterSheet extends React.Component {
@@ -73,14 +78,9 @@ class CharacterSheet extends React.Component {
 
 	calculateFields(newState) {
 		newState = newState || merge({}, this.state);
-		this.calculateModifiers(newState);
-		this.calculateProficiencyBonus(newState);
-		this.calculateSavingThrows(newState);
-		this.calculateSkills(newState);
-		this.calculateInitiative(newState);
-		this.calculatePassiveWisdom(newState);
-		this.calculateArmorClass(newState);
-		this.addBonuses(newState);
+		_CALCULATED_FIELDS.forEach((field) => {
+			 this[`calculate${field}`](newState);
+		});
 		this.setState(newState, () => (window.character = this.state.character));
 	}
 
@@ -113,7 +113,7 @@ class CharacterSheet extends React.Component {
 				(bonus) => bonus._id !== bonusId
 			);
 			this.setState(newState, () => this.handleSubmit());
-		}
+		};
 	}
 
 	handleSubmit(e) {
@@ -201,10 +201,26 @@ class CharacterSheet extends React.Component {
 		newState.character.armorClass += modifier;
 	}
 
-	addBonuses(newState) {
+	calculateSpeed(newState) {
+		newState = newState || merge({}, this.state);
+		if (newState.character.race) {
+			const race = this.props.races[newState.character.race];
+			newState.character.speed = race.speed;
+		} else {
+			newState.character.speed = 0;
+		}
+	}
+
+	calculateBonuses(newState) {
 		newState.character.bonuses.forEach((bonus) => {
 			newState.character[bonus.field] += bonus.bonusAmount;
 		});
+	}
+
+	renderRaces() {
+		return (
+			<RaceMenu races={this.props.races} selectedRace={this.state.character.race ? this.state.character.race._id : ""} handleChange={this.handleChange('race')}/>
+		);
 	}
 
 	renderEditableFields() {
@@ -249,7 +265,7 @@ class CharacterSheet extends React.Component {
 	}
 
 	renderCalculatedFields() {
-		return _CALCULATED_FIELDS.map((field, i) => (
+		return ['Proficiency Bonus', 'Initiative', 'Passive Wisdom', 'Armor Class', 'Speed'].map((field, i) => (
 			<label key={i}>
 				<h3>{field} </h3>
 				{this.state.character[camelCase(field)] >= 0 ? ' +' : '   '}
@@ -337,13 +353,16 @@ class CharacterSheet extends React.Component {
 
 	render() {
 		return [
-			<Link key={1} to={`/users/${this.props.currentUser._id}`}>Back to Home</Link>,
+			<Link key={1} to={`/users/${this.props.currentUser._id}`}>
+				Back to Home
+			</Link>,
 			<form
 				key={2}
 				className="character-form"
 				onSubmit={this.handleSubmit.bind(this)}>
 				<input type="submit" value="Save" />
 				<div className="character-form-1">{this.renderEditableFields()}</div>
+				<div className="character-form-1">{this.renderRaces()}</div>
 				<div className="character-form-1">{this.renderHealth()}</div>
 				<div className="character-form-2">{this.renderCalculatedFields()}</div>
 				<div className="character-form-3">
@@ -366,7 +385,7 @@ class CharacterSheet extends React.Component {
 				</div>
 			</form>,
 			<div key={3} className="character-form-6">
-				<h3>Special Bonuses (feats, magic items, etc.)</h3>
+				<h3>Traits, Bonuses, Traits, etc.</h3>
 				{this.renderBonuses()}
 			</div>
 		];
@@ -395,3 +414,4 @@ export default CharacterSheet;
 // hide bonus details
 // refresh shouldn't redirect
 // money
+// make racial bonus type that gets added automatically

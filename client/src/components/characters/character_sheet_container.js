@@ -10,6 +10,7 @@ const mapStateToProps = (state, ownProps) => {
     currentUser: state.session.currentUser,
     character,
     editable,
+    races: state.races,
   };
 };
 
