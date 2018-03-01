@@ -213,7 +213,9 @@ class CharacterSheet extends React.Component {
 
 	calculateBonuses(newState) {
 		newState.character.bonuses.forEach((bonus) => {
-			newState.character[bonus.field] += bonus.bonusAmount;
+			if (bonus.field) {
+				newState.character[bonus.field] += bonus.bonusAmount;
+			}
 		});
 	}
 
