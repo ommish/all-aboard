@@ -7,10 +7,16 @@ class BonusForm extends React.Component {
 		this.state = {
       _id: this.props.bonus._id,
 			name: this.props.bonus.name,
-			field: this.props.bonus.field || 'acrobatics',
+			field: this.props.bonus.field,
 			description: this.props.bonus.description,
 			bonusAmount: this.props.bonus.bonusAmount
 		};
+	}
+
+	componentWillReceiveProps(newProps) {
+		if (this.props.bonus._id !== newProps.bonus._id) {
+			this.setState({_id: newProps.bonus._id})
+		}
 	}
 
 	handleChange(field) {
@@ -45,7 +51,8 @@ class BonusForm extends React.Component {
 				</label>
 				<label>
 					Field
-					<select name="field" onChange={this.handleChange('field')}>
+					<select value={this.state.field} name="field" onChange={this.handleChange('field')}>
+						<option value="">Select a Field</option>
 						{Object.keys(this.props.skills).map((skill, i) => {
 							return <option key={i} value={camelCase(skill)}>{skill}</option>;
 						})}
