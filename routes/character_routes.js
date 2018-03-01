@@ -7,6 +7,7 @@ module.exports = (app) => {
 	app.post('/api/characters', requireLogin, async (req, res) => {
 		let newChar = new Character(req.body);
 		newChar._user = req.user._id;
+		console.log(req.body);
 		try {
 			newChar = await newChar.save();
 			res.send(newChar);
