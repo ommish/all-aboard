@@ -1,5 +1,6 @@
 import React from 'react';
 import { merge, camelCase } from 'lodash';
+import { Link } from 'react-router-dom';
 import BonusForm from './bonus_form';
 import './character_sheet.css';
 
@@ -336,10 +337,12 @@ class CharacterSheet extends React.Component {
 
 	render() {
 		return [
+			<Link key={1} to={`/users/${this.props.currentUser._id}`}>Back to Home</Link>,
 			<form
-				key={1}
+				key={2}
 				className="character-form"
 				onSubmit={this.handleSubmit.bind(this)}>
+				<input type="submit" value="Save" />
 				<div className="character-form-1">{this.renderEditableFields()}</div>
 				<div className="character-form-1">{this.renderHealth()}</div>
 				<div className="character-form-2">{this.renderCalculatedFields()}</div>
@@ -361,9 +364,8 @@ class CharacterSheet extends React.Component {
 						{this.renderSkills()}
 					</div>
 				</div>
-				<input type="submit" value="Update" />
 			</form>,
-			<div key={2} className="character-form-6">
+			<div key={3} className="character-form-6">
 				<h3>Special Bonuses (feats, magic items, etc.)</h3>
 				{this.renderBonuses()}
 			</div>

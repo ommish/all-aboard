@@ -7,6 +7,7 @@ const mapStateToProps = (state, ownProps) => {
   const character = state.characters[characterId];
   const editable = character ? character._user ===  state.session.currentUser.id : false;
   return {
+    currentUser: state.session.currentUser,
     character,
     editable,
   };
