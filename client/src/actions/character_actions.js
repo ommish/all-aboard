@@ -23,17 +23,16 @@ export const fetchCharacters = (userId) => {
 };
 
 export const createCharacter = (character) => {
-	character.name = 'peika';
-  character.hitDice = 6;
-	character.strength = 17;
-	character.dexterity = 12;
-	character.constitution = 15;
-	character.intelligence = 14;
-	character.wisdom = 12;
-	character.charisma = 8;
-	character.charClass = 'barbarian';
+	character.name = 'peika'
 	return async (dispatch) => {
 		const { data } = await axios.post(`/api/characters`, character);
-		dispatch(receiveCharacter(data));
+		return dispatch(receiveCharacter(data));
+	};
+};
+
+export const updateCharacter = (character) => {
+	return async (dispatch) => {
+		const { data } = await axios.put(`/api/characters/${character._id}`, character);
+		return dispatch(receiveCharacter(data));
 	};
 };
