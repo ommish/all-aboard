@@ -1,6 +1,7 @@
 import React from 'react';
 import { merge, camelCase } from 'lodash';
 import BonusForm from './bonus_form';
+import './character_sheet.css';
 
 const _ABILITIES = [
 	'Strength',
@@ -37,11 +38,14 @@ const _EDITABLE_FIELDS = {
 	Class: { type: 'text' },
 	Subclass: { type: 'text' },
 	Background: { type: 'text' },
-	Alignment: { type: 'text' },
-	'Max Health': { type: 'number', min: 0, max: 999 },
-	'Current Health': { type: 'number', min: 0, max: 999 }
+	Alignment: { type: 'text' }
 };
-const _CALCULATED_FIELDS = ['Initiative', 'Passive Wisdom', 'Armor Class'];
+const _CALCULATED_FIELDS = [
+	'Proficiency Bonus',
+	'Initiative',
+	'Passive Wisdom',
+	'Armor Class'
+];
 
 class CharacterSheet extends React.Component {
 	constructor(props) {
@@ -73,6 +77,7 @@ class CharacterSheet extends React.Component {
 		this.calculateSavingThrows(newState);
 		this.calculateSkills(newState);
 		this.calculateInitiative(newState);
+		this.calculatePassiveWisdom(newState);
 		this.calculateArmorClass(newState);
 		this.addBonuses(newState);
 		this.setState(newState, () => (window.character = this.state.character));
@@ -81,7 +86,8 @@ class CharacterSheet extends React.Component {
 	handleChange(field) {
 		return (e) => {
 			const newState = merge({}, this.state);
-			newState.character[field] = e.target.value;
+			newState.character[field] =
+				e.target.type === 'checkbox' ? e.target.checked : e.target.value;
 			this.calculateFields(newState);
 		};
 	}
@@ -89,18 +95,22 @@ class CharacterSheet extends React.Component {
 	handleBonusSubmit(newBonus) {
 		const newState = merge({}, this.state);
 		if (newBonus._id) {
-			newState.character.bonuses.filter((bonus) => {
-				bonus._id === newBonus._id;
-			})[0] = newBonus;
+			newState.character.bonuses.filter(
+				(bonus) => bonus._id === newBonus._id
+			)[0] = newBonus;
 		} else {
-			newState.characters.bonuses.push(newBonus);
+			newState.character.bonuses.push(newBonus);
 		}
-		this.addBonuses(newState);
-		this.setState(newState);
+		// this.addBonuses(newState);
+		// this.setState(newState);
+		this.calculateFields(newState);
 	}
 
 	handleSubmit(e) {
 		e.preventDefault();
+		this.props.submitCharacter(this.state.character).then((res) => {
+			
+		});
 	}
 
 	calculateModifiers(newState) {
@@ -150,7 +160,7 @@ class CharacterSheet extends React.Component {
 
 	calculatePassiveWisdom(newState) {
 		newState = newState || merge({}, this.state);
-		newState.character.passiveWisdom = newState.character.perception;
+		newState.character.passiveWisdom = 10 + newState.character.perception;
 	}
 
 	calculateArmorClass(newState) {
@@ -192,7 +202,7 @@ class CharacterSheet extends React.Component {
 			const camel = camelCase(field);
 			return (
 				<label key={i}>
-					{field}
+					<h3>{field} </h3>
 					<input
 						type={_EDITABLE_FIELDS[field].type}
 						value={this.state.character[camel]}
@@ -205,12 +215,45 @@ class CharacterSheet extends React.Component {
 		});
 	}
 
+	renderHealth() {
+		return (
+			<label>
+				<h3>Health </h3>
+				<input
+					type="number"
+					min="0"
+					max="999"
+					value={this.state.character.currentHealth}
+					onChange={this.handleChange('currentHealth')}
+				/>
+				/
+				<input
+					type="number"
+					min="0"
+					max="999"
+					value={this.state.character.maxHealth}
+					onChange={this.handleChange('maxHealth')}
+				/>
+			</label>
+		);
+	}
+
+	renderCalculatedFields() {
+		return _CALCULATED_FIELDS.map((field, i) => (
+			<label key={i}>
+				<h3>{field} </h3>
+				{this.state.character[camelCase(field)] >= 0 ? ' +' : '   '}
+				{this.state.character[camelCase(field)]}
+			</label>
+		));
+	}
+
 	renderAbilityScores() {
 		return _ABILITIES.map((ability, i) => {
 			const camel = camelCase(ability);
 			return (
 				<label key={i}>
-					{ability}
+					{ability}:
 					<input
 						type="number"
 						min="0"
@@ -223,41 +266,37 @@ class CharacterSheet extends React.Component {
 		});
 	}
 
-	renderCalculatedFields() {
-		return _CALCULATED_FIELDS.map((field) => (
-			<label>{this.state.character[camelCase(field)]}</label>
-		));
-	}
-
 	renderSavingThrows() {
-		return _ABILITIES.map((ability) => {
+		return _ABILITIES.map((ability, i) => {
 			const camel = camelCase(ability);
 			return (
-				<label>
+				<label key={i}>
 					{ability}
+					{this.state.character[`${camel}SavingThrow`] >= 0 ? ' +' : '   '}
+					{this.state.character[`${camel}SavingThrow`]}
 					<input
 						type="checkbox"
 						onChange={this.handleChange(`${camel}SaveProficiency`)}
 						checked={this.state.character[`${camel}SaveProficiency`]}
 					/>
-					{this.state.character[`${camel}SavingThrow`]}
 				</label>
 			);
 		});
 	}
 
 	renderSkills() {
-		return Object.keys(_SKILLS).map((skill) => {
+		return Object.keys(_SKILLS).map((skill, i) => {
 			const camel = camelCase(skill);
 			return (
-				<label>
-					{skill} ({_SKILLS[camel].slice(0, 3)})
+				<label key={i}>
+					{skill} ({_SKILLS[skill].slice(0, 3)})
+					{this.state.character[camel] >= 0 ? ' +' : '   '}
+					{this.state.character[camel]}
 					<input
 						type="checkbox"
 						onChange={this.handleChange(`${camel}Proficiency`)}
 						checked={this.state.character[`${camel}Proficiency`]}
 					/>
-					+{this.state.character[camel]}
 				</label>
 			);
 		});
@@ -265,26 +304,55 @@ class CharacterSheet extends React.Component {
 
 	renderBonuses() {
 		// should be form within form?
-		return this.state.character.bonuses.map((bonus) => (
+		const existing = this.state.character.bonuses.map((bonus, i) => (
 			<BonusForm
+				key={i}
 				handleBonusSubmit={this.handleBonusSubmit.bind(this)}
 				bonus={bonus}
 				skills={_SKILLS}
 			/>
 		));
+		return existing.concat(
+			<BonusForm
+				key={existing.length}
+				handleBonusSubmit={this.handleBonusSubmit.bind(this)}
+				bonus={{ name: '', field: '', description: '', bonusAmount: 0 }}
+				skills={_SKILLS}
+			/>
+		);
 	}
 
 	render() {
-		return (
-			<form onSubmit={this.handleSubmit}>
-				<div>{this.renderEditableFields()}</div>
-				<div>{this.renderCalculatedFields()}</div>
-				<div>{this.renderAbilityScores()}</div>
-				<div>{this.renderSavingThrows()}</div>
-				<div>{this.renderSkills()}</div>
-				<div>{this.renderBonuses()}</div>
-			</form>
-		);
+		return [
+			<form key={1} className="character-form" onSubmit={this.handleSubmit}>
+				<div className="character-form-1">{this.renderEditableFields()}</div>
+				<div className="character-form-1">{this.renderHealth()}</div>
+				<div className="character-form-2">{this.renderCalculatedFields()}</div>
+				<div className="character-form-3">
+					<h3>Ability Scores </h3>
+					<div className="character-form-input-group">
+						{this.renderAbilityScores()}
+					</div>
+				</div>
+				<div className="character-form-4">
+					<h3>Saving Throws </h3>
+					<div className="character-form-input-group">
+						{this.renderSavingThrows()}
+					</div>
+				</div>
+				<div className="character-form-5">
+					<h3>Skills </h3>
+					<div className="character-form-input-group">
+						{this.renderSkills()}
+					</div>
+				</div>
+				<input type="submit" />
+			</form>,
+			<div key={2} className="character-form-6">
+				<h3>Special Bonuses (feats, magic items, etc.)</h3>
+				{this.renderBonuses()}
+			</div>
+		];
 	}
 }
 
@@ -294,3 +362,7 @@ class CharacterSheet extends React.Component {
 // noneditable fields: proficiency bonuses, saving throws,
 
 export default CharacterSheet;
+
+// TODO: make charClass model to help auto calculate fields
+// refactor
+//

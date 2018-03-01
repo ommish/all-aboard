@@ -2,19 +2,21 @@ import React from 'react';
 import { camelCase } from 'lodash';
 
 class BonusForm extends React.Component {
-	constructor({ bonus, handleBonusSubmit, skills }) {
+	constructor(props) {
 		super(props);
 		this.state = {
-			name: bonus.name,
-			field: bonus.field,
-			description: bonus.description,
-			bonusAmount: bonus.bonusAmount
+      _id: this.props.bonus._id,
+			name: this.props.bonus.name,
+			field: this.props.bonus.field || 'acrobatics',
+			description: this.props.bonus.description,
+			bonusAmount: this.props.bonus.bonusAmount
 		};
 	}
 
 	handleChange(field) {
 		return (e) => {
-			this.setState({ [field]: e.target.value });
+      const newVal = e.target.type === "number" ? e.target.valueAsNumber : e.target.value;
+			this.setState({ [field]: newVal });
 		};
 	}
 
@@ -24,28 +26,28 @@ class BonusForm extends React.Component {
 				onSubmit={(e) => {
 					e.preventDefault();
 					e.stopPropagation();
-					this.handleBonusSubmit(this.state);
+					this.props.handleBonusSubmit(this.state);
 				}}>
 				<label>
 					Name
 					<input
 						type="text"
-						value={this.state.bonus.name}
+						value={this.state.name}
 						onChange={this.handleChange('name')}
 					/>
 				</label>
 				<label>
 					Description
 					<textarea
-						value={this.state.bonus.description}
+						value={this.state.description}
 						onChange={this.handleChange('description')}
 					/>
 				</label>
 				<label>
 					Field
 					<select name="field" onChange={this.handleChange('field')}>
-						{Object.keys(_SKILLS).map((skill) => {
-							return <option value={camelCase(skill)}>{skill}</option>;
+						{Object.keys(this.props.skills).map((skill, i) => {
+							return <option key={i} value={camelCase(skill)}>{skill}</option>;
 						})}
 						<option value="armorClass">Armor Class</option>
 						<option value="initiative">Initiative</option>
@@ -54,13 +56,13 @@ class BonusForm extends React.Component {
 						Bonus Amount
 						<input
 							type="number"
-							value={this.state.bonus.bonusAmount}
+							value={this.state.bonusAmount}
 							onChange={this.handleChange('bonusAmount')}
 						/>
 					</label>
 					<input
 						type="submit"
-						value={this.state.bonus._id ? 'Update' : 'Add'}
+						value={this.state._id ? 'Update' : 'Add'}
 					/>
 				</label>
 			</form>

@@ -1,0 +1,31 @@
+.character-form {
+  display: flex;
+  flex-direction: column;
+  padding: 10px;
+}
+
+div[class|="character-form"] {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+div[class="character-form-3"], div[class="character-form-4"], div[class="character-form-5"], div[class="character-form-6"] {
+  flex-direction: column;
+}
+
+.character-form label {
+  margin: 10px;
+}
+
+.character-form input:first-child {
+  margin-left: 10px;
+}
+
+.character-form input[type="submit"] {
+  margin: 0;
+  width: 200px;
+}
+
+.character-form h3 {
+  margin: 0;
+}
