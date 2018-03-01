@@ -1,8 +1,13 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { NavLink } from 'react-router-dom';
+import { fetchCompendium } from '../actions/compendium_actions';
 
 class UserHome extends React.Component {
+
+	componentDidMount() {
+		this.props.fetchCompendium();
+	}
 
 	render() {
 		return (
@@ -23,4 +28,10 @@ const mapStateToProps = (state) => {
 	};
 };
 
-export default connect(mapStateToProps)(UserHome);
+const mapDispatchToProps = (dispatch) => {
+	return {
+		fetchCompendium: () => dispatch(fetchCompendium()),
+	}
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(UserHome);
