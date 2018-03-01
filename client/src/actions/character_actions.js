@@ -23,6 +23,7 @@ export const fetchCharacters = (userId) => {
 };
 
 export const createCharacter = (character) => {
+	character = {};
 	character.name = 'peika'
 	return async (dispatch) => {
 		const { data } = await axios.post(`/api/characters`, character);
