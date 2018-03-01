@@ -1,5 +1,6 @@
 import React from 'react';
 import { merge, camelCase } from 'lodash';
+import BonusForm from './bonus_form';
 
 const _ABILITIES = [
 	'Strength',
@@ -8,17 +9,6 @@ const _ABILITIES = [
 	'Intelligence',
 	'Wisdom',
 	'Charisma'
-];
-const _EDITABLE_NUMERICAL_FIELDS = {
-	Level: { min: 1, max: 20 },
-	'Max Health': { min: 1, max: 999 },
-	'Current Health': { min: 0, max: 999 },
-	Speed: { min: 0, max: 999 }
-};
-const _CALCULATED_NUMERICAL_FIELDS = [
-	'Initiative',
-	'Passive Wisdom',
-	'Armor Class'
 ];
 const _SKILLS = {
 	Acrobatics: 'Dexterity',
@@ -40,6 +30,18 @@ const _SKILLS = {
 	Stealth: 'Dexterity',
 	Survival: 'Wisdom'
 };
+const _EDITABLE_FIELDS = {
+	Name: { type: 'text' },
+	Level: { type: 'number', min: 1, max: 20 },
+	Race: { type: 'text' },
+	Class: { type: 'text' },
+	Subclass: { type: 'text' },
+	Background: { type: 'text' },
+	Alignment: { type: 'text' },
+	'Max Health': { type: 'number', min: 0, max: 999 },
+	'Current Health': { type: 'number', min: 0, max: 999 }
+};
+const _CALCULATED_FIELDS = ['Initiative', 'Passive Wisdom', 'Armor Class'];
 
 class CharacterSheet extends React.Component {
 	constructor(props) {
@@ -64,27 +66,42 @@ class CharacterSheet extends React.Component {
 		}
 	}
 
-	calculateFields() {
-		const newState = merge({}, this.state);
+	calculateFields(newState) {
+		newState = newState || merge({}, this.state);
 		this.calculateModifiers(newState);
 		this.calculateProficiencyBonus(newState);
 		this.calculateSavingThrows(newState);
 		this.calculateSkills(newState);
-    this.calculateInitiative(newState);
-		// this.calculateArmorClass(newState);
-		// this.addSpecialBonuses(newState);
-		this.setState(newState, () => (window.character = this.state));
+		this.calculateInitiative(newState);
+		this.calculateArmorClass(newState);
+		this.addBonuses(newState);
+		this.setState(newState, () => (window.character = this.state.character));
 	}
 
 	handleChange(field) {
 		return (e) => {
 			const newState = merge({}, this.state);
 			newState.character[field] = e.target.value;
-			this.setState(newState);
+			this.calculateFields(newState);
 		};
 	}
 
-	handleSubmit() {}
+	handleBonusSubmit(newBonus) {
+		const newState = merge({}, this.state);
+		if (newBonus._id) {
+			newState.character.bonuses.filter((bonus) => {
+				bonus._id === newBonus._id;
+			})[0] = newBonus;
+		} else {
+			newState.characters.bonuses.push(newBonus);
+		}
+		this.addBonuses(newState);
+		this.setState(newState);
+	}
+
+	handleSubmit(e) {
+		e.preventDefault();
+	}
 
 	calculateModifiers(newState) {
 		newState = newState || merge({}, this.state);
@@ -127,129 +144,147 @@ class CharacterSheet extends React.Component {
 	}
 
 	calculateInitiative(newState) {
+		newState = newState || merge({}, this.state);
 		newState.character.initiative = newState.character.dexterityModifier;
 	}
 
-  calculateArmorClass(newState) {
-    newState = newState || merge({}, this.state);
-    // newState.character.armorClass = newState.character.armor.ac;
-    newState.character.armorClass += newState.character.dexterityModifier;
-    newState.character.armorClass += newState.character.hasShield ? 2 : 0;
-    if (newState.character.class === 'Barbarian') {
-    } else {
-    }
-  }
+	calculatePassiveWisdom(newState) {
+		newState = newState || merge({}, this.state);
+		newState.character.passiveWisdom = newState.character.perception;
+	}
 
-	addSpecialBonuses(newState) {
-		newState.character.specialBonuses.forEach((bonus) => {
-			newState.character[bonus.field] += bonus.change;
+	calculateArmorClass(newState) {
+		newState = newState || merge({}, this.state);
+		let modifier;
+		if (newState.character.armor) {
+			newState.character.armorClass = newState.character.armor.baseAc;
+			modifier = newState.character.armor.acMod
+				? newState.character[newState.character.armor.acMod]
+				: 0;
+			modifier =
+				newState.character.armor.acModLimit &&
+				modifier > newState.character.armor.acModLimit
+					? newState.character.armor.acModLimit
+					: modifier;
+		} else {
+			newState.character.armorClass = 10;
+			modifier = newState.character.dexterityModifier;
+			if (newState.character.charClass === 'barbarian') {
+				modifier += newState.character.constitutionModifier;
+			} else if (newState.character.charClass === 'monk') {
+				modifier += newState.character.wisdomModifier;
+			} else if (newState.character.charClass === 'sorcerer') {
+				newState.character.armorClass = 13;
+			}
+		}
+		modifier += newState.character.shielded ? 2 : 0;
+		newState.character.armorClass += modifier;
+	}
+
+	addBonuses(newState) {
+		newState.character.bonuses.forEach((bonus) => {
+			newState.character[bonus.field] += bonus.bonusAmount;
 		});
 	}
 
-	renderBasicTextInfo() {
-		const fields = [
-			'Name',
-			'Race',
-			'Class',
-			'Subclass',
-			'Background',
-			'Alignment'
-		];
-		return fields.map((field) => {
-			<label>
-				{field}
-				<input
-					type="text"
-					value={this.state.character[field]}
-					onChange={this.handleChange(field)}
-				/>
-			</label>;
+	renderEditableFields() {
+		return Object.keys(_EDITABLE_FIELDS).map((field, i) => {
+			const camel = camelCase(field);
+			return (
+				<label key={i}>
+					{field}
+					<input
+						type={_EDITABLE_FIELDS[field].type}
+						value={this.state.character[camel]}
+						onChange={this.handleChange(camel)}
+						min={_EDITABLE_FIELDS[field].min}
+						max={_EDITABLE_FIELDS[field].max}
+					/>
+				</label>
+			);
 		});
 	}
 
 	renderAbilityScores() {
-		return _ABILITIES.map((ability) => {
-			<label>
-				{ability.toUpperCase()}
-				<input
-					type="number"
-					min="0"
-					max="20"
-					value={this.state.character[ability]}
-					onChange={this.handleChange(ability)}
-				/>
-			</label>;
+		return _ABILITIES.map((ability, i) => {
+			const camel = camelCase(ability);
+			return (
+				<label key={i}>
+					{ability}
+					<input
+						type="number"
+						min="0"
+						max="30"
+						value={this.state.character[camel]}
+						onChange={this.handleChange(camel)}
+					/>
+				</label>
+			);
 		});
 	}
 
-	renderEditableNumericalFields() {
-		return Object.keys(_EDITABLE_NUMERICAL_FIELDS).map((field) => (
-			<label>
-				{field}
-				<input
-					value={this.state.character[camelCase(field)]}
-					min={_EDITABLE_NUMERICAL_FIELDS[field].min}
-					max={_EDITABLE_NUMERICAL_FIELDS[field].max}
-				/>
-			</label>
-		));
-	}
-
-	renderCalculatedNumericalFields() {
-		return _CALCULATED_NUMERICAL_FIELDS.map((field) => (
+	renderCalculatedFields() {
+		return _CALCULATED_FIELDS.map((field) => (
 			<label>{this.state.character[camelCase(field)]}</label>
 		));
 	}
 
 	renderSavingThrows() {
-		return _ABILITIES.map((ability) => (
-			<label>
-				{ability.toUpperCase()}
-				<input
-					type="checkbox"
-					checked={this.state.character[`${ability}SaveProficiency`]}
-				/>
-				{this.state.character[`${ability}SavingThrow`]}
-			</label>
-		));
+		return _ABILITIES.map((ability) => {
+			const camel = camelCase(ability);
+			return (
+				<label>
+					{ability}
+					<input
+						type="checkbox"
+						onChange={this.handleChange(`${camel}SaveProficiency`)}
+						checked={this.state.character[`${camel}SaveProficiency`]}
+					/>
+					{this.state.character[`${camel}SavingThrow`]}
+				</label>
+			);
+		});
 	}
 
 	renderSkills() {
-		return Object.keys(_SKILLS).map((skill) => (
-			<label>
-				{skill} ({_SKILLS[skill].slice(0, 3)})
-				<input
-					type="checkbox"
-					checked={this.state.character[`${camelCase(skill)}Proficiency`]}
-				/>
-				+{this.state.character[`${camelCase(skill)}Bonus`]}
-			</label>
-		));
+		return Object.keys(_SKILLS).map((skill) => {
+			const camel = camelCase(skill);
+			return (
+				<label>
+					{skill} ({_SKILLS[camel].slice(0, 3)})
+					<input
+						type="checkbox"
+						onChange={this.handleChange(`${camel}Proficiency`)}
+						checked={this.state.character[`${camel}Proficiency`]}
+					/>
+					+{this.state.character[camel]}
+				</label>
+			);
+		});
 	}
 
-	renderSpecialBonuses() {
+	renderBonuses() {
 		// should be form within form?
-		return this.state.character.specialBonuses.map((bonus) => (
-			<form>
-				<label>
-					Name
-					<input type="text" />
-				</label>
-				<label>
-					Field
-					<select name="field">
-						{Object.keys(_SKILLS).map((skill) => {
-							<option>{skill}</option>;
-						})}
-						<option value="armorClass">Armor Class</option>
-					</select>
-				</label>
-			</form>
+		return this.state.character.bonuses.map((bonus) => (
+			<BonusForm
+				handleBonusSubmit={this.handleBonusSubmit.bind(this)}
+				bonus={bonus}
+				skills={_SKILLS}
+			/>
 		));
 	}
 
 	render() {
-		return <form>character sheet form</form>;
+		return (
+			<form onSubmit={this.handleSubmit}>
+				<div>{this.renderEditableFields()}</div>
+				<div>{this.renderCalculatedFields()}</div>
+				<div>{this.renderAbilityScores()}</div>
+				<div>{this.renderSavingThrows()}</div>
+				<div>{this.renderSkills()}</div>
+				<div>{this.renderBonuses()}</div>
+			</form>
+		);
 	}
 }
 
