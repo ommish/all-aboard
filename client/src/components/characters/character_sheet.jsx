@@ -101,15 +101,24 @@ class CharacterSheet extends React.Component {
 		} else {
 			newState.character.bonuses.push(newBonus);
 		}
-		// this.addBonuses(newState);
-		// this.setState(newState);
-		this.calculateFields(newState);
+		this.setState(newState, () => this.handleSubmit());
+	}
+
+	handleRemoveBonus(bonusId) {
+		return (e) => {
+			e.preventDefault();
+			const newState = merge({}, this.state);
+			newState.character.bonuses = newState.character.bonuses.filter(
+				(bonus) => bonus._id !== bonusId
+			);
+			this.setState(newState, () => this.handleSubmit());
+		}
 	}
 
 	handleSubmit(e) {
-		e.preventDefault();
-		this.props.submitCharacter(this.state.character).then((res) => {
-			
+		if (e) e.preventDefault();
+		this.props.updateCharacter(this.state.character).then(({ character }) => {
+			this.calculateFields({ character });
 		});
 	}
 
@@ -199,7 +208,7 @@ class CharacterSheet extends React.Component {
 
 	renderEditableFields() {
 		return Object.keys(_EDITABLE_FIELDS).map((field, i) => {
-			const camel = camelCase(field);
+			const camel = field === 'Class' ? 'charClass' : camelCase(field);
 			return (
 				<label key={i}>
 					<h3>{field} </h3>
@@ -304,14 +313,17 @@ class CharacterSheet extends React.Component {
 
 	renderBonuses() {
 		// should be form within form?
-		const existing = this.state.character.bonuses.map((bonus, i) => (
+		const existing = this.state.character.bonuses.map((bonus, i) => [
 			<BonusForm
-				key={i}
+				key={1}
 				handleBonusSubmit={this.handleBonusSubmit.bind(this)}
 				bonus={bonus}
 				skills={_SKILLS}
-			/>
-		));
+			/>,
+			<button key={2} onClick={this.handleRemoveBonus(bonus._id)}>
+				Remove
+			</button>
+		]);
 		return existing.concat(
 			<BonusForm
 				key={existing.length}
@@ -324,7 +336,10 @@ class CharacterSheet extends React.Component {
 
 	render() {
 		return [
-			<form key={1} className="character-form" onSubmit={this.handleSubmit}>
+			<form
+				key={1}
+				className="character-form"
+				onSubmit={this.handleSubmit.bind(this)}>
 				<div className="character-form-1">{this.renderEditableFields()}</div>
 				<div className="character-form-1">{this.renderHealth()}</div>
 				<div className="character-form-2">{this.renderCalculatedFields()}</div>
@@ -346,7 +361,7 @@ class CharacterSheet extends React.Component {
 						{this.renderSkills()}
 					</div>
 				</div>
-				<input type="submit" />
+				<input type="submit" value="Update" />
 			</form>,
 			<div key={2} className="character-form-6">
 				<h3>Special Bonuses (feats, magic items, etc.)</h3>

@@ -21,7 +21,7 @@ div[class="character-form-3"], div[class="character-form-4"], div[class="charact
   margin-left: 10px;
 }
 
-.character-form input[type="submit"] {
+.character-form input[type="submit"], button {
   margin: 0;
   width: 200px;
 }

@@ -1,4 +1,5 @@
 import { connect } from 'react-redux';
+import { updateCharacter } from '../../actions/character_actions';
 import CharacterSheet from './character_sheet';
 
 const mapStateToProps = (state, ownProps) => {
@@ -12,7 +13,9 @@ const mapStateToProps = (state, ownProps) => {
 };
 
 const mapDispatchToProps = (dispatch) => {
-
+  return {
+    updateCharacter: (character) => dispatch(updateCharacter(character)),
+  }
 }
 
-export default connect(mapStateToProps, null)(CharacterSheet);
+export default connect(mapStateToProps, mapDispatchToProps)(CharacterSheet);
