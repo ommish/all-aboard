@@ -16,7 +16,7 @@ const App = ({store}) => {
           <Switch>
             <ProtectedRoute path='/users/:userId' component={UserProfile}/>
             <ProtectedRoute path='/characters/:characterId' component={CharacterSheet}/>
-            <AuthRoute path='/' component={Splash}/>
+            <AuthRoute exact path='/' component={Splash}/>
           </Switch>
           <ProtectedRoute exact path='/users/:userId/characters' component={CharacterIndex}/>
         </div>
