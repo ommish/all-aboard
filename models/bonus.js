@@ -9,7 +9,7 @@ const bonusSchema = new Schema({
 			'initiative',
 			'armorClass',
 			'acrobatics',
-			'animalHanding',
+			'animalHandling',
 			'arcana',
 			'athletics',
 			'deception',

@@ -34,7 +34,7 @@ const characterSchema = new Schema({
 	wisdomSaveProficiency: { type: Boolean, default: false },
 	charismaSaveProficiency: { type: Boolean, default: false },
 	acrobaticsProficiency: { type: Boolean, default: false },
-	animalHandingProficiency: { type: Boolean, default: false },
+	animalHandlingProficiency: { type: Boolean, default: false },
 	arcanaProficiency: { type: Boolean, default: false },
 	athleticsProficiency: { type: Boolean, default: false },
 	deceptionProficiency: { type: Boolean, default: false },
