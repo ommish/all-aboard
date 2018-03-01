@@ -381,5 +381,17 @@ class CharacterSheet extends React.Component {
 export default CharacterSheet;
 
 // TODO: make charClass model to help auto calculate fields
-// refactor
-//
+// list to select races from
+// list to select classes from
+// list to select subclasses from
+// list to select backgrounds from
+// list to
+// inventory
+// weapons
+// character create flow
+// character image
+// require bonus field to be selected if amount exists
+// hide bonus field and amount until click
+// hide bonus details
+// refresh shouldn't redirect
+// money
