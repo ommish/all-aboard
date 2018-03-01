@@ -4,15 +4,30 @@ const armor = require('./armor');
 const bonus = require('./bonus');
 
 const characterSchema = new Schema({
+	name: { type: String, default: '' },
 	_user: { type: Schema.Types.ObjectId, ref: 'User' },
 	armor: { type: armor.armorSchema },
 	bonuses: { type: [bonus.bonusSchema] },
-	name: { type: String, default: '' },
-	race: { type: String, default: '' },
+	race: { type: Schema.Types.ObjectId, ref: 'Race' },
 	charClass: { type: String, default: '' },
 	subclass: { type: String, default: '' },
 	background: { type: String, default: '' },
-	alignment: { type: String, default: '' },
+	alignment: {
+		type: String,
+		default: '',
+		enum: [
+			'',
+			'Chaotic Evil',
+			'Neutral Evil',
+			'Lawful Evil',
+			'Chaotic Neutral',
+			'True Neutral',
+			'Lawful Neutral',
+			'Chaotic Good',
+			'Neutral Good',
+			'Lawful Good'
+		]
+	},
 	playerName: { type: String, default: '' },
 	shielded: { type: Boolean, default: false },
 	level: { type: Number, min: 1, max: 20, default: 1 },
@@ -51,7 +66,17 @@ const characterSchema = new Schema({
 	sleightOfHandProficiency: { type: Boolean, default: false },
 	stealthProficiency: { type: Boolean, default: false },
 	survivalProficiency: { type: Boolean, default: false },
-	otherProficienciesAndLanguages: { type: String, default: '' }
+	platinum: { type: Number, default: 0 },
+	gold: { type: Number, default: 0 },
+	silver: { type: Number, default: 0 },
+	copper: { type: Number, default: 0 },
+	age: Number,
+	height: Number,
+	weight: Number,
+	eyes: {type: String, default: ''},
+	skin: {type: String, default: ''},
+	hair: {type: String, default: ''},
+	backstory: {type: String, default: ''},
 });
 
 mongoose.model('Character', characterSchema);

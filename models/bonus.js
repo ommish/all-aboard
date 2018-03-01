@@ -5,9 +5,12 @@ const bonusSchema = new Schema({
 	description: { type: String, default: '' },
 	field: {
 		type: String,
+		default: '',
 		enum: [
+			'',
 			'initiative',
 			'armorClass',
+			'speed',
 			'acrobatics',
 			'animalHandling',
 			'arcana',
