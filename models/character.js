@@ -1,9 +1,12 @@
 const mongoose = require('mongoose');
 const { Schema } = mongoose;
 const armor = require('./armor');
+const bonus = require('./bonus');
+
 const characterSchema = new Schema({
 	_user: { type: Schema.Types.ObjectId, ref: 'User' },
 	armor: { type: armor.armorSchema },
+	bonuses: { type: [bonus.bonusSchema] },
 	name: { type: String, default: '' },
 	race: { type: String, default: '' },
 	charClass: { type: String, default: '' },
@@ -11,7 +14,7 @@ const characterSchema = new Schema({
 	background: { type: String, default: '' },
 	alignment: { type: String, default: '' },
 	playerName: { type: String, default: '' },
-	shield: { type: Boolean, default: false },
+	shielded: { type: Boolean, default: false },
 	level: { type: Number, min: 1, max: 20, default: 1 },
 	inspiration: { type: Number, min: 0, max: 10, default: 0 },
 	maxHealth: { type: Number, min: 0, max: 999, default: 0 },
@@ -48,7 +51,6 @@ const characterSchema = new Schema({
 	sleightOfHandProficiency: { type: Boolean, default: false },
 	stealthProficiency: { type: Boolean, default: false },
 	survivalProficiency: { type: Boolean, default: false },
-	specialBonuses: { type: String, default: '[]' },
 	otherProficienciesAndLanguages: { type: String, default: '' }
 });
 
