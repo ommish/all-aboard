@@ -3,6 +3,7 @@ import { merge, camelCase } from 'lodash';
 import { Link } from 'react-router-dom';
 import BonusForm from './form_components/bonus_form';
 import RaceMenu from './form_components/race_menu';
+import Money from './form_components/money';
 import './character_sheet.css';
 
 const _ABILITIES = [
@@ -79,7 +80,7 @@ class CharacterSheet extends React.Component {
 	calculateFields(newState) {
 		newState = newState || merge({}, this.state);
 		_CALCULATED_FIELDS.forEach((field) => {
-			 this[`calculate${field}`](newState);
+			this[`calculate${field}`](newState);
 		});
 		this.setState(newState, () => (window.character = this.state.character));
 	}
@@ -221,7 +222,13 @@ class CharacterSheet extends React.Component {
 
 	renderRaces() {
 		return (
-			<RaceMenu races={this.props.races} selectedRace={this.state.character.race ? this.state.character.race : ""} handleChange={this.handleChange('race')}/>
+			<RaceMenu
+				races={this.props.races}
+				selectedRace={
+					this.state.character.race ? this.state.character.race : ''
+				}
+				handleChange={this.handleChange('race')}
+			/>
 		);
 	}
 
@@ -232,6 +239,7 @@ class CharacterSheet extends React.Component {
 				<label key={i}>
 					<h3>{field} </h3>
 					<input
+						required={Boolean(field === 'Name')}
 						type={_EDITABLE_FIELDS[field].type}
 						value={this.state.character[camel]}
 						onChange={this.handleChange(camel)}
@@ -267,7 +275,13 @@ class CharacterSheet extends React.Component {
 	}
 
 	renderCalculatedFields() {
-		return ['Proficiency Bonus', 'Initiative', 'Passive Wisdom', 'Armor Class', 'Speed'].map((field, i) => (
+		return [
+			'Proficiency Bonus',
+			'Initiative',
+			'Passive Wisdom',
+			'Armor Class',
+			'Speed'
+		].map((field, i) => (
 			<label key={i}>
 				<h3>{field} </h3>
 				{this.state.character[camelCase(field)] >= 0 ? ' +' : '   '}
@@ -353,6 +367,18 @@ class CharacterSheet extends React.Component {
 		);
 	}
 
+	renderMoney() {
+		return (
+			<Money
+				copper={this.state.character.copper}
+				silver={this.state.character.silver}
+				gold={this.state.character.gold}
+				platinum={this.state.character.platinum}
+				handleChange={this.handleChange.bind(this)}
+			/>
+		);
+	}
+
 	render() {
 		return [
 			<Link key={1} to={`/users/${this.props.currentUser._id}`}>
@@ -389,6 +415,10 @@ class CharacterSheet extends React.Component {
 			<div key={3} className="character-form-6">
 				<h3>Traits, Bonuses, Traits, etc.</h3>
 				{this.renderBonuses()}
+			</div>,
+			<div key={4}>
+			<h3>Money</h3>
+			{this.renderMoney()}
 			</div>
 		];
 	}
@@ -402,11 +432,9 @@ class CharacterSheet extends React.Component {
 export default CharacterSheet;
 
 // TODO: make charClass model to help auto calculate fields
-// list to select races from
 // list to select classes from
 // list to select subclasses from
 // list to select backgrounds from
-// list to
 // inventory
 // weapons
 // character create flow
@@ -414,6 +442,8 @@ export default CharacterSheet;
 // require bonus field to be selected if amount exists
 // hide bonus field and amount until click
 // hide bonus details
-// refresh shouldn't redirect
-// money
+// refresh shouldn't redirect - because fetching user happens after component mount. try moving this to app load
 // make racial bonus type that gets added automatically
+// add campaign (character can belong to campaign)
+// list more than name in character list
+// add uniqueness validation

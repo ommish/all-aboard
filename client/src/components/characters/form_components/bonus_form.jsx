@@ -37,6 +37,7 @@ class BonusForm extends React.Component {
 				<label>
 					Name
 					<input
+						required={true}
 						type="text"
 						value={this.state.name}
 						onChange={this.handleChange('name')}
@@ -51,7 +52,7 @@ class BonusForm extends React.Component {
 				</label>
 				<label>
 					Field
-					<select value={this.state.field} name="field" onChange={this.handleChange('field')}>
+					<select value={this.state.field} required={Boolean(this.state.bonusAmount)} name="field" onChange={this.handleChange('field')}>
 						<option value="">Select a Field</option>
 						{Object.keys(this.props.skills).map((skill, i) => {
 							return <option key={i} value={camelCase(skill)}>{skill}</option>;
