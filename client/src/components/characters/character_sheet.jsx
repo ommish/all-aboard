@@ -2,8 +2,10 @@ import React from 'react';
 import { merge, camelCase } from 'lodash';
 import { Link } from 'react-router-dom';
 import BonusForm from './form_components/bonus_form';
+import AlignmentMenu from './form_components/alignment_menu';
 import RaceMenu from './form_components/race_menu';
 import ClassMenu from './form_components/class_menu';
+import BackgroundMenu from './form_components/background_menu';
 import Money from './form_components/money';
 import './character_sheet.css';
 
@@ -35,12 +37,20 @@ const _SKILLS = {
 	Stealth: 'Dexterity',
 	Survival: 'Wisdom'
 };
+const _ALIGNMENTS = [
+	'Chaotic Evil',
+	'Neutral Evil',
+	'Lawful Evil',
+	'Chaotic Neutral',
+	'True Neutral',
+	'Lawful Neutral',
+	'Chaotic Good',
+	'Neutral Good',
+	'Lawful Good'
+];
 const _EDITABLE_FIELDS = {
 	Name: { type: 'text' },
 	Level: { type: 'number', min: 1, max: 20 },
-	Subclass: { type: 'text' },
-	Background: { type: 'text' },
-	Alignment: { type: 'text' }
 };
 const _CALCULATED_FIELDS = [
 	'Modifiers',
@@ -97,7 +107,9 @@ class CharacterSheet extends React.Component {
 	handleBonusSubmit(newBonus) {
 		const newState = merge({}, this.state);
 		if (newBonus._id) {
-			const bonusIdx = newState.character.bonuses.findIndex((bonus) => bonus._id === newBonus._id);
+			const bonusIdx = newState.character.bonuses.findIndex(
+				(bonus) => bonus._id === newBonus._id
+			);
 			newState.character.bonuses[bonusIdx] = newBonus;
 		} else {
 			newState.character.bonuses.push(newBonus);
@@ -220,6 +232,12 @@ class CharacterSheet extends React.Component {
 		});
 	}
 
+	renderAlignments() {
+		return (
+			<AlignmentMenu alignments={_ALIGNMENTS} handleChange={this.handleChange('alignment')} selectedAlignment={this.state.character.alignment}/>
+		);
+	}
+
 	renderRaces() {
 		return (
 			<RaceMenu
@@ -240,6 +258,18 @@ class CharacterSheet extends React.Component {
 					this.state.character.charClass ? this.state.character.charClass : ''
 				}
 				handleChange={this.handleChange('charClass')}
+			/>
+		);
+	}
+
+	renderBackgrounds() {
+		return (
+			<BackgroundMenu
+				backgrounds={this.props.backgrounds}
+				selectedBackground={
+					this.state.character.background ? this.state.character.background : ''
+				}
+				handleChange={this.handleChange('background')}
 			/>
 		);
 	}
@@ -318,7 +348,11 @@ class CharacterSheet extends React.Component {
 			const camel = camelCase(ability);
 			return (
 				<label key={i}>
-					{ability}:
+					{ability}: ({this.state.character[`${camelCase(ability)}Modifier`] >=
+					0
+						? ' +'
+						: '   '}
+					{this.state.character[`${camelCase(ability)}Modifier`]})
 					<input
 						type="number"
 						min="0"
@@ -413,8 +447,10 @@ class CharacterSheet extends React.Component {
 				onSubmit={this.handleSubmit.bind(this)}>
 				<input type="submit" value="Save" />
 				<div className="character-form-1">{this.renderEditableFields()}</div>
+				<div className="character-form-1">{this.renderAlignments()}</div>				
 				<div className="character-form-1">{this.renderRaces()}</div>
 				<div className="character-form-1">{this.renderCharClasses()}</div>
+				<div className="character-form-1">{this.renderBackgrounds()}</div>
 				<div className="character-form-1">{this.renderHealth()}</div>
 				<div className="character-form-1">{this.renderHitDie()}</div>
 				<div className="character-form-2">{this.renderCalculatedFields()}</div>
@@ -465,7 +501,6 @@ class CharacterSheet extends React.Component {
 export default CharacterSheet;
 
 // TODO: make charClass model to help auto calculate fields
-// list to select subclasses from
 // list to select backgrounds from
 // inventory
 // weapons

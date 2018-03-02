@@ -10,7 +10,6 @@ const characterSchema = new Schema({
 	bonuses: { type: [bonus.bonusSchema] },
 	race: { type: Schema.Types.ObjectId, ref: 'Race' },
 	charClass: { type: Schema.Types.ObjectId, ref: 'CharClass' },
-	subclass: { type: String, default: '' },
 	background: { type: Schema.Types.ObjectId, ref: 'Background' },
 	alignment: {
 		type: String,
@@ -77,7 +76,12 @@ const characterSchema = new Schema({
 	skin: { type: String, default: '' },
 	hair: { type: String, default: '' },
 	backstory: { type: String, default: '' },
-	languages: { type: String, default: '[]' }
+	languages: { type: String, default: '[]' },
+	armorProficiencies: { type: String, default: '[]' },
+	weaponProficiencies: { type: String, default: '[]' },
+	toolProficiencies: { type: String, default: '[]' },
+	equipment: { type: String, default: '[]' },
+	weapons: { type: String, default: '[]' }, //eventually make weapon model
 });
 
 mongoose.model('Character', characterSchema);

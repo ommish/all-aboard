@@ -7,7 +7,7 @@ class RaceMenu extends React.Component {
 		});
 		return (
       <select value={this.props.selectedRace} onChange={this.props.handleChange}>
-        <option value="">Select a Race</option>
+        <option value="">Select Race</option>
         {raceOptions}
       </select>
     );
