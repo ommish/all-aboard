@@ -97,9 +97,8 @@ class CharacterSheet extends React.Component {
 	handleBonusSubmit(newBonus) {
 		const newState = merge({}, this.state);
 		if (newBonus._id) {
-			newState.character.bonuses.filter(
-				(bonus) => bonus._id === newBonus._id
-			)[0] = newBonus;
+			const bonusIdx = newState.character.bonuses.findIndex((bonus) => bonus._id === newBonus._id);
+			newState.character.bonuses[bonusIdx] = newBonus;
 		} else {
 			newState.character.bonuses.push(newBonus);
 		}
@@ -441,7 +440,7 @@ class CharacterSheet extends React.Component {
 					<h3>Shielded </h3>
 					<div className="character-form-input-group">
 						<label>
-							Shielded?
+							Shield
 							<input
 								type="checkbox"
 								value={this.state.character.shielded}
