@@ -1,7 +1,7 @@
 const passport = require('passport');
+const AuthController = require('../controllers/auth_controller');
 
 module.exports = (app) => {
-
 	app.get(
 		'/auth/google',
 		passport.authenticate('google', {
@@ -12,17 +12,10 @@ module.exports = (app) => {
 	app.get(
 		'/auth/google/callback',
 		passport.authenticate('google'),
-		(req, res) => {
-			res.redirect('/');
-		}
+		AuthController.authCallback
 	);
 
-	app.get('/api/current_user', (req, res) => {
-		res.send(req.user);
-	});
+	app.get('/api/current_user', AuthController.currentUser);
 
-	app.get('/api/logout', (req, res) => {
-		req.logout();
-		res.redirect('/');
-	});
+	app.get('/api/logout', AuthController.logout);
 };
