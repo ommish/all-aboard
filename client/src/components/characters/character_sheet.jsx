@@ -8,61 +8,14 @@ import ClassMenu from './form_components/class_menu';
 import BackgroundMenu from './form_components/background_menu';
 import Money from './form_components/money';
 import './character_sheet.css';
-
-const _ABILITIES = [
-	'Strength',
-	'Dexterity',
-	'Constitution',
-	'Intelligence',
-	'Wisdom',
-	'Charisma'
-];
-const _SKILLS = {
-	Acrobatics: 'Dexterity',
-	'Animal Handling': 'Wisdom',
-	Arcana: 'Intelligence',
-	Athletics: 'Strength',
-	Deception: 'Charisma',
-	History: 'Intelligence',
-	Insight: 'Wisdom',
-	Intimidation: 'Charisma',
-	Investigation: 'Intelligence',
-	Medicine: 'Wisdom',
-	Nature: 'Intelligence',
-	Perception: 'Wisdom',
-	Performance: 'Charisma',
-	Persuasion: 'Charisma',
-	Religion: 'Intelligence',
-	'Sleight of Hand': 'Dexterity',
-	Stealth: 'Dexterity',
-	Survival: 'Wisdom'
-};
-const _ALIGNMENTS = [
-	'Chaotic Evil',
-	'Neutral Evil',
-	'Lawful Evil',
-	'Chaotic Neutral',
-	'True Neutral',
-	'Lawful Neutral',
-	'Chaotic Good',
-	'Neutral Good',
-	'Lawful Good'
-];
-const _EDITABLE_FIELDS = {
-	Name: { type: 'text' },
-	Level: { type: 'number', min: 1, max: 20 },
-};
-const _CALCULATED_FIELDS = [
-	'Modifiers',
-	'ProficiencyBonus',
-	'SavingThrows',
-	'Skills',
-	'Initiative',
-	'PassiveWisdom',
-	'ArmorClass',
-	'Speed',
-	'Bonuses'
-];
+import {
+	_ABILITIES,
+	_SKILLS,
+	_ALIGNMENTS,
+	_EDITABLE_FIELDS,
+	_CALCULATED_FIELDS
+} from './character_variables';
+import * as Calculators from './calculators';
 
 class CharacterSheet extends React.Component {
 	constructor(props) {
@@ -73,26 +26,26 @@ class CharacterSheet extends React.Component {
 	}
 
 	componentDidMount() {
-		// fetch character, then:
-		this.calculateFields();
+		const newState = merge({}, this.state);
+		this.calculateFields({newState, races: this.props.races, charClasses: this.props.charClasses, backgrounds: this.props.backgrounds});
+		this.setState(newState, () => (window.character = this.state.character));
 	}
 
 	componentWillReceiveProps(newProps) {
 		if (
-			this.props.match.params.characterId !== newProps.match.params.characterId
+			this.props.match.params.characterId !== newProps.match.params.characterId || this.props.character !== newProps.character
 		) {
-			this.setState({ character: newProps.character }, () => {
-				this.calculateFields();
-			});
+			const newState = {character: merge({}, newProps.character)};
+			this.calculateFields({newState, races: this.props.races, charClasses: this.props.charClasses, backgrounds: this.props.backgrounds});
+			this.setState(newState);
 		}
 	}
 
-	calculateFields(newState) {
-		newState = newState || merge({}, this.state);
-		_CALCULATED_FIELDS.forEach((field) => {
-			this[`calculate${field}`](newState);
-		});
-		this.setState(newState, () => (window.character = this.state.character));
+	calculateFields ({newState, races, charClasses, backgrounds}) {
+	  _CALCULATED_FIELDS.forEach((field) => {
+			const camel = camelCase(field);
+	    Calculators[camel]({newState, races, charClasses, backgrounds});
+	  });
 	}
 
 	handleChange(field) {
@@ -100,7 +53,8 @@ class CharacterSheet extends React.Component {
 			const newState = merge({}, this.state);
 			newState.character[field] =
 				e.target.type === 'checkbox' ? e.target.checked : e.target.value;
-			this.calculateFields(newState);
+			this.calculateFields({newState, races: this.props.races, charClasses: this.props.charClasses, backgrounds: this.props.backgrounds});
+			this.setState(newState);
 		};
 	}
 
@@ -130,111 +84,16 @@ class CharacterSheet extends React.Component {
 
 	handleSubmit(e) {
 		if (e) e.preventDefault();
-		this.props.updateCharacter(this.state.character).then(({ character }) => {
-			this.calculateFields({ character });
-		});
-	}
-
-	calculateModifiers(newState) {
-		newState = newState || merge({}, this.state);
-		_ABILITIES.forEach((ability) => {
-			const field = camelCase(ability);
-			const modifier = Math.floor((newState.character[field] - 10) / 2);
-			newState.character[`${field}Modifier`] = modifier;
-		});
-	}
-
-	calculateProficiencyBonus(newState) {
-		newState = newState || merge({}, this.state);
-		newState.character.proficiencyBonus =
-			Math.ceil(newState.character.level / 4) + 1;
-	}
-
-	calculateSavingThrows(newState) {
-		newState = newState || merge({}, this.state);
-		_ABILITIES.forEach((ability) => {
-			const field = camelCase(ability);
-			const proficiencyBonus = newState.character[`${field}SaveProficiency`]
-				? newState.character.proficiencyBonus
-				: 0;
-			newState.character[`${field}SavingThrow`] =
-				newState.character[`${field}Modifier`] + proficiencyBonus;
-		});
-	}
-
-	calculateSkills(newState) {
-		newState = newState || merge({}, this.state);
-		Object.keys(_SKILLS).forEach((skill) => {
-			const field = camelCase(skill);
-			const connectedAbility = camelCase(_SKILLS[skill]);
-			const proficiencyBonus = newState.character[`${field}Proficiency`]
-				? newState.character.proficiencyBonus
-				: 0;
-			newState.character[field] =
-				newState.character[`${connectedAbility}Modifier`] + proficiencyBonus;
-		});
-	}
-
-	calculateInitiative(newState) {
-		newState = newState || merge({}, this.state);
-		newState.character.initiative = newState.character.dexterityModifier;
-	}
-
-	calculatePassiveWisdom(newState) {
-		newState = newState || merge({}, this.state);
-		newState.character.passiveWisdom = 10 + newState.character.perception;
-	}
-
-	calculateArmorClass(newState) {
-		newState = newState || merge({}, this.state);
-		let modifier;
-		if (newState.character.armor) {
-			newState.character.armorClass = newState.character.armor.baseAc;
-			modifier = newState.character.armor.acMod
-				? newState.character[newState.character.armor.acMod]
-				: 0;
-			modifier =
-				newState.character.armor.acModLimit &&
-				modifier > newState.character.armor.acModLimit
-					? newState.character.armor.acModLimit
-					: modifier;
-		} else {
-			newState.character.armorClass = 10;
-			modifier = newState.character.dexterityModifier;
-			const charClass = this.props.charClasses[newState.character.charClass];
-			if (charClass === 'barbarian') {
-				modifier += newState.character.constitutionModifier;
-			} else if (charClass === 'monk') {
-				modifier += newState.character.wisdomModifier;
-			} else if (charClass === 'sorcerer') {
-				newState.character.armorClass = 13;
-			}
-		}
-		modifier += newState.character.shielded ? 2 : 0;
-		newState.character.armorClass += modifier;
-	}
-
-	calculateSpeed(newState) {
-		newState = newState || merge({}, this.state);
-		if (newState.character.race) {
-			const race = this.props.races[newState.character.race];
-			newState.character.speed = race.speed;
-		} else {
-			newState.character.speed = 0;
-		}
-	}
-
-	calculateBonuses(newState) {
-		newState.character.bonuses.forEach((bonus) => {
-			if (bonus.field) {
-				newState.character[bonus.field] += bonus.bonusAmount;
-			}
-		});
+		this.props.updateCharacter(this.state.character);
 	}
 
 	renderAlignments() {
 		return (
-			<AlignmentMenu alignments={_ALIGNMENTS} handleChange={this.handleChange('alignment')} selectedAlignment={this.state.character.alignment}/>
+			<AlignmentMenu
+				alignments={_ALIGNMENTS}
+				handleChange={this.handleChange('alignment')}
+				selectedAlignment={this.state.character.alignment}
+			/>
 		);
 	}
 
@@ -447,7 +306,7 @@ class CharacterSheet extends React.Component {
 				onSubmit={this.handleSubmit.bind(this)}>
 				<input type="submit" value="Save" />
 				<div className="character-form-1">{this.renderEditableFields()}</div>
-				<div className="character-form-1">{this.renderAlignments()}</div>				
+				<div className="character-form-1">{this.renderAlignments()}</div>
 				<div className="character-form-1">{this.renderRaces()}</div>
 				<div className="character-form-1">{this.renderCharClasses()}</div>
 				<div className="character-form-1">{this.renderBackgrounds()}</div>
