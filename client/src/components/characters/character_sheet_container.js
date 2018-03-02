@@ -11,6 +11,7 @@ const mapStateToProps = (state, ownProps) => {
     character,
     editable,
     races: state.races,
+    charClasses: state.charClasses,
   };
 };
 

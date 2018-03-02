@@ -3,6 +3,7 @@ import { merge, camelCase } from 'lodash';
 import { Link } from 'react-router-dom';
 import BonusForm from './form_components/bonus_form';
 import RaceMenu from './form_components/race_menu';
+import ClassMenu from './form_components/class_menu';
 import Money from './form_components/money';
 import './character_sheet.css';
 
@@ -37,7 +38,6 @@ const _SKILLS = {
 const _EDITABLE_FIELDS = {
 	Name: { type: 'text' },
 	Level: { type: 'number', min: 1, max: 20 },
-	Class: { type: 'text' },
 	Subclass: { type: 'text' },
 	Background: { type: 'text' },
 	Alignment: { type: 'text' }
@@ -232,6 +232,18 @@ class CharacterSheet extends React.Component {
 		);
 	}
 
+	renderCharClasses() {
+		return (
+			<ClassMenu
+				charClasses={this.props.charClasses}
+				selectedCharClass={
+					this.state.character.charClass ? this.state.character.charClass : ''
+				}
+				handleChange={this.handleChange('charClass')}
+			/>
+		);
+	}
+
 	renderEditableFields() {
 		return Object.keys(_EDITABLE_FIELDS).map((field, i) => {
 			const camel = field === 'Class' ? 'charClass' : camelCase(field);
@@ -391,6 +403,7 @@ class CharacterSheet extends React.Component {
 				<input type="submit" value="Save" />
 				<div className="character-form-1">{this.renderEditableFields()}</div>
 				<div className="character-form-1">{this.renderRaces()}</div>
+				<div className="character-form-1">{this.renderCharClasses()}</div>
 				<div className="character-form-1">{this.renderHealth()}</div>
 				<div className="character-form-2">{this.renderCalculatedFields()}</div>
 				<div className="character-form-3">

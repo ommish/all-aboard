@@ -1,10 +1,11 @@
 import axios from 'axios';
 
 export const RECEIVE_COMPENDIUM = 'RECEIVE_COMPENDIUM';
-export const receiveCompendium = ({ races }) => {
+export const receiveCompendium = ({ race, charClass }) => {
 	return {
 		type: RECEIVE_COMPENDIUM,
-		races,
+		races: race,
+		charClasses: charClass,
 	};
 };
 
