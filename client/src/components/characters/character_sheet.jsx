@@ -190,11 +190,12 @@ class CharacterSheet extends React.Component {
 		} else {
 			newState.character.armorClass = 10;
 			modifier = newState.character.dexterityModifier;
-			if (newState.character.charClass === 'barbarian') {
+			const charClass = this.props.charClasses[newState.character.charClass];
+			if (charClass === 'barbarian') {
 				modifier += newState.character.constitutionModifier;
-			} else if (newState.character.charClass === 'monk') {
+			} else if (charClass === 'monk') {
 				modifier += newState.character.wisdomModifier;
-			} else if (newState.character.charClass === 'sorcerer') {
+			} else if (charClass === 'sorcerer') {
 				newState.character.armorClass = 13;
 			}
 		}
@@ -424,14 +425,27 @@ class CharacterSheet extends React.Component {
 						{this.renderSkills()}
 					</div>
 				</div>
+				<div className="character-form-5">
+					<h3>Shielded </h3>
+					<div className="character-form-input-group">
+						<label>
+							Shielded?
+							<input
+								type="checkbox"
+								value={this.state.character.shielded}
+								onChange={this.handleChange('shielded')}
+							/>
+						</label>
+					</div>
+				</div>
+				<div className="character-form-4">
+					<h3>Money</h3>
+					{this.renderMoney()}
+				</div>
 			</form>,
 			<div key={3} className="character-form-6">
 				<h3>Traits, Bonuses, Traits, etc.</h3>
 				{this.renderBonuses()}
-			</div>,
-			<div key={4}>
-			<h3>Money</h3>
-			{this.renderMoney()}
 			</div>
 		];
 	}
