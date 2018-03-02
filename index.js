@@ -12,6 +12,7 @@ require('./models/user');
 require('./models/armor');
 require('./models/race');
 require('./models/char_class');
+require('./models/background');
 require('./models/character');
 
 // require('./seeds/armor_seeds');

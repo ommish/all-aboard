@@ -11,7 +11,7 @@ const characterSchema = new Schema({
 	race: { type: Schema.Types.ObjectId, ref: 'Race' },
 	charClass: { type: Schema.Types.ObjectId, ref: 'CharClass' },
 	subclass: { type: String, default: '' },
-	background: { type: String, default: '' },
+	charClass: { type: Schema.Types.ObjectId, ref: 'Background' },
 	alignment: {
 		type: String,
 		default: '',
