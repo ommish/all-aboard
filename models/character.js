@@ -9,7 +9,7 @@ const characterSchema = new Schema({
 	armor: { type: armor.armorSchema },
 	bonuses: { type: [bonus.bonusSchema] },
 	race: { type: Schema.Types.ObjectId, ref: 'Race' },
-	charClass: { type: String, default: '' },
+	charClass: { type: Schema.Types.ObjectId, ref: 'CharClass' },
 	subclass: { type: String, default: '' },
 	background: { type: String, default: '' },
 	alignment: {

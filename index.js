@@ -11,6 +11,7 @@ mongoose.connect(`${variables.DATABASE}`);
 require('./models/user');
 require('./models/armor');
 require('./models/race');
+require('./models/char_class');
 require('./models/character');
 
 const cookieSession = require('cookie-session');
