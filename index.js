@@ -33,6 +33,7 @@ app.use(bodyParser.json());
 
 require('./services/passport');
 require('./routes/auth_routes')(app);
+require('./routes/user_routes')(app);
 require('./routes/character_routes')(app);
 require ('./routes/compendium_routes')(app);
 
