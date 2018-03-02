@@ -31,7 +31,9 @@ const bonusSchema = new Schema({
 			'survival'
 		]
 	},
-	bonusAmount: { type: Number, default: 0 }
+	bonusAmount: { type: Number, default: 0 },
+	fromRace: { type: Boolean, default: false },
+	fromClass: { type: Boolean, default: false }
 });
 
 const Bonus = mongoose.model('Bonus', bonusSchema);
