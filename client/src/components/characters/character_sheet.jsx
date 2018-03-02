@@ -287,6 +287,17 @@ class CharacterSheet extends React.Component {
 		);
 	}
 
+	renderHitDie() {
+		return (
+			<label>
+				<h3>Hit Die</h3>
+				{this.state.character.charClass
+					? `d${this.props.charClasses[this.state.character.charClass].hitDie}`
+					: ''}
+			</label>
+		);
+	}
+
 	renderCalculatedFields() {
 		return [
 			'Proficiency Bonus',
@@ -406,6 +417,7 @@ class CharacterSheet extends React.Component {
 				<div className="character-form-1">{this.renderRaces()}</div>
 				<div className="character-form-1">{this.renderCharClasses()}</div>
 				<div className="character-form-1">{this.renderHealth()}</div>
+				<div className="character-form-1">{this.renderHitDie()}</div>
 				<div className="character-form-2">{this.renderCalculatedFields()}</div>
 				<div className="character-form-3">
 					<h3>Ability Scores </h3>
@@ -444,33 +456,26 @@ class CharacterSheet extends React.Component {
 				</div>
 			</form>,
 			<div key={3} className="character-form-6">
-				<h3>Traits, Bonuses, Traits, etc.</h3>
+				<h3>Traits, Bonuses, Feats, etc.</h3>
 				{this.renderBonuses()}
 			</div>
 		];
 	}
 }
 
-// feats/special items => name and effect (add to AC, add some num to a skill, initiative, speed, )
-// effects => ability score, health, proficiency,
-
-// noneditable fields: proficiency bonuses, saving throws,
-
 export default CharacterSheet;
 
 // TODO: make charClass model to help auto calculate fields
-// list to select classes from
 // list to select subclasses from
 // list to select backgrounds from
 // inventory
 // weapons
 // character create flow
 // character image
-// require bonus field to be selected if amount exists
 // hide bonus field and amount until click
 // hide bonus details
 // refresh shouldn't redirect - because fetching user happens after component mount. try moving this to app load
-// make racial bonus type that gets added automatically
 // add campaign (character can belong to campaign)
 // list more than name in character list
 // add uniqueness validation
+// add hit dice (number of dice, not die type)
