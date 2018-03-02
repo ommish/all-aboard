@@ -437,10 +437,10 @@ class CharacterSheet extends React.Component {
 					</div>
 				</div>
 				<div className="character-form-5">
-					<h3>Shielded </h3>
+					<h3>Shield </h3>
 					<div className="character-form-input-group">
 						<label>
-							Shield
+							Shielded
 							<input
 								type="checkbox"
 								value={this.state.character.shielded}
