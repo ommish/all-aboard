@@ -7,7 +7,7 @@ class ClassMenu extends React.Component {
 		});
 		return (
       <select value={this.props.selectedCharClass} onChange={this.props.handleChange}>
-        <option value=""></option>
+        <option value="">Select a Class</option>
         {charClassOptions}
       </select>
     );
