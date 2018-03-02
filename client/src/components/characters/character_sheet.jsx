@@ -221,7 +221,7 @@ class CharacterSheet extends React.Component {
 
 	renderRaces() {
 		return (
-			<RaceMenu races={this.props.races} selectedRace={this.state.character.race ? this.state.character.race._id : ""} handleChange={this.handleChange('race')}/>
+			<RaceMenu races={this.props.races} selectedRace={this.state.character.race ? this.state.character.race : ""} handleChange={this.handleChange('race')}/>
 		);
 	}
 
