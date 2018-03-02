@@ -6,6 +6,7 @@ const raceSchema = new Schema({
 	name: { type: String, required: true },
 	speed: { type: Number, required: true },
 	weaponProficiencies: { type: String, default: '[]' },
+	armorProficiencies: { type: String, default: '[]' },
 	toolProficiencies: { type: String, default: '[]' },
 	languages: { type: String, default: '[]' },
 	racialBonuses: { type: [bonus.bonusSchema] }

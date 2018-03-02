@@ -67,7 +67,7 @@ const backgrounds = [
 	{
 		name: 'Sage',
 		skillProficiencies: '["arcana", "history"]',
-		languages: '["choice1", choice2]',
+		languages: '["choice1", "choice2"]',
 		gold: 10
 	},
 	{

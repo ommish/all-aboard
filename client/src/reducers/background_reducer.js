@@ -6,6 +6,12 @@ const BackgroundReducer = (state, action) => {
   switch (action.type) {
     case RECEIVE_COMPENDIUM:
       newState = merge({}, action.backgrounds);
+      for (const bgId in newState) {
+        newState[bgId].skillProficiencies = JSON.parse(newState[bgId].skillProficiencies);
+        newState[bgId].toolProficiencies = JSON.parse(newState[bgId].toolProficiencies);
+        newState[bgId].languages = JSON.parse(newState[bgId].languages);
+        newState[bgId].equipment = JSON.parse(newState[bgId].equipment);
+      }
       break;
     default:
       break;

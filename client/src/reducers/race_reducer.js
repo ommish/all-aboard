@@ -6,6 +6,12 @@ const RaceReducer = (state = {}, action) => {
   switch (action.type) {
     case RECEIVE_COMPENDIUM:
       newState = merge({}, action.races);
+      for (const raceId in newState) {
+        newState[raceId].toolProficiencies = JSON.parse(newState[raceId].toolProficiencies);
+        newState[raceId].weaponProficiencies = JSON.parse(newState[raceId].weaponProficiencies);
+        newState[raceId].armorProficiencies = JSON.parse(newState[raceId].armorProficiencies);
+        newState[raceId].languages = JSON.parse(newState[raceId].languages);
+      }
       break;
     default:
       break;

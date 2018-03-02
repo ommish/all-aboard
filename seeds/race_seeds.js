@@ -13,8 +13,8 @@ const races = [
 	{
 		name: 'Dwarf',
 		speed: 25,
-		weaponProficiencies: '',
-		toolProficiencies: '',
+		weaponProficiencies: '[]',
+		toolProficiencies: '[]',
 		languages: '["Common", "Dwarvish"]',
 		racialBonuses: [
 			{
@@ -36,65 +36,65 @@ const races = [
 	{
 		name: 'Elf',
 		speed: 30,
-		weaponProficiencies: '',
-		toolProficiencies: '',
-		languages: '',
+		weaponProficiencies: '[]',
+		toolProficiencies: '[]',
+		languages: '[]',
 		racialBonuses: []
 	},
 	{
 		name: 'Halfling',
 		speed: 25,
-		weaponProficiencies: '',
-		toolProficiencies: '',
-		languages: '',
+		weaponProficiencies: '[]',
+		toolProficiencies: '[]',
+		languages: '[]',
 		racialBonuses: []
 	},
 	{
 		name: 'Human',
 		speed: 30,
-		weaponProficiencies: '',
-		toolProficiencies: '',
-		languages: '',
+		weaponProficiencies: '[]',
+		toolProficiencies: '[]',
+		languages: '[]',
 		racialBonuses: []
 	},
 	{
 		name: 'Dragonborn',
 		speed: 30,
-		weaponProficiencies: '',
-		toolProficiencies: '',
-		languages: '',
+		weaponProficiencies: '[]',
+		toolProficiencies: '[]',
+		languages: '[]',
 		racialBonuses: []
 	},
 	{
 		name: 'Gnome',
 		speed: 25,
-		weaponProficiencies: '',
-		toolProficiencies: '',
-		languages: '',
+		weaponProficiencies: '[]',
+		toolProficiencies: '[]',
+		languages: '[]',
 		racialBonuses: []
 	},
 	{
 		name: 'Half-Elf',
 		speed: 30,
-		weaponProficiencies: '',
-		toolProficiencies: '',
-		languages: '',
+		weaponProficiencies: '[]',
+		toolProficiencies: '[]',
+		languages: '[]',
 		racialBonuses: []
 	},
 	{
 		name: 'Half-Orc',
 		speed: 30,
-		weaponProficiencies: '',
-		toolProficiencies: '',
-		languages: '',
+		weaponProficiencies: '[]',
+		toolProficiencies: '[]',
+		languages: '[]',
 		racialBonuses: []
 	},
 	{
 		name: 'Tiefling',
 		speed: 30,
-		weaponProficiencies: '',
-		toolProficiencies: '',
-		languages: '',
+		weaponProficiencies: '[]',
+		toolProficiencies: '[]',
+		languages: '[]',
 		racialBonuses: []
 	}
 ];

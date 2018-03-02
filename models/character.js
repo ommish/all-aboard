@@ -11,7 +11,7 @@ const characterSchema = new Schema({
 	race: { type: Schema.Types.ObjectId, ref: 'Race' },
 	charClass: { type: Schema.Types.ObjectId, ref: 'CharClass' },
 	subclass: { type: String, default: '' },
-	charClass: { type: Schema.Types.ObjectId, ref: 'Background' },
+	background: { type: Schema.Types.ObjectId, ref: 'Background' },
 	alignment: {
 		type: String,
 		default: '',
@@ -73,10 +73,11 @@ const characterSchema = new Schema({
 	age: Number,
 	height: Number,
 	weight: Number,
-	eyes: {type: String, default: ''},
-	skin: {type: String, default: ''},
-	hair: {type: String, default: ''},
-	backstory: {type: String, default: ''},
+	eyes: { type: String, default: '' },
+	skin: { type: String, default: '' },
+	hair: { type: String, default: '' },
+	backstory: { type: String, default: '' },
+	languages: { type: String, default: '[]' }
 });
 
 mongoose.model('Character', characterSchema);
