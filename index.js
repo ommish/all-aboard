@@ -14,9 +14,9 @@ require('./models/race');
 require('./models/char_class');
 require('./models/character');
 
-require('./seeds/armor_seeds');
-require('./seeds/race_seeds');
-require('./seeds/char_class_seeds');
+// require('./seeds/armor_seeds');
+// require('./seeds/race_seeds');
+// require('./seeds/char_class_seeds');
 
 const cookieSession = require('cookie-session');
 const passport = require('passport');
