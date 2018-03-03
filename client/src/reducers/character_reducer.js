@@ -1,7 +1,7 @@
 import { merge } from 'lodash';
 import { RECEIVE_CHARACTERS, RECEIVE_CHARACTER } from '../actions/character_actions';
 
-const CharactersReducer = (state = {}, action) => {
+const CharacterReducer = (state = {}, action) => {
   let newState = merge({}, state);
   switch (action.type) {
     case RECEIVE_CHARACTERS:
@@ -16,6 +16,6 @@ const CharactersReducer = (state = {}, action) => {
     break;
   }
   return newState;
-}
+};
 
-export default CharactersReducer;
+export default CharacterReducer;
