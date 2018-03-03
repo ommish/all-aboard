@@ -66,11 +66,11 @@ export const armorClass = ({ newState, charClasses, armors }) => {
 		newState.character.armorClass = 10;
 		modifier = newState.character.dexterityModifier;
 		const charClass = charClasses[newState.character.charClass];
-		if (charClass === 'barbarian') {
+		if (charClass.name === 'Barbarian') {
 			modifier += newState.character.constitutionModifier;
-		} else if (charClass === 'monk') {
+		} else if (charClass.name === 'Monk') {
 			modifier += newState.character.wisdomModifier;
-		} else if (charClass === 'sorcerer') {
+		} else if (charClass.name === 'Sorcerer') {
 			newState.character.armorClass = 13;
 		}
 	}

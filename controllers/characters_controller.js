@@ -8,6 +8,7 @@ module.exports = {
 		if (!req.body.charClass) req.body.charClass = undefined;
 		if (!req.body.race) req.body.race = undefined;
 		if (!req.body.background) req.body.background = undefined;
+		if (!req.body.armor) req.body.armor = undefined;
 		try {
 			newChar = await newChar.save();
 			res.send(newChar);
@@ -26,6 +27,7 @@ module.exports = {
 				if (!req.body.charClass) req.body.charClass = undefined;
 				if (!req.body.race) req.body.race = undefined;
 				if (!req.body.background) req.body.background = undefined;
+				if (!req.body.armor) req.body.armor = undefined;
 				await newChar.update(req.body);
 				newChar = await Character.findById(req.params.characterId);
 				res.send(newChar);
