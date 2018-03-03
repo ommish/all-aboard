@@ -4,6 +4,7 @@ import { Link } from 'react-router-dom';
 import BonusForm from './form_components/bonus_form';
 import AlignmentMenu from './form_components/alignment_menu';
 import RaceMenu from './form_components/race_menu';
+import ArmorMenu from './form_components/armor_menu';
 import ClassMenu from './form_components/class_menu';
 import BackgroundMenu from './form_components/background_menu';
 import Languages from './form_components/languages';
@@ -34,7 +35,8 @@ class CharacterSheet extends React.Component {
 			newState,
 			races: this.props.races,
 			charClasses: this.props.charClasses,
-			backgrounds: this.props.backgrounds
+			backgrounds: this.props.backgrounds,
+			armors: this.props.armors,
 		});
 		this.setState(newState, () => (window.character = this.state.character));
 	}
@@ -50,16 +52,17 @@ class CharacterSheet extends React.Component {
 				newState,
 				races: this.props.races,
 				charClasses: this.props.charClasses,
-				backgrounds: this.props.backgrounds
+				backgrounds: this.props.backgrounds,
+				armors: this.props.armors,
 			});
 			this.setState(newState);
 		}
 	}
 
-	calculateFields({ newState, races, charClasses, backgrounds }) {
+	calculateFields({ newState, races, charClasses, backgrounds, armors }) {
 		_CALCULATED_FIELDS.forEach((field) => {
 			const camel = camelCase(field);
-			Calculators[camel]({ newState, races, charClasses, backgrounds });
+			Calculators[camel]({ newState, races, charClasses, backgrounds, armors });
 		});
 	}
 
@@ -72,7 +75,8 @@ class CharacterSheet extends React.Component {
 				newState,
 				races: this.props.races,
 				charClasses: this.props.charClasses,
-				backgrounds: this.props.backgrounds
+				backgrounds: this.props.backgrounds,
+				armors: this.props.armors,
 			});
 			this.setState(newState);
 		};
@@ -125,6 +129,18 @@ class CharacterSheet extends React.Component {
 				alignments={_ALIGNMENTS}
 				handleChange={this.handleChange('alignment')}
 				selectedAlignment={this.state.character.alignment}
+			/>
+		);
+	}
+
+	renderArmor() {
+		return (
+			<ArmorMenu
+				armors={this.props.armors}
+				selectedArmor={
+					this.state.character.armor ? this.state.character.armor : ''
+				}
+				handleChange={this.handleChange('armor')}
 			/>
 		);
 	}
@@ -346,10 +362,10 @@ class CharacterSheet extends React.Component {
 				onSubmit={this.handleSubmit.bind(this)}>
 				<input type="submit" value="Save" />
 				<div className="character-form-1">{this.renderEditableFields()}</div>
-				<div className="character-form-1">{this.renderAlignments()}</div>
-				<div className="character-form-1">{this.renderRaces()}</div>
-				<div className="character-form-1">{this.renderCharClasses()}</div>
-				<div className="character-form-1">{this.renderBackgrounds()}</div>
+				<div className="character-form-1"><h3>Alignment </h3>{this.renderAlignments()}</div>
+				<div className="character-form-1"><h3>Race </h3>{this.renderRaces()}</div>
+				<div className="character-form-1"><h3>Class </h3>{this.renderCharClasses()}</div>
+				<div className="character-form-1"><h3>Background </h3>{this.renderBackgrounds()}</div>
 				<div className="character-form-1">{this.renderHealth()}</div>
 				<div className="character-form-1">{this.renderHitDie()}</div>
 				<div className="character-form-2">{this.renderCalculatedFields()}</div>
@@ -384,6 +400,7 @@ class CharacterSheet extends React.Component {
 						</label>
 					</div>
 				</div>
+				<div className="character-form-1"><h3>Armor </h3>{this.renderArmor()}</div>
 				<div className="character-form-4">
 					<h3>Languages</h3>
 					// this.renderLanguages()

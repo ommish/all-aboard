@@ -1,12 +1,11 @@
 const mongoose = require('mongoose');
 const { Schema } = mongoose;
-const armor = require('./armor');
 const bonus = require('./bonus');
 
 const characterSchema = new Schema({
 	name: { type: String, default: '' },
 	_user: { type: Schema.Types.ObjectId, ref: 'User' },
-	armor: { type: armor.armorSchema },
+	armor: { type: Schema.Types.ObjectId, ref: 'ArmorClass' },
 	bonuses: { type: [bonus.bonusSchema] },
 	race: { type: Schema.Types.ObjectId, ref: 'Race' },
 	charClass: { type: Schema.Types.ObjectId, ref: 'CharClass' },
@@ -70,8 +69,8 @@ const characterSchema = new Schema({
 	silver: { type: Number, default: 0 },
 	copper: { type: Number, default: 0 },
 	age: Number,
-	height: Number,
-	weight: Number,
+	height: { type: String, default: '' },
+	weight: { type: String, default: '' },
 	eyes: { type: String, default: '' },
 	skin: { type: String, default: '' },
 	hair: { type: String, default: '' },

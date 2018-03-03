@@ -13,6 +13,7 @@ const mapStateToProps = (state, ownProps) => {
     races: state.races,
     charClasses: state.charClasses,
     backgrounds: state.backgrounds,
+    armors: state.armors,
   };
 };
 

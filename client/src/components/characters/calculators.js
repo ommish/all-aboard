@@ -8,91 +8,89 @@ import {
 	_CALCULATED_FIELDS
 } from './character_variables';
 
-export const modifiers = ({newState}) => {
-  _ABILITIES.forEach((ability) => {
-    const field = camelCase(ability);
-    const modifier = Math.floor((newState.character[field] - 10) / 2);
-    newState.character[`${field}Modifier`] = modifier;
-  });
-}
+export const modifiers = ({ newState }) => {
+	_ABILITIES.forEach((ability) => {
+		const field = camelCase(ability);
+		const modifier = Math.floor((newState.character[field] - 10) / 2);
+		newState.character[`${field}Modifier`] = modifier;
+	});
+};
 
-export const proficiencyBonus = ({newState}) => {
-  newState.character.proficiencyBonus =
-    Math.ceil(newState.character.level / 4) + 1;
-}
+export const proficiencyBonus = ({ newState }) => {
+	newState.character.proficiencyBonus =
+		Math.ceil(newState.character.level / 4) + 1;
+};
 
-export const savingThrows = ({newState}) => {
-  _ABILITIES.forEach((ability) => {
-    const field = camelCase(ability);
-    const proficiencyBonus = newState.character[`${field}SaveProficiency`]
-      ? newState.character.proficiencyBonus
-      : 0;
-    newState.character[`${field}SavingThrow`] =
-      newState.character[`${field}Modifier`] + proficiencyBonus;
-  });
-}
+export const savingThrows = ({ newState }) => {
+	_ABILITIES.forEach((ability) => {
+		const field = camelCase(ability);
+		const proficiencyBonus = newState.character[`${field}SaveProficiency`]
+			? newState.character.proficiencyBonus
+			: 0;
+		newState.character[`${field}SavingThrow`] =
+			newState.character[`${field}Modifier`] + proficiencyBonus;
+	});
+};
 
-export const skills = ({newState}) => {
-  Object.keys(_SKILLS).forEach((skill) => {
-    const field = camelCase(skill);
-    const connectedAbility = camelCase(_SKILLS[skill]);
-    const proficiencyBonus = newState.character[`${field}Proficiency`]
-      ? newState.character.proficiencyBonus
-      : 0;
-    newState.character[field] =
-      newState.character[`${connectedAbility}Modifier`] + proficiencyBonus;
-  });
-}
+export const skills = ({ newState }) => {
+	Object.keys(_SKILLS).forEach((skill) => {
+		const field = camelCase(skill);
+		const connectedAbility = camelCase(_SKILLS[skill]);
+		const proficiencyBonus = newState.character[`${field}Proficiency`]
+			? newState.character.proficiencyBonus
+			: 0;
+		newState.character[field] =
+			newState.character[`${connectedAbility}Modifier`] + proficiencyBonus;
+	});
+};
 
-export const initiative = ({newState}) => {
-  newState.character.initiative = newState.character.dexterityModifier;
-}
+export const initiative = ({ newState }) => {
+	newState.character.initiative = newState.character.dexterityModifier;
+};
 
-export const passiveWisdom = ({newState}) => {
-  newState.character.passiveWisdom = 10 + newState.character.perception;
-}
+export const passiveWisdom = ({ newState }) => {
+	newState.character.passiveWisdom = 10 + newState.character.perception;
+};
 
-export const armorClass = ({newState, charClasses}) => {
-  let modifier;
-  if (newState.character.armor) {
-    newState.character.armorClass = newState.character.armor.baseAc;
-    modifier = newState.character.armor.acMod
-      ? newState.character[newState.character.armor.acMod]
-      : 0;
-    modifier =
-      newState.character.armor.acModLimit &&
-      modifier > newState.character.armor.acModLimit
-        ? newState.character.armor.acModLimit
-        : modifier;
-  } else {
-    newState.character.armorClass = 10;
-    modifier = newState.character.dexterityModifier;
-    const charClass = charClasses[newState.character.charClass];
-    if (charClass === 'barbarian') {
-      modifier += newState.character.constitutionModifier;
-    } else if (charClass === 'monk') {
-      modifier += newState.character.wisdomModifier;
-    } else if (charClass === 'sorcerer') {
-      newState.character.armorClass = 13;
-    }
-  }
-  modifier += newState.character.shielded ? 2 : 0;
-  newState.character.armorClass += modifier;
-}
+export const armorClass = ({ newState, charClasses, armors }) => {
+	let modifier;
+	if (newState.character.armor) {
+		const armor = armors[newState.character.armor];
+		newState.character.armorClass = armor.baseAc;
+		modifier = armor.acMod ? newState.character[armor.acMod] : 0;
+		modifier =
+			(armor.acModLimit > 0 && modifier > armor.acModLimit)
+				? armor.acModLimit
+				: modifier;
+	} else {
+		newState.character.armorClass = 10;
+		modifier = newState.character.dexterityModifier;
+		const charClass = charClasses[newState.character.charClass];
+		if (charClass === 'barbarian') {
+			modifier += newState.character.constitutionModifier;
+		} else if (charClass === 'monk') {
+			modifier += newState.character.wisdomModifier;
+		} else if (charClass === 'sorcerer') {
+			newState.character.armorClass = 13;
+		}
+	}
+	modifier += newState.character.shielded ? 2 : 0;
+	newState.character.armorClass += modifier;
+};
 
-export const speed = ({newState, races}) => {
-  if (newState.character.race) {
-    const race = races[newState.character.race];
-    newState.character.speed = race.speed;
-  } else {
-    newState.character.speed = 0;
-  }
-}
+export const speed = ({ newState, races }) => {
+	if (newState.character.race) {
+		const race = races[newState.character.race];
+		newState.character.speed = race.speed;
+	} else {
+		newState.character.speed = 0;
+	}
+};
 
-export const bonuses = ({newState}) => {
-  newState.character.bonuses.forEach((bonus) => {
-    if (bonus.field) {
-      newState.character[bonus.field] += bonus.bonusAmount;
-    }
-  });
-}
+export const bonuses = ({ newState }) => {
+	newState.character.bonuses.forEach((bonus) => {
+		if (bonus.field) {
+			newState.character[bonus.field] += bonus.bonusAmount;
+		}
+	});
+};
