@@ -58,14 +58,11 @@ export const armorClass = ({ newState, charClasses, armors }) => {
 		const armor = armors[newState.character.armor];
 		newState.character.armorClass = armor.baseAc;
 		modifier = armor.acMod ? newState.character[armor.acMod] : 0;
-		modifier =
-			(armor.acModLimit > 0 && modifier > armor.acModLimit)
-				? armor.acModLimit
-				: modifier;
+		if (armor.acModLimit > 0 && modifier > armor.acModLimit) modifier = armor.acModLimit;
 	} else {
 		newState.character.armorClass = 10;
 		modifier = newState.character.dexterityModifier;
-		const charClass = charClasses[newState.character.charClass];
+		const charClass = charClasses[newState.character.charClass] || {name: ''};
 		if (charClass.name === 'Barbarian') {
 			modifier += newState.character.constitutionModifier;
 		} else if (charClass.name === 'Monk') {
