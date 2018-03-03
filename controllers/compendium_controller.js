@@ -3,10 +3,11 @@ const User = mongoose.model('User');
 const Race = mongoose.model('Race');
 const CharClass = mongoose.model('CharClass');
 const Background = mongoose.model('Background');
+const Armor = mongoose.model('Armor');
 
 module.exports = {
 	get: async (req, res) => {
-		const models = [Race, CharClass, Background];
+		const models = [Race, CharClass, Background, Armor];
 		const data = {};
 		for (let i = 0; i < models.length; i++) {
 			data[models[i].modelName] = {};
