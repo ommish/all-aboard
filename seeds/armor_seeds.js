@@ -4,8 +4,8 @@ const Armor = mongoose.model('Armor');
 
 const armors = [
 	{
-		name: 'padded',
-		armorType: 'light',
+		name: 'Padded',
+		type: 'light',
 		stealthDisadvantage: true,
 		weight: 8,
 		strengthMin: 0,
@@ -14,8 +14,8 @@ const armors = [
 		acModLimit: 0
 	},
 	{
-		name: 'leather',
-		armorType: 'light',
+		name: 'Leather',
+		type: 'light',
 		stealthDisadvantage: false,
 		weight: 10,
 		strengthMin: 0,
@@ -24,8 +24,8 @@ const armors = [
 		acModLimit: 0
 	},
 	{
-		name: 'studded leather',
-		armorType: 'light',
+		name: 'Studded Leather',
+		type: 'light',
 		stealthDisadvantage: false,
 		weight: 13,
 		strengthMin: 0,
@@ -34,8 +34,8 @@ const armors = [
 		acModLimit: 0
 	},
 	{
-		name: 'hide',
-		armorType: 'medium',
+		name: 'Hide',
+		type: 'medium',
 		stealthDisadvantage: false,
 		weight: 12,
 		strengthMin: 0,
@@ -44,8 +44,8 @@ const armors = [
 		acModLimit: 2
 	},
 	{
-		name: 'chain shirt',
-		armorType: 'medium',
+		name: 'Chain Shirt',
+		type: 'medium',
 		stealthDisadvantage: false,
 		weight: 20,
 		strengthMin: 0,
@@ -54,8 +54,8 @@ const armors = [
 		acModLimit: 2
 	},
 	{
-		name: 'scale mail',
-		armorType: 'medium',
+		name: 'Scale Mail',
+		type: 'medium',
 		stealthDisadvantage: true,
 		weight: 45,
 		strengthMin: 0,
@@ -64,8 +64,8 @@ const armors = [
 		acModLimit: 2
 	},
 	{
-		name: 'breastplate',
-		armorType: 'medium',
+		name: 'Breastplate',
+		type: 'medium',
 		stealthDisadvantage: false,
 		weight: 20,
 		strengthMin: 0,
@@ -74,8 +74,8 @@ const armors = [
 		acModLimit: 2
 	},
 	{
-		name: 'half plate',
-		armorType: 'medium',
+		name: 'Half Plate',
+		type: 'medium',
 		stealthDisadvantage: true,
 		weight: 40,
 		strengthMin: 0,
@@ -84,8 +84,8 @@ const armors = [
 		acModLimit: 2
 	},
 	{
-		name: 'ring mail',
-		armorType: 'heavy',
+		name: 'Ring Mail',
+		type: 'heavy',
 		stealthDisadvantage: true,
 		weight: 40,
 		strengthMin: 0,
@@ -94,8 +94,8 @@ const armors = [
 		acModLimit: 0
 	},
 	{
-		name: 'chain mail',
-		armorType: 'heavy',
+		name: 'Chain Mail',
+		type: 'heavy',
 		stealthDisadvantage: true,
 		weight: 55,
 		strengthMin: 13,
@@ -104,8 +104,8 @@ const armors = [
 		acModLimit: 0
 	},
 	{
-		name: 'splint',
-		armorType: 'heavy',
+		name: 'Splint',
+		type: 'heavy',
 		stealthDisadvantage: true,
 		weight: 60,
 		strengthMin: 15,
@@ -114,8 +114,8 @@ const armors = [
 		acModLimit: 0
 	},
 	{
-		name: 'plate',
-		armorType: 'heavy',
+		name: 'Plate',
+		type: 'heavy',
 		stealthDisadvantage: true,
 		weight: 65,
 		strengthMin: 15,

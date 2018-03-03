@@ -2,7 +2,7 @@ const mongoose = require('mongoose');
 const { Schema } = mongoose;
 const armorSchema = new Schema({
 	name: { type: String, default: '' },
-	armorType: { type: String, default: '' },
+	type: { type: String, default: '' },
 	stealthDisadvantage: { type: Boolean, default: false },
 	weight: { type: Number, default: 0 },
 	strengthMin: { type: Number, default: 0 },
