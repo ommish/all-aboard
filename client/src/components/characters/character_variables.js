@@ -41,7 +41,13 @@ export const _ALIGNMENTS = [
 
 export const _EDITABLE_FIELDS = {
 	Name: { type: 'text' },
-	Level: { type: 'number', min: 1, max: 20 }
+	Level: { type: 'number', min: 1, max: 20 },
+	Age: { type: 'number', min: 0 },
+	Height: { type: 'text' },
+	Weight: { type: 'text', min: 1 },
+	Eyes: { type: 'text' },
+	Skin: { type: 'text' },
+	Hair: { type: 'text' },
 };
 
 export const _CALCULATED_FIELDS = [
@@ -55,3 +61,9 @@ export const _CALCULATED_FIELDS = [
 	'Speed',
 	'Bonuses'
 ];
+
+export const _CATEGORIES = {
+	race: 'races',
+	charClass: 'charClasses',
+	background: 'backgrounds'
+};

@@ -6,14 +6,17 @@ import AlignmentMenu from './form_components/alignment_menu';
 import RaceMenu from './form_components/race_menu';
 import ClassMenu from './form_components/class_menu';
 import BackgroundMenu from './form_components/background_menu';
+import Languages from './form_components/languages';
 import Money from './form_components/money';
 import './character_sheet.css';
 import {
 	_ABILITIES,
 	_SKILLS,
+	_PHYSICAL_ATTRIBUTES,
 	_ALIGNMENTS,
 	_EDITABLE_FIELDS,
-	_CALCULATED_FIELDS
+	_CALCULATED_FIELDS,
+	_CATEGORIES
 } from './character_variables';
 import * as Calculators from './calculators';
 
@@ -27,25 +30,37 @@ class CharacterSheet extends React.Component {
 
 	componentDidMount() {
 		const newState = merge({}, this.state);
-		this.calculateFields({newState, races: this.props.races, charClasses: this.props.charClasses, backgrounds: this.props.backgrounds});
+		this.calculateFields({
+			newState,
+			races: this.props.races,
+			charClasses: this.props.charClasses,
+			backgrounds: this.props.backgrounds
+		});
 		this.setState(newState, () => (window.character = this.state.character));
 	}
 
 	componentWillReceiveProps(newProps) {
 		if (
-			this.props.match.params.characterId !== newProps.match.params.characterId || this.props.character !== newProps.character
+			this.props.match.params.characterId !==
+				newProps.match.params.characterId ||
+			this.props.character !== newProps.character
 		) {
-			const newState = {character: merge({}, newProps.character)};
-			this.calculateFields({newState, races: this.props.races, charClasses: this.props.charClasses, backgrounds: this.props.backgrounds});
+			const newState = { character: merge({}, newProps.character) };
+			this.calculateFields({
+				newState,
+				races: this.props.races,
+				charClasses: this.props.charClasses,
+				backgrounds: this.props.backgrounds
+			});
 			this.setState(newState);
 		}
 	}
 
-	calculateFields ({newState, races, charClasses, backgrounds}) {
-	  _CALCULATED_FIELDS.forEach((field) => {
+	calculateFields({ newState, races, charClasses, backgrounds }) {
+		_CALCULATED_FIELDS.forEach((field) => {
 			const camel = camelCase(field);
-	    Calculators[camel]({newState, races, charClasses, backgrounds});
-	  });
+			Calculators[camel]({ newState, races, charClasses, backgrounds });
+		});
 	}
 
 	handleChange(field) {
@@ -53,7 +68,12 @@ class CharacterSheet extends React.Component {
 			const newState = merge({}, this.state);
 			newState.character[field] =
 				e.target.type === 'checkbox' ? e.target.checked : e.target.value;
-			this.calculateFields({newState, races: this.props.races, charClasses: this.props.charClasses, backgrounds: this.props.backgrounds});
+			this.calculateFields({
+				newState,
+				races: this.props.races,
+				charClasses: this.props.charClasses,
+				backgrounds: this.props.backgrounds
+			});
 			this.setState(newState);
 		};
 	}
@@ -80,6 +100,18 @@ class CharacterSheet extends React.Component {
 			);
 			this.setState(newState, () => this.handleSubmit());
 		};
+	}
+
+	handleLanguageSubmit(language) {
+		const newState = merge({}, this.state);
+		newState.character.languages.push(language);
+		this.setState(newState);
+	}
+
+	handleRemoveLanguage(languageIdx) {
+		const newState = merge({}, this.state);
+		newState.character.languages = newState.character.languages.slice(0, languageIdx).concat(newState.character.languages.slice(languageIdx + 1));
+		this.setState(newState);
 	}
 
 	handleSubmit(e) {
@@ -261,7 +293,6 @@ class CharacterSheet extends React.Component {
 	}
 
 	renderBonuses() {
-		// should be form within form?
 		const existing = this.state.character.bonuses.map((bonus, i) => [
 			<BonusForm
 				key={1}
@@ -291,6 +322,15 @@ class CharacterSheet extends React.Component {
 				gold={this.state.character.gold}
 				platinum={this.state.character.platinum}
 				handleChange={this.handleChange.bind(this)}
+			/>
+		);
+	}
+
+	renderLanguages() {
+		return (
+			<Languages
+				languages={this.state.character.languages}
+				handleLanguageSubmit={this.handleLanguageSubmit.bind(this)}
 			/>
 		);
 	}
@@ -343,6 +383,10 @@ class CharacterSheet extends React.Component {
 							/>
 						</label>
 					</div>
+				</div>
+				<div className="character-form-4">
+					<h3>Languages</h3>
+					// this.renderLanguages()
 				</div>
 				<div className="character-form-4">
 					<h3>Money</h3>
