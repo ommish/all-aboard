@@ -8,7 +8,7 @@ const backgrounds = [
 			'You have spent your life in the service of a temple to a specific god or pantheon of gods. You act as an intermediary between the realm of the holy and the mortal world, performing sacred rites and offering sacrifices in order to conduct worshipers into the presence of the divine. You are not necessarily a cleric—performing sacred rites is not the same thing as channeling divine power.',
 		skillProficiencies: [{ name: 'religion' }, { name: 'insight' }],
 		toolProficiencies: [],
-		languages: [{ name: 'choice1' }, { name: 'choice2' }],
+		languageProficiencies: [{ name: 'Choose two (acolyte bonus)' }],
 		gold: 15
 	},
 	{
@@ -43,34 +43,34 @@ const backgrounds = [
 		name: 'Guild Artisan',
 		skillProficiencies: [{ name: 'insight' }, { name: 'persuasion' }],
 		toolProficiencies: [{ name: "Artisan's Tools" }],
-		languages: [{ name: 'choice1' }],
+		languageProficiencies: [{ name: 'Choose one (guild artisan bonus)' }],
 		gold: 15
 	},
 	{
 		name: 'Hermit',
 		skillProficiencies: [{ name: 'medicine' }, { name: 'religion' }],
 		toolProficiencies: [{ name: 'Herbalism Kit' }],
-		languages: [{ name: 'choice1' }],
+		languageProficiencies: [{ name: 'Choose one (hermit bonus)' }],
 		gold: 5
 	},
 	{
 		name: 'Noble',
 		skillProficiencies: [{ name: 'history' }, { name: 'persuasion' }],
 		toolProficiencies: [{ name: 'Gaming Set' }],
-		languages: [{ name: 'choice1' }],
+		languageProficiencies: [{ name: 'Choose one (noble bonus)' }],
 		gold: 25
 	},
 	{
 		name: 'Outlander',
 		skillProficiencies: [{ name: 'athletics' }, { name: 'survival' }],
 		toolProficiencies: [{ name: 'Musical Instrument' }],
-		languages: [{ name: 'choice1' }],
+		languageProficiencies: [{ name: 'Choose one (outlander bonus)' }],
 		gold: 10
 	},
 	{
 		name: 'Sage',
 		skillProficiencies: [{ name: 'arcana' }, { name: 'history' }],
-		languages: [{ name: 'choice1' }, { name: 'choice2' }],
+		languageProficiencies: [{ name: 'Choose two (sage bonus)' }],
 		gold: 10
 	},
 	{

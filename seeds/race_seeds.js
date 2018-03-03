@@ -15,7 +15,7 @@ const races = [
 		speed: 25,
 		weaponProficiencies: [],
 		toolProficiencies: [],
-		languages: [{ name: 'Common' }, { name: 'Dwarvish' }],
+		languageProficiencies: [{ name: 'Common' }, { name: 'Dwarvish' }],
 		racialBonuses: [
 			{
 				name: 'Darkvision',
@@ -38,7 +38,7 @@ const races = [
 		speed: 30,
 		weaponProficiencies: [],
 		toolProficiencies: [],
-		languages: [],
+		languageProficiencies: [],
 		racialBonuses: []
 	},
 	{
@@ -46,7 +46,7 @@ const races = [
 		speed: 25,
 		weaponProficiencies: [],
 		toolProficiencies: [],
-		languages: [],
+		languageProficiencies: [],
 		racialBonuses: []
 	},
 	{
@@ -54,7 +54,7 @@ const races = [
 		speed: 30,
 		weaponProficiencies: [],
 		toolProficiencies: [],
-		languages: [],
+		languageProficiencies: [],
 		racialBonuses: []
 	},
 	{
@@ -62,7 +62,7 @@ const races = [
 		speed: 30,
 		weaponProficiencies: [],
 		toolProficiencies: [],
-		languages: [],
+		languageProficiencies: [],
 		racialBonuses: []
 	},
 	{
@@ -70,7 +70,7 @@ const races = [
 		speed: 25,
 		weaponProficiencies: [],
 		toolProficiencies: [],
-		languages: [],
+		languageProficiencies: [],
 		racialBonuses: []
 	},
 	{
@@ -78,7 +78,7 @@ const races = [
 		speed: 30,
 		weaponProficiencies: [],
 		toolProficiencies: [],
-		languages: [],
+		languageProficiencies: [],
 		racialBonuses: []
 	},
 	{
@@ -86,7 +86,7 @@ const races = [
 		speed: 30,
 		weaponProficiencies: [],
 		toolProficiencies: [],
-		languages: [],
+		languageProficiencies: [],
 		racialBonuses: []
 	},
 	{
@@ -94,7 +94,7 @@ const races = [
 		speed: 30,
 		weaponProficiencies: [],
 		toolProficiencies: [],
-		languages: [],
+		languageProficiencies: [],
 		racialBonuses: []
 	}
 ];

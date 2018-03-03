@@ -19,7 +19,7 @@ import {
 	_EDITABLE_FIELDS,
 	_CALCULATED_FIELDS,
 	_CATEGORIES,
-	_PROFICIENCY_TYPES,
+	_PROFICIENCY_TYPES
 } from './character_variables';
 import * as Calculators from './calculators';
 
@@ -66,6 +66,23 @@ class CharacterSheet extends React.Component {
 			const camel = camelCase(field);
 			Calculators[camel]({ newState, races, charClasses, backgrounds, armors });
 		});
+	}
+
+	addCharacterBonuses(category) {
+		const newState = merge({}, this.state);
+		const pluralized = _CATEGORIES[category];
+		const categoryInfo = this.props[pluralized][this.state.character[category]];
+		const proficiencyTypes = _PROFICIENCY_TYPES.map((type) => camelCase(type));
+		proficiencyTypes.forEach((type) => {
+			(categoryInfo[`${type}Proficiencies`] || []).forEach((item) => {
+				newState.character[`${type}Proficiencies`].push(item);
+			});
+		});
+		(categoryInfo.skillProficiencies || []).forEach((skill) => {
+			newState.character[`${skill.name}Proficiency`] = true;
+		});
+		newState.character.gold += (categoryInfo.gold || 0)
+		this.setState(newState, () => this.handleSubmit());
 	}
 
 	handleChange(field) {
@@ -310,7 +327,11 @@ class CharacterSheet extends React.Component {
 			return (
 				<div key={i} className="character-form-4">
 					<h3>{type} Proficiencies</h3>
-					<Proficiencies type={camel} items={this.state.character[`${camel}Proficiencies`]} handleRemoveItem={this.handleRemoveItem.bind(this)}/>
+					<Proficiencies
+						type={camel}
+						items={this.state.character[`${camel}Proficiencies`]}
+						handleRemoveItem={this.handleRemoveItem.bind(this)}
+					/>
 				</div>
 			);
 		});
@@ -376,6 +397,11 @@ class CharacterSheet extends React.Component {
 				<div className="character-form-1">
 					<h3>Background </h3>
 					{this.renderBackgrounds()}
+					<button
+						disabled={!this.state.character.background}
+						onClick={() => this.addCharacterBonuses('background')}>
+						Add Background Bonuses
+					</button>
 				</div>
 				<div className="character-form-1">{this.renderHealth()}</div>
 				<div className="character-form-1">{this.renderHitDie()}</div>
