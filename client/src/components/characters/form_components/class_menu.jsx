@@ -1,17 +1,23 @@
 import React from 'react';
 
-class ClassMenu extends React.Component {
-	render() {
-		const charClassOptions = Object.values(this.props.charClasses).map((charClass, i) => {
-			return <option key={i} value={charClass._id}>{charClass.name}</option>;
-		});
-		return (
-      <select value={this.props.selectedCharClass} onChange={this.props.handleChange}>
-        <option value="">Select Class</option>
-        {charClassOptions}
-      </select>
-    );
-	}
-}
+const ClassMenu = ({ charClasses, handleChange, selectedCharClass }) => {
+	const charClassOptions = Object.values(charClasses).map(
+		(charClass, i) => {
+			return (
+				<option key={i} value={charClass._id}>
+					{charClass.name}
+				</option>
+			);
+		}
+	);
+	return (
+		<select
+			value={selectedCharClass}
+			onChange={handleChange}>
+			<option value="">Select Class</option>
+			{charClassOptions}
+		</select>
+	);
+};
 
 export default ClassMenu;

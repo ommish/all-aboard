@@ -67,3 +67,10 @@ export const _CATEGORIES = {
 	charClass: 'charClasses',
 	background: 'backgrounds'
 };
+
+export const _PROFICIENCY_TYPES = [
+	'Armor',
+	'Weapon',
+	'Tool',
+	'Language'
+];

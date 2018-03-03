@@ -7,7 +7,8 @@ import RaceMenu from './form_components/race_menu';
 import ArmorMenu from './form_components/armor_menu';
 import ClassMenu from './form_components/class_menu';
 import BackgroundMenu from './form_components/background_menu';
-import Languages from './form_components/languages';
+import Proficiencies from './form_components/proficiencies';
+import ProficiencyForm from './form_components/proficiency_form';
 import Money from './form_components/money';
 import './character_sheet.css';
 import {
@@ -17,7 +18,8 @@ import {
 	_ALIGNMENTS,
 	_EDITABLE_FIELDS,
 	_CALCULATED_FIELDS,
-	_CATEGORIES
+	_CATEGORIES,
+	_PROFICIENCY_TYPES,
 } from './character_variables';
 import * as Calculators from './calculators';
 
@@ -36,7 +38,7 @@ class CharacterSheet extends React.Component {
 			races: this.props.races,
 			charClasses: this.props.charClasses,
 			backgrounds: this.props.backgrounds,
-			armors: this.props.armors,
+			armors: this.props.armors
 		});
 		this.setState(newState, () => (window.character = this.state.character));
 	}
@@ -53,7 +55,7 @@ class CharacterSheet extends React.Component {
 				races: this.props.races,
 				charClasses: this.props.charClasses,
 				backgrounds: this.props.backgrounds,
-				armors: this.props.armors,
+				armors: this.props.armors
 			});
 			this.setState(newState);
 		}
@@ -76,7 +78,7 @@ class CharacterSheet extends React.Component {
 				races: this.props.races,
 				charClasses: this.props.charClasses,
 				backgrounds: this.props.backgrounds,
-				armors: this.props.armors,
+				armors: this.props.armors
 			});
 			this.setState(newState);
 		};
@@ -95,27 +97,21 @@ class CharacterSheet extends React.Component {
 		this.setState(newState, () => this.handleSubmit());
 	}
 
-	handleRemoveBonus(bonusId) {
+	handleProficiencySubmit(proficiency) {
+		const newState = merge({}, this.state);
+		newState.character[`${proficiency.type}Proficiencies`].push(proficiency);
+		this.setState(newState, () => this.handleSubmit());
+	}
+
+	handleRemoveItem(itemId, itemType) {
 		return (e) => {
 			e.preventDefault();
 			const newState = merge({}, this.state);
-			newState.character.bonuses = newState.character.bonuses.filter(
-				(bonus) => bonus._id !== bonusId
+			newState.character[itemType] = newState.character[itemType].filter(
+				(item) => item._id !== itemId
 			);
 			this.setState(newState, () => this.handleSubmit());
 		};
-	}
-
-	handleLanguageSubmit(language) {
-		const newState = merge({}, this.state);
-		newState.character.languages.push(language);
-		this.setState(newState);
-	}
-
-	handleRemoveLanguage(languageIdx) {
-		const newState = merge({}, this.state);
-		newState.character.languages = newState.character.languages.slice(0, languageIdx).concat(newState.character.languages.slice(languageIdx + 1));
-		this.setState(newState);
 	}
 
 	handleSubmit(e) {
@@ -308,6 +304,18 @@ class CharacterSheet extends React.Component {
 		});
 	}
 
+	renderProficiencies() {
+		return _PROFICIENCY_TYPES.map((type, i) => {
+			const camel = camelCase(type);
+			return (
+				<div key={i} className="character-form-4">
+					<h3>{type} Proficiencies</h3>
+					<Proficiencies type={camel} items={this.state.character[`${camel}Proficiencies`]} handleRemoveItem={this.handleRemoveItem.bind(this)}/>
+				</div>
+			);
+		});
+	}
+
 	renderBonuses() {
 		const existing = this.state.character.bonuses.map((bonus, i) => [
 			<BonusForm
@@ -316,7 +324,7 @@ class CharacterSheet extends React.Component {
 				bonus={bonus}
 				skills={_SKILLS}
 			/>,
-			<button key={2} onClick={this.handleRemoveBonus(bonus._id)}>
+			<button key={2} onClick={this.handleRemoveItem(bonus._id, 'bonuses')}>
 				Remove
 			</button>
 		]);
@@ -342,15 +350,6 @@ class CharacterSheet extends React.Component {
 		);
 	}
 
-	renderLanguages() {
-		return (
-			<Languages
-				languages={this.state.character.languages}
-				handleLanguageSubmit={this.handleLanguageSubmit.bind(this)}
-			/>
-		);
-	}
-
 	render() {
 		return [
 			<Link key={1} to={`/users/${this.props.currentUser._id}`}>
@@ -362,10 +361,22 @@ class CharacterSheet extends React.Component {
 				onSubmit={this.handleSubmit.bind(this)}>
 				<input type="submit" value="Save" />
 				<div className="character-form-1">{this.renderEditableFields()}</div>
-				<div className="character-form-1"><h3>Alignment </h3>{this.renderAlignments()}</div>
-				<div className="character-form-1"><h3>Race </h3>{this.renderRaces()}</div>
-				<div className="character-form-1"><h3>Class </h3>{this.renderCharClasses()}</div>
-				<div className="character-form-1"><h3>Background </h3>{this.renderBackgrounds()}</div>
+				<div className="character-form-1">
+					<h3>Alignment </h3>
+					{this.renderAlignments()}
+				</div>
+				<div className="character-form-1">
+					<h3>Race </h3>
+					{this.renderRaces()}
+				</div>
+				<div className="character-form-1">
+					<h3>Class </h3>
+					{this.renderCharClasses()}
+				</div>
+				<div className="character-form-1">
+					<h3>Background </h3>
+					{this.renderBackgrounds()}
+				</div>
 				<div className="character-form-1">{this.renderHealth()}</div>
 				<div className="character-form-1">{this.renderHitDie()}</div>
 				<div className="character-form-2">{this.renderCalculatedFields()}</div>
@@ -400,17 +411,23 @@ class CharacterSheet extends React.Component {
 						</label>
 					</div>
 				</div>
-				<div className="character-form-1"><h3>Armor </h3>{this.renderArmor()}</div>
-				<div className="character-form-4">
-					<h3>Languages</h3>
-					// this.renderLanguages()
+				<div className="character-form-1">
+					<h3>Armor </h3>
+					{this.renderArmor()}
 				</div>
 				<div className="character-form-4">
 					<h3>Money</h3>
 					{this.renderMoney()}
 				</div>
+				{this.renderProficiencies()}
 			</form>,
-			<div key={3} className="character-form-6">
+			<div key={3} className="character-form-4">
+				<h3>Add Proficiencies</h3>
+				<ProficiencyForm
+					handleProficiencySubmit={this.handleProficiencySubmit.bind(this)}
+				/>
+			</div>,
+			<div key={4} className="character-form-6">
 				<h3>Traits, Bonuses, Feats, etc.</h3>
 				{this.renderBonuses()}
 			</div>
