@@ -15,7 +15,7 @@ require('./models/race');
 require('./models/char_class');
 require('./models/background');
 require('./models/character');
-// 
+//
 // require('./seeds/armor_seeds');
 // require('./seeds/race_seeds');
 // require('./seeds/char_class_seeds');

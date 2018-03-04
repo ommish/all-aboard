@@ -24,7 +24,7 @@ export const proficiencyBonus = ({ newState }) => {
 export const savingThrows = ({ newState }) => {
 	_ABILITIES.forEach((ability) => {
 		const field = camelCase(ability);
-		const proficiencyBonus = newState.character[`${field}SaveProficiency`]
+		const proficiencyBonus = newState.character[`${field}SaveProficiency`].is
 			? newState.character.proficiencyBonus
 			: 0;
 		newState.character[`${field}SavingThrow`] =
@@ -36,7 +36,7 @@ export const skills = ({ newState }) => {
 	Object.keys(_SKILLS).forEach((skill) => {
 		const field = camelCase(skill);
 		const connectedAbility = camelCase(_SKILLS[skill]);
-		const proficiencyBonus = newState.character[`${field}Proficiency`]
+		const proficiencyBonus = newState.character[`${field}Proficiency`].is
 			? newState.character.proficiencyBonus
 			: 0;
 		newState.character[field] =

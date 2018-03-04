@@ -75,7 +75,10 @@ class CharacterSheet extends React.Component {
 			});
 		});
 		(categoryInfo.skillProficiencies || []).forEach((skill) => {
-			newState.character[`${skill.name}Proficiency`] = true;
+			newState.character[`${skill.name}Proficiency`] = skill;
+		});
+		(categoryInfo.saveProficiencies || []).forEach((save) => {
+			newState.character[`${save.name}SaveProficiency`] = save;
 		});
 		(categoryInfo.bonuses || []).forEach((bonus) => {
 			if (!newState.character.bonuses.some((bon) => bon._id === bonus._id))
@@ -88,8 +91,13 @@ class CharacterSheet extends React.Component {
 	handleChange(field) {
 		return (e) => {
 			const newState = merge({}, this.state);
-			newState.character[field] =
-				e.target.type === 'checkbox' ? e.target.checked : e.target.value;
+			if (e.target.type === 'checkbox') {
+				newState.character[field] = e.target.checked
+					? { name: e.target.value, is: true }
+					: { name: e.target.value, is: false };
+			} else {
+				newState.character[field] = e.target.value;
+			}
 			this.calculateFields({
 				newState,
 				races: this.props.races,
@@ -260,7 +268,8 @@ class CharacterSheet extends React.Component {
 					<input
 						type="checkbox"
 						onChange={this.handleChange(`${camel}SaveProficiency`)}
-						checked={this.state.character[`${camel}SaveProficiency`]}
+						checked={this.state.character[`${camel}SaveProficiency`].is}
+						value={`${camel}SaveProficiency`}
 					/>
 				</label>
 			);
@@ -278,7 +287,8 @@ class CharacterSheet extends React.Component {
 					<input
 						type="checkbox"
 						onChange={this.handleChange(`${camel}Proficiency`)}
-						checked={this.state.character[`${camel}Proficiency`]}
+						checked={this.state.character[`${camel}Proficiency`].is}
+						value={`${camel}Proficiency`}
 					/>
 				</label>
 			);
@@ -483,3 +493,4 @@ export default CharacterSheet;
 // list more than name in character list
 // add uniqueness validation
 // add hit dice (number of dice, not die type)
+// sort bonuses by level
