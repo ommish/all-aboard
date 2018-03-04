@@ -37,25 +37,19 @@ class CharacterSheet extends React.Component {
 			backgrounds: this.props.backgrounds,
 			armors: this.props.armors
 		});
-		this.setState(newState, () => (window.character = this.state.character));
+		this.setState(newState);
 	}
 
 	componentWillReceiveProps(newProps) {
-		if (
-			this.props.match.params.characterId !==
-				newProps.match.params.characterId ||
-			this.props.character !== newProps.character
-		) {
-			const newState = { character: merge({}, newProps.character) };
-			this.calculateFields({
-				newState,
-				races: this.props.races,
-				charClasses: this.props.charClasses,
-				backgrounds: this.props.backgrounds,
-				armors: this.props.armors
-			});
-			this.setState(newState);
-		}
+		const newState = { character: merge({}, newProps.character) };
+		this.calculateFields({
+			newState,
+			races: this.props.races,
+			charClasses: this.props.charClasses,
+			backgrounds: this.props.backgrounds,
+			armors: this.props.armors
+		});
+		this.setState(newState, () => (window.character = this.state.character));
 	}
 
 	calculateFields({ newState, races, charClasses, backgrounds, armors }) {
@@ -72,16 +66,22 @@ class CharacterSheet extends React.Component {
 		const proficiencyTypes = _PROFICIENCY_TYPES.map((type) => camelCase(type));
 		proficiencyTypes.forEach((type) => {
 			(categoryInfo[`${type}Proficiencies`] || []).forEach((item) => {
-				newState.character[`${type}Proficiencies`].push(item);
+				if (
+					!newState.character[`${type}Proficiencies`].some(
+						(prof) => prof._id === item._id
+					)
+				)
+					newState.character[`${type}Proficiencies`].push(item);
 			});
 		});
 		(categoryInfo.skillProficiencies || []).forEach((skill) => {
 			newState.character[`${skill.name}Proficiency`] = true;
 		});
 		(categoryInfo.bonuses || []).forEach((bonus) => {
-			newState.character.bonuses.push(bonus);
+			if (!newState.character.bonuses.some((bon) => bon._id === bonus._id))
+				newState.character.bonuses.push(bonus);
 		});
-		newState.character.gold += (categoryInfo.gold || 0)
+		newState.character.gold += categoryInfo.gold || 0;
 		this.setState(newState, () => this.handleSubmit());
 	}
 
@@ -133,6 +133,7 @@ class CharacterSheet extends React.Component {
 
 	handleSubmit(e) {
 		if (e) e.preventDefault();
+
 		this.props.updateCharacter(this.state.character);
 	}
 
@@ -149,10 +150,10 @@ class CharacterSheet extends React.Component {
 	renderDropdownMenu(options, selectedOption, handleChange, field) {
 		return (
 			<DropdownMenu
-			options={options}
-			selectedOption={selectedOption}
-			handleChange={handleChange}
-			field={field}
+				options={options}
+				selectedOption={selectedOption}
+				handleChange={handleChange}
+				field={field}
 			/>
 		);
 	}
@@ -301,22 +302,30 @@ class CharacterSheet extends React.Component {
 	}
 
 	renderBonuses() {
-		const existing = this.state.character.bonuses.map((bonus, i) => [
-			<BonusForm
-				key={1}
-				handleBonusSubmit={this.handleBonusSubmit.bind(this)}
-				bonus={bonus}
-				skills={_SKILLS}
-			/>,
-			<button key={2} onClick={this.handleRemoveItem(bonus._id, 'bonuses')}>
-				Remove
-			</button>
-		]);
+		const existing = this.state.character.bonuses.map((bonus, i) => (
+			<div key={i}>
+				<BonusForm
+					handleBonusSubmit={this.handleBonusSubmit.bind(this)}
+					bonus={bonus}
+					skills={_SKILLS}
+				/>,
+				<button onClick={this.handleRemoveItem(bonus._id, 'bonuses')}>
+					Remove
+				</button>
+			</div>
+		));
 		return existing.concat(
 			<BonusForm
 				key={existing.length}
 				handleBonusSubmit={this.handleBonusSubmit.bind(this)}
-				bonus={{ name: '', field: '', description: '', bonusAmount: 0, level: this.state.character.level, source: '' }}
+				bonus={{
+					name: '',
+					field: '',
+					description: '',
+					bonusAmount: 0,
+					level: this.state.character.level,
+					source: ''
+				}}
 				skills={_SKILLS}
 			/>
 		);
@@ -338,10 +347,14 @@ class CharacterSheet extends React.Component {
 		return (
 			<button
 				disabled={!this.state.character[category]}
-				onClick={(e) => {e.preventDefault(); e.stopPropagation(); this.addCharacterBonuses(category)}}>
+				onClick={(e) => {
+					e.preventDefault();
+					e.stopPropagation();
+					this.addCharacterBonuses(category);
+				}}>
 				Add {label} Bonuses
 			</button>
-		)
+		);
 	}
 
 	render() {
@@ -361,17 +374,36 @@ class CharacterSheet extends React.Component {
 				</div>
 				<div className="character-form-1">
 					<h3>Race </h3>
-					{this.renderDropdownMenu(this.props.races, this.state.character.race ? this.state.character.race : '', this.handleChange('race'), 'Race')}
+					{this.renderDropdownMenu(
+						this.props.races,
+						this.state.character.race ? this.state.character.race : '',
+						this.handleChange('race'),
+						'Race'
+					)}
 					{this.renderAddBonusButton('race', 'Race')}
 				</div>
 				<div className="character-form-1">
 					<h3>Class </h3>
-					{this.renderDropdownMenu(this.props.charClasses, this.state.character.charClass ? this.state.character.charClass : '', this.handleChange('charClass'), 'Class')}
+					{this.renderDropdownMenu(
+						this.props.charClasses,
+						this.state.character.charClass
+							? this.state.character.charClass
+							: '',
+						this.handleChange('charClass'),
+						'Class'
+					)}
 					{this.renderAddBonusButton('charClass', 'Class')}
 				</div>
 				<div className="character-form-1">
 					<h3>Background </h3>
-					{this.renderDropdownMenu(this.props.backgrounds, this.state.character.background ? this.state.character.background : '', this.handleChange('background'), 'Background')}
+					{this.renderDropdownMenu(
+						this.props.backgrounds,
+						this.state.character.background
+							? this.state.character.background
+							: '',
+						this.handleChange('background'),
+						'Background'
+					)}
 					{this.renderAddBonusButton('background', 'Background')}
 				</div>
 				<div className="character-form-1">{this.renderHealth()}</div>
@@ -410,7 +442,12 @@ class CharacterSheet extends React.Component {
 				</div>
 				<div className="character-form-1">
 					<h3>Armor </h3>
-					{this.renderDropdownMenu(this.props.armors, this.state.character.armor ? this.state.character.armor : '', this.handleChange('armor'), 'Armor')}
+					{this.renderDropdownMenu(
+						this.props.armors,
+						this.state.character.armor ? this.state.character.armor : '',
+						this.handleChange('armor'),
+						'Armor'
+					)}
 				</div>
 				<div className="character-form-4">
 					<h3>Money</h3>

@@ -1,5 +1,5 @@
 import React from 'react';
-import { camelCase } from 'lodash';
+import { camelCase, merge } from 'lodash';
 
 class BonusForm extends React.Component {
 	constructor(props) {
@@ -15,10 +15,8 @@ class BonusForm extends React.Component {
 		};
 	}
 
-	componentWillReceiveProps(newProps) {
-		if (this.props.bonus._id !== newProps.bonus._id) {
-			this.setState({_id: newProps.bonus._id})
-		}
+	componentWillReceiveProps({ bonus: {_id, name, field, description, bonusAmount, level, source} }) {
+		this.setState({ _id, name, field, description, bonusAmount, level, source })
 	}
 
 	handleChange(field) {
@@ -34,7 +32,7 @@ class BonusForm extends React.Component {
 				onSubmit={(e) => {
 					e.preventDefault();
 					e.stopPropagation();
-					this.props.handleBonusSubmit(this.state);
+					this.props.handleBonusSubmit(merge({}, this.state));
 				}}>
 				<label>
 					Name
@@ -84,7 +82,7 @@ class BonusForm extends React.Component {
 						type="submit"
 						value={this.state._id ? 'Update' : 'Add'}
 					/>
-					{this.state.source ? <label>`(Src: ${this.state.source})`</label> : ""}
+					{this.state.source ? <label>{`(Src: ${this.state.source})`}</label> : ""}
 
 				</label>
 
