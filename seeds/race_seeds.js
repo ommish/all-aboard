@@ -16,7 +16,7 @@ const races = [
 		weaponProficiencies: [],
 		toolProficiencies: [],
 		languageProficiencies: [{ name: 'Common', source: 'Dwarf' }, { name: 'Dwarvish', source: 'Dwarf' }],
-		racialBonuses: [
+		bonuses: [
 			{
 				name: 'Darkvision',
 				source: 'Dwarf',
@@ -41,7 +41,7 @@ const races = [
 		weaponProficiencies: [],
 		toolProficiencies: [],
 		languageProficiencies: [],
-		racialBonuses: []
+		bonuses: []
 	},
 	{
 		name: 'Halfling',
@@ -49,7 +49,7 @@ const races = [
 		weaponProficiencies: [],
 		toolProficiencies: [],
 		languageProficiencies: [],
-		racialBonuses: []
+		bonuses: []
 	},
 	{
 		name: 'Human',
@@ -57,7 +57,7 @@ const races = [
 		weaponProficiencies: [],
 		toolProficiencies: [],
 		languageProficiencies: [],
-		racialBonuses: []
+		bonuses: []
 	},
 	{
 		name: 'Dragonborn',
@@ -65,7 +65,7 @@ const races = [
 		weaponProficiencies: [],
 		toolProficiencies: [],
 		languageProficiencies: [],
-		racialBonuses: []
+		bonuses: []
 	},
 	{
 		name: 'Gnome',
@@ -73,7 +73,7 @@ const races = [
 		weaponProficiencies: [],
 		toolProficiencies: [],
 		languageProficiencies: [],
-		racialBonuses: []
+		bonuses: []
 	},
 	{
 		name: 'Half-Elf',
@@ -81,7 +81,7 @@ const races = [
 		weaponProficiencies: [],
 		toolProficiencies: [],
 		languageProficiencies: [],
-		racialBonuses: []
+		bonuses: []
 	},
 	{
 		name: 'Half-Orc',
@@ -89,7 +89,7 @@ const races = [
 		weaponProficiencies: [],
 		toolProficiencies: [],
 		languageProficiencies: [],
-		racialBonuses: []
+		bonuses: []
 	},
 	{
 		name: 'Tiefling',
@@ -97,7 +97,7 @@ const races = [
 		weaponProficiencies: [],
 		toolProficiencies: [],
 		languageProficiencies: [],
-		racialBonuses: []
+		bonuses: []
 	}
 ];
 

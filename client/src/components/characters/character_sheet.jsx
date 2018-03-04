@@ -78,6 +78,9 @@ class CharacterSheet extends React.Component {
 		(categoryInfo.skillProficiencies || []).forEach((skill) => {
 			newState.character[`${skill.name}Proficiency`] = true;
 		});
+		(categoryInfo.bonuses || []).forEach((bonus) => {
+			newState.character.bonuses.push(bonus);
+		});
 		newState.character.gold += (categoryInfo.gold || 0)
 		this.setState(newState, () => this.handleSubmit());
 	}

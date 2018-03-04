@@ -10,7 +10,7 @@ const backgroundSchema = new Schema({
 	skillProficiencies: { type: [proficiency.proficiencySchema] },
 	toolProficiencies: { type: [proficiency.proficiencySchema] },
 	languageProficiencies: { type: [proficiency.proficiencySchema] },
-	backgroundBonuses: { type: [bonus.bonusSchema] },
+	bonuses: { type: [bonus.bonusSchema] },
 	gold: { type: Number, default: 0 },
 	equipment: { type: String, default: '[]' }
 });

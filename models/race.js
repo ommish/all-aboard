@@ -11,7 +11,7 @@ const raceSchema = new Schema({
 	armorProficiencies: { type: [proficiency.proficiencySchema] },
 	weaponProficiencies: { type: [proficiency.proficiencySchema] },
 	toolProficiencies: { type: [proficiency.proficiencySchema] },
-	racialBonuses: { type: [bonus.bonusSchema] }
+	bonuses: { type: [bonus.bonusSchema] }
 });
 
 const Race = mongoose.model('Race', raceSchema);
