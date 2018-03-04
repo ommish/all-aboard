@@ -4,7 +4,7 @@ const Proficiencies = ({ type, items, handleRemoveItem }) => {
 	const lis = items.map((item, i) => {
 		return (
 			<li key={i}>
-				{item.name}
+				{item.name} (Lvl {item.level}{item.source ? `, Src: ${item.source}` : ""})
 				<button onClick={handleRemoveItem(item._id, `${type}Proficiencies`)}>
 					Remove
 				</button>

@@ -19,6 +19,7 @@ const races = [
 		racialBonuses: [
 			{
 				name: 'Darkvision',
+				source: 'Dwarf',
 				description:
 					'Accustomed to life underground, you have superior vision in dark and dim Conditions. You can see in dim light within 60 feet of you as if it were bright light, and in Darkness as if it were dim light. You can’t discern color in Darkness, only shades of gray.',
 				field: '',
@@ -26,6 +27,7 @@ const races = [
 			},
 			{
 				name: 'Dwarven Resilience',
+				source: 'Dwarf',
 				description:
 					'You have advantage on saving throws against poison, and you have Resistance against poison damage.',
 				field: '',

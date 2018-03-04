@@ -143,46 +143,13 @@ class CharacterSheet extends React.Component {
 		);
 	}
 
-	renderArmor(selectedArmor) {
+	renderDropdownMenu(options, selectedOption, handleChange, field) {
 		return (
 			<DropdownMenu
-				options={this.props.armors}
-				selectedOption={selectedArmor}
-				handleChange={this.handleChange('armor')}
-				field="Armor"
-			/>
-		);
-	}
-
-	renderRaces(selectedRace) {
-		return (
-			<DropdownMenu
-				options={this.props.races}
-				selectedOption={selectedRace}
-				handleChange={this.handleChange('race')}
-				field="Race"
-			/>
-		);
-	}
-
-	renderCharClasses(selectedCharClass) {
-		return (
-			<DropdownMenu
-				options={this.props.charClasses}
-				selectedOption={selectedCharClass}
-				handleChange={this.handleChange('charClass')}
-				field="Class"
-			/>
-		);
-	}
-
-	renderBackgrounds(selectedBackground) {
-		return (
-			<DropdownMenu
-				options={this.props.backgrounds}
-				selectedOption={selectedBackground}
-				handleChange={this.handleChange('background')}
-				field="Background"
+			options={options}
+			selectedOption={selectedOption}
+			handleChange={handleChange}
+			field={field}
 			/>
 		);
 	}
@@ -346,7 +313,7 @@ class CharacterSheet extends React.Component {
 			<BonusForm
 				key={existing.length}
 				handleBonusSubmit={this.handleBonusSubmit.bind(this)}
-				bonus={{ name: '', field: '', description: '', bonusAmount: 0 }}
+				bonus={{ name: '', field: '', description: '', bonusAmount: 0, level: this.state.character.level, source: '' }}
 				skills={_SKILLS}
 			/>
 		);
@@ -381,15 +348,15 @@ class CharacterSheet extends React.Component {
 				</div>
 				<div className="character-form-1">
 					<h3>Race </h3>
-					{this.renderRaces(this.state.character.race ? this.state.character.race : '')}
+					{this.renderDropdownMenu(this.props.races, this.state.character.race ? this.state.character.race : '', this.handleChange('race'), 'Race')}
 				</div>
 				<div className="character-form-1">
 					<h3>Class </h3>
-					{this.renderCharClasses(this.state.character.charClass ? this.state.character.charClass : '')}
+					{this.renderDropdownMenu(this.props.charClasses, this.state.character.charClass ? this.state.character.charClass : '', this.handleChange('charClass'), 'Class')}
 				</div>
 				<div className="character-form-1">
 					<h3>Background </h3>
-					{this.renderBackgrounds(this.state.character.background ? this.state.character.background : '')}
+					{this.renderDropdownMenu(this.props.backgrounds, this.state.character.background ? this.state.character.background : '', this.handleChange('background'), 'Background')}
 					<button
 						disabled={!this.state.character.background}
 						onClick={(e) => {e.preventDefault(); e.stopPropagation(); this.addCharacterBonuses('background')}}>
@@ -432,7 +399,7 @@ class CharacterSheet extends React.Component {
 				</div>
 				<div className="character-form-1">
 					<h3>Armor </h3>
-					{this.renderArmor(this.state.character.armor ? this.state.character.armor : '')}
+					{this.renderDropdownMenu(this.props.armors, this.state.character.armor ? this.state.character.armor : '', this.handleChange('armor'), 'Armor')}
 				</div>
 				<div className="character-form-4">
 					<h3>Money</h3>
@@ -456,8 +423,7 @@ class CharacterSheet extends React.Component {
 
 export default CharacterSheet;
 
-// TODO: make charClass model to help auto calculate fields
-// list to select backgrounds from
+// TODO:
 // inventory
 // weapons
 // character create flow

@@ -3,6 +3,8 @@ const { Schema } = mongoose;
 const bonusSchema = new Schema({
 	name: { type: String, default: '' },
 	description: { type: String, default: '' },
+	source: { type: String, default: '' },
+	level: { type: Number, default: 1 },
 	field: {
 		type: String,
 		default: '',

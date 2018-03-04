@@ -9,7 +9,9 @@ class BonusForm extends React.Component {
 			name: this.props.bonus.name,
 			field: this.props.bonus.field,
 			description: this.props.bonus.description,
-			bonusAmount: this.props.bonus.bonusAmount
+			bonusAmount: this.props.bonus.bonusAmount,
+			level: this.props.bonus.level,
+			source: this.props.bonus.source,
 		};
 	}
 
@@ -51,6 +53,16 @@ class BonusForm extends React.Component {
 					/>
 				</label>
 				<label>
+					Level
+					<input
+						min="1"
+						max="20"
+						type="number"
+						value={this.state.level}
+						onChange={this.handleChange('level')}
+					/>
+				</label>
+				<label>
 					Field
 					<select value={this.state.field} required={Boolean(this.state.bonusAmount)} name="field" onChange={this.handleChange('field')}>
 						<option value="">Select a Field</option>
@@ -72,7 +84,10 @@ class BonusForm extends React.Component {
 						type="submit"
 						value={this.state._id ? 'Update' : 'Add'}
 					/>
+					{this.state.source ? <label>`(Src: ${this.state.source})`</label> : ""}
+
 				</label>
+
 			</form>
 		);
 	}

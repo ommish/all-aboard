@@ -86,7 +86,7 @@ export const speed = ({ newState, races }) => {
 
 export const bonuses = ({ newState }) => {
 	newState.character.bonuses.forEach((bonus) => {
-		if (bonus.field) {
+		if (bonus.field && newState.character.level >= bonus.level) {
 			newState.character[bonus.field] += bonus.bonusAmount;
 		}
 	});
