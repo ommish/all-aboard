@@ -331,6 +331,16 @@ class CharacterSheet extends React.Component {
 		);
 	}
 
+	renderAddBonusButton(category, label) {
+		return (
+			<button
+				disabled={!this.state.character[category]}
+				onClick={(e) => {e.preventDefault(); e.stopPropagation(); this.addCharacterBonuses(category)}}>
+				Add {label} Bonuses
+			</button>
+		)
+	}
+
 	render() {
 		return [
 			<Link key={1} to={`/users/${this.props.currentUser._id}`}>
@@ -349,19 +359,17 @@ class CharacterSheet extends React.Component {
 				<div className="character-form-1">
 					<h3>Race </h3>
 					{this.renderDropdownMenu(this.props.races, this.state.character.race ? this.state.character.race : '', this.handleChange('race'), 'Race')}
+					{this.renderAddBonusButton('race', 'Race')}
 				</div>
 				<div className="character-form-1">
 					<h3>Class </h3>
 					{this.renderDropdownMenu(this.props.charClasses, this.state.character.charClass ? this.state.character.charClass : '', this.handleChange('charClass'), 'Class')}
+					{this.renderAddBonusButton('charClass', 'Class')}
 				</div>
 				<div className="character-form-1">
 					<h3>Background </h3>
 					{this.renderDropdownMenu(this.props.backgrounds, this.state.character.background ? this.state.character.background : '', this.handleChange('background'), 'Background')}
-					<button
-						disabled={!this.state.character.background}
-						onClick={(e) => {e.preventDefault(); e.stopPropagation(); this.addCharacterBonuses('background')}}>
-						Add Background Bonuses
-					</button>
+					{this.renderAddBonusButton('background', 'Background')}
 				</div>
 				<div className="character-form-1">{this.renderHealth()}</div>
 				<div className="character-form-1">{this.renderHitDie()}</div>

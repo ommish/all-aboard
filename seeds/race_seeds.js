@@ -15,7 +15,7 @@ const races = [
 		speed: 25,
 		weaponProficiencies: [],
 		toolProficiencies: [],
-		languageProficiencies: [{ name: 'Common' }, { name: 'Dwarvish' }],
+		languageProficiencies: [{ name: 'Common', source: 'Dwarf' }, { name: 'Dwarvish', source: 'Dwarf' }],
 		racialBonuses: [
 			{
 				name: 'Darkvision',
