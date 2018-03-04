@@ -3,10 +3,7 @@ import { merge, camelCase } from 'lodash';
 import { Link } from 'react-router-dom';
 import BonusForm from './form_components/bonus_form';
 import AlignmentMenu from './form_components/alignment_menu';
-import RaceMenu from './form_components/race_menu';
-import ArmorMenu from './form_components/armor_menu';
-import ClassMenu from './form_components/class_menu';
-import BackgroundMenu from './form_components/background_menu';
+import DropdownMenu from './form_components/dropdown_menu';
 import Proficiencies from './form_components/proficiencies';
 import ProficiencyForm from './form_components/proficiency_form';
 import Money from './form_components/money';
@@ -136,60 +133,56 @@ class CharacterSheet extends React.Component {
 		this.props.updateCharacter(this.state.character);
 	}
 
-	renderAlignments() {
+	renderAlignments(selectedAlignment) {
 		return (
 			<AlignmentMenu
 				alignments={_ALIGNMENTS}
 				handleChange={this.handleChange('alignment')}
-				selectedAlignment={this.state.character.alignment}
+				selectedAlignment={selectedAlignment}
 			/>
 		);
 	}
 
-	renderArmor() {
+	renderArmor(selectedArmor) {
 		return (
-			<ArmorMenu
-				armors={this.props.armors}
-				selectedArmor={
-					this.state.character.armor ? this.state.character.armor : ''
-				}
+			<DropdownMenu
+				options={this.props.armors}
+				selectedOption={selectedArmor}
 				handleChange={this.handleChange('armor')}
+				field="Armor"
 			/>
 		);
 	}
 
-	renderRaces() {
+	renderRaces(selectedRace) {
 		return (
-			<RaceMenu
-				races={this.props.races}
-				selectedRace={
-					this.state.character.race ? this.state.character.race : ''
-				}
+			<DropdownMenu
+				options={this.props.races}
+				selectedOption={selectedRace}
 				handleChange={this.handleChange('race')}
+				field="Race"
 			/>
 		);
 	}
 
-	renderCharClasses() {
+	renderCharClasses(selectedCharClass) {
 		return (
-			<ClassMenu
-				charClasses={this.props.charClasses}
-				selectedCharClass={
-					this.state.character.charClass ? this.state.character.charClass : ''
-				}
+			<DropdownMenu
+				options={this.props.charClasses}
+				selectedOption={selectedCharClass}
 				handleChange={this.handleChange('charClass')}
+				field="Class"
 			/>
 		);
 	}
 
-	renderBackgrounds() {
+	renderBackgrounds(selectedBackground) {
 		return (
-			<BackgroundMenu
-				backgrounds={this.props.backgrounds}
-				selectedBackground={
-					this.state.character.background ? this.state.character.background : ''
-				}
+			<DropdownMenu
+				options={this.props.backgrounds}
+				selectedOption={selectedBackground}
 				handleChange={this.handleChange('background')}
+				field="Background"
 			/>
 		);
 	}
@@ -384,22 +377,22 @@ class CharacterSheet extends React.Component {
 				<div className="character-form-1">{this.renderEditableFields()}</div>
 				<div className="character-form-1">
 					<h3>Alignment </h3>
-					{this.renderAlignments()}
+					{this.renderAlignments(this.state.character.alignment)}
 				</div>
 				<div className="character-form-1">
 					<h3>Race </h3>
-					{this.renderRaces()}
+					{this.renderRaces(this.state.character.race ? this.state.character.race : '')}
 				</div>
 				<div className="character-form-1">
 					<h3>Class </h3>
-					{this.renderCharClasses()}
+					{this.renderCharClasses(this.state.character.charClass ? this.state.character.charClass : '')}
 				</div>
 				<div className="character-form-1">
 					<h3>Background </h3>
-					{this.renderBackgrounds()}
+					{this.renderBackgrounds(this.state.character.background ? this.state.character.background : '')}
 					<button
 						disabled={!this.state.character.background}
-						onClick={() => this.addCharacterBonuses('background')}>
+						onClick={(e) => {e.preventDefault(); e.stopPropagation(); this.addCharacterBonuses('background')}}>
 						Add Background Bonuses
 					</button>
 				</div>
@@ -439,7 +432,7 @@ class CharacterSheet extends React.Component {
 				</div>
 				<div className="character-form-1">
 					<h3>Armor </h3>
-					{this.renderArmor()}
+					{this.renderArmor(this.state.character.armor ? this.state.character.armor : '')}
 				</div>
 				<div className="character-form-4">
 					<h3>Money</h3>
