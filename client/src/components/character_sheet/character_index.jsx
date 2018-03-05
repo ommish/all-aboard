@@ -18,6 +18,7 @@ class CharacterIndex extends React.Component {
     });
     return (
       <main>
+        <Link to={`/users/${this.props.match.params.userId}/new-character`}>Create New Character</Link>
         <button onClick={() => this.props.createCharacter({})}>CREATE CHARACTER</button>
         <ul>
           {characters}
