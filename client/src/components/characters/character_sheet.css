@@ -8,56 +8,41 @@
   padding: 20px;
 }
 
-.character-sheet > .character-form,  .character-sheet > .proficiency-section, .bonus-section {
+.character-sheet > .character-form,
+.character-sheet > .proficiency-section,
+.character-sheet > .bonus-section {
   padding: 20px;
   display: flex;
   flex-direction: column;
 }
 
-.name-level, .physical {
+.character-sheet .row {
   display: flex;
   flex-wrap: wrap;
-  align-items: flex-start;
-  justify-content: flex-start;
+  margin-bottom: 10px;
 }
 
-.character-form > .dropdowns, .character-form > .health, .character-form > .calculated,
-.character-form > .shield-armor, .character-form .money-inputs, .proficiencies-of-type > ul, .character-form > .proficiency-form,
-.character-sheet .bonus-form {
-  display: flex;
-  flex-wrap: wrap;
-}
-
-.ability-scores > div, .saving-throws > div, .skills > div, .calculated {
+.character-sheet .col {
   display: flex;
   flex-direction: column;
 }
 
-.bonus-forms {
-  display: flex;
-  flex-direction: column;
-}
-
-.character-sheet .remove-button {
-  border-radius: 7px;
-  background: white;
-  color: #A93226;
-  padding: 3px;
-  margin: 3px;
-  border: 1px solid #CCD1D1;
-  height: 25px;
-  width: 25px;
-}
-
-.character-sheet .remove-button:hover {
-  background: #A93226;
-  color: white;
+.space-around {
+  justify-content: space-between;
 }
 
 .character-sheet label {
-  margin: 0 30px 20px 0;
+  margin: 20px 30px 0 0;
 }
 
-.proficiencies-of-type > ul > li {
-  margin: 0 20px 20px 0;
+.one-of {
+  margin-right: 20px;
+}
+
+.blocks > div {
+  margin-left: 50px;
+}
+
+.blocks > div:first-child {
+  margin-left: 0;
 }

@@ -39,9 +39,14 @@ class BonusForm extends React.Component {
 	}
 
 	render() {
+		const deleteButton = this.state._id ? (
+			<button onClick={this.props.handleRemoveItem}
+				className="remove-button tiny-button">
+				✘
+			</button>) : null;
 		return (
 			<form
-				className="tooltip-container bonus-form"
+				className="tooltip-container row"
 				onSubmit={(e) => {
 					e.preventDefault();
 					e.stopPropagation();
@@ -100,7 +105,8 @@ class BonusForm extends React.Component {
 							onChange={this.handleChange('bonusAmount')}
 						/>
 					</label>
-					<input type="submit" value={this.state._id ? 'Update' : 'Add'} />
+					<input className="add-button tiny-button" type="submit" value={this.state._id ? '✎' : '➕'} />
+					{deleteButton}
 				</label>
 			</form>
 		);

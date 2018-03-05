@@ -12,7 +12,7 @@ const Proficiencies = ({ type, items, handleRemoveItem }) => {
 						{ key: 'Level', val: item.level }
 					]}
 				/>
-				<button className="remove-button" onClick={handleRemoveItem(item._id, `${type}Proficiencies`)}>
+				<button className="remove-button tiny-button" onClick={handleRemoveItem(item._id, `${type}Proficiencies`)}>
 					✘
 				</button>
 			</li>

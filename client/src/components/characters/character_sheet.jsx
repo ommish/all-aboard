@@ -129,6 +129,7 @@ class CharacterSheet extends React.Component {
 
 	handleRemoveItem(itemId, itemType) {
 		return (e) => {
+			e.stopPropagation();
 			e.preventDefault();
 			const newState = merge({}, this.state);
 			newState.character[itemType] = newState.character[itemType].filter(
@@ -142,27 +143,6 @@ class CharacterSheet extends React.Component {
 		if (e) e.preventDefault();
 
 		this.props.updateCharacter(this.state.character);
-	}
-
-	renderAlignments(selectedAlignment) {
-		return (
-			<AlignmentMenu
-				alignments={_ALIGNMENTS}
-				handleChange={this.handleChange('alignment')}
-				selectedAlignment={selectedAlignment}
-			/>
-		);
-	}
-
-	renderDropdownMenu(options, selectedOption, handleChange, field) {
-		return (
-			<DropdownMenu
-				options={options}
-				selectedOption={selectedOption}
-				handleChange={handleChange}
-				field={field}
-			/>
-		);
 	}
 
 	renderNameLevel() {
@@ -203,6 +183,27 @@ class CharacterSheet extends React.Component {
 				</label>
 			);
 		});
+	}
+
+	renderAlignments(selectedAlignment) {
+		return (
+			<AlignmentMenu
+				alignments={_ALIGNMENTS}
+				handleChange={this.handleChange('alignment')}
+				selectedAlignment={selectedAlignment}
+			/>
+		);
+	}
+
+	renderDropdownMenu(options, selectedOption, handleChange, field) {
+		return (
+			<DropdownMenu
+				options={options}
+				selectedOption={selectedOption}
+				handleChange={handleChange}
+				field={field}
+			/>
+		);
 	}
 
 	renderHealth() {
@@ -269,131 +270,93 @@ class CharacterSheet extends React.Component {
 	}
 
 	renderAbilityScores() {
-		return _ABILITIES.map((ability, i) => {
+		const inputs = _ABILITIES.map((ability, i) => {
 			const camel = camelCase(ability);
+			const modString =
+				this.state.character[`${camelCase(ability)}Modifier`] >= 0
+					? '( +'
+					: '(  ';
 			return (
-				<label key={i}>
-					{ability}: ({this.state.character[`${camelCase(ability)}Modifier`] >=
-					0
-						? ' +'
-						: '   '}
-					{this.state.character[`${camelCase(ability)}Modifier`]})
-					<input
-						type="number"
-						min="0"
-						max="30"
-						value={this.state.character[camel]}
-						onChange={this.handleChange(camel)}
-					/>
-				</label>
+				<li key={i}>
+					<label>
+						{ability}: {modString}
+						{this.state.character[`${camelCase(ability)}Modifier`]})
+						<input
+							type="number"
+							min="0"
+							max="30"
+							value={this.state.character[camel]}
+							onChange={this.handleChange(camel)}
+						/>
+					</label>
+				</li>
 			);
 		});
+		return <ul className="row">{inputs}</ul>;
 	}
 
 	renderSavingThrows() {
-		return _ABILITIES.map((ability, i) => {
-			const camel = camelCase(ability);
+		const inputs = _ABILITIES.map((ability, i) => {
+			const camelThrow = camelCase(ability) + 'SavingThrow';
+			const camelProf = camelCase(ability) + 'SaveProficiency';
 			return (
-				<label key={i} className="tooltip-container">
-					{ability}
-					{this.state.character[`${camel}SavingThrow`] >= 0 ? ' +' : '   '}
-					{this.state.character[`${camel}SavingThrow`]}
-					<input
-						type="checkbox"
-						onChange={this.handleChange(`${camel}SaveProficiency`)}
-						checked={this.state.character[`${camel}SaveProficiency`].is}
-						value={`${camel}SaveProficiency`}
-					/>
-					<Tooltip
-						listItems={[
-							{
-								key: 'Source',
-								val: this.state.character[`${camel}SaveProficiency`].source
-							}
-						]}
-					/>
-				</label>
+				<li key={i}>
+					<label className="tooltip-container">
+						{ability}
+						{this.state.character[camelThrow] >= 0 ? ' +' : '   '}
+						{this.state.character[camelThrow]}
+						<input
+							type="checkbox"
+							onChange={this.handleChange(camelProf)}
+							checked={this.state.character[camelProf].is}
+							value={camelProf}
+						/>
+						<Tooltip
+							listItems={[
+								{ key: 'Source', val: this.state.character[camelProf].source }
+							]}
+						/>
+					</label>
+				</li>
 			);
 		});
+		return <ul className="row">{inputs}</ul>;
 	}
 
 	renderSkills() {
-		return Object.keys(_SKILLS).map((skill, i) => {
+		const inputs = Object.keys(_SKILLS).map((skill, i) => {
 			const camel = camelCase(skill);
+			const camelProf = camelCase(skill) + 'Proficiency';
 			return (
-				<label key={i} className="tooltip-container">
-					{skill} ({_SKILLS[skill].slice(0, 3)})
-					{this.state.character[camel] >= 0 ? ' +' : '   '}
-					{this.state.character[camel]}
-					<input
-						type="checkbox"
-						onChange={this.handleChange(`${camel}Proficiency`)}
-						checked={this.state.character[`${camel}Proficiency`].is}
-						value={`${camel}Proficiency`}
-					/>
-					<Tooltip
-					listItems={[
-						{
-							key: 'Source',
-							val: this.state.character[`${camel}Proficiency`].source
-						}
-					]}
-					/>
-				</label>
+				<li key={i}>
+					<label className="tooltip-container">
+						{skill} ({_SKILLS[skill].slice(0, 3)})
+						{this.state.character[camel] >= 0 ? ' +' : '   '}
+						{this.state.character[camel]}
+						<input
+							type="checkbox"
+							onChange={this.handleChange(camelProf)}
+							checked={this.state.character[camelProf].is}
+							value={camelProf}
+						/>
+						<Tooltip
+							listItems={[
+								{
+									key: 'Source',
+									val: this.state.character[camelProf].source
+								}
+							]}
+						/>
+					</label>
+				</li>
 			);
 		});
-	}
-
-	renderProficiencies() {
-		return _PROFICIENCY_TYPES.map((type, i) => {
-			const camel = camelCase(type);
-			return (
-				<div key={i} className="proficiencies-of-type">
-					<h3>{type} Proficiencies</h3>
-					<Proficiencies
-						type={camel}
-						items={this.state.character[`${camel}Proficiencies`]}
-						handleRemoveItem={this.handleRemoveItem.bind(this)}
-					/>
-				</div>
-			);
-		});
-	}
-
-	renderBonuses() {
-		let forms = this.state.character.bonuses.map((bonus, i) => (
-			<div key={i} className="bonus-form">
-				<BonusForm
-					handleBonusSubmit={this.handleBonusSubmit.bind(this)}
-					bonus={bonus}
-					skills={_SKILLS}
-				/>
-				<button className="remove-button" onClick={this.handleRemoveItem(bonus._id, 'bonuses')}>
-				✘
-				</button>
-			</div>
-		));
-		forms = forms.concat(
-			<BonusForm
-				key={forms.length}
-				handleBonusSubmit={this.handleBonusSubmit.bind(this)}
-				bonus={{
-					name: '',
-					field: '',
-					description: '',
-					bonusAmount: 0,
-					level: this.state.character.level,
-					source: ''
-				}}
-				skills={_SKILLS}
-			/>
-		);
-		return <div className="bonus-forms">{forms}</div>;
+		return <ul className="row">{inputs}</ul>;
 	}
 
 	renderMoney() {
 		return (
-			<div className="moneyInputs">
+			<div className="row">
 				<label>
 					Copper:{' '}
 					<input
@@ -434,6 +397,51 @@ class CharacterSheet extends React.Component {
 		);
 	}
 
+	renderProficiencies() {
+		return _PROFICIENCY_TYPES.map((type, i) => {
+			const camel = camelCase(type);
+			return (
+				<div key={i} className="col one-of">
+					<h3>{type} Proficiencies</h3>
+					<Proficiencies
+						type={camel}
+						items={this.state.character[`${camel}Proficiencies`]}
+						handleRemoveItem={this.handleRemoveItem.bind(this)}
+					/>
+				</div>
+			);
+		});
+	}
+
+	renderBonuses() {
+		let forms = this.state.character.bonuses.map((bonus, i) => (
+			<div key={i} className="row">
+				<BonusForm
+					handleBonusSubmit={this.handleBonusSubmit.bind(this)}
+					handleRemoveItem={this.handleRemoveItem(bonus._id, 'bonuses')}
+					bonus={bonus}
+					skills={_SKILLS}
+				/>
+			</div>
+		));
+		forms = forms.concat(
+			<BonusForm
+				key={forms.length}
+				handleBonusSubmit={this.handleBonusSubmit.bind(this)}
+				bonus={{
+					name: '',
+					field: '',
+					description: '',
+					bonusAmount: 0,
+					level: this.state.character.level,
+					source: ''
+				}}
+				skills={_SKILLS}
+			/>
+		);
+		return <div className="col">{forms}</div>;
+	}
+
 	renderAddBonusButton(category, label) {
 		return (
 			<button
@@ -443,7 +451,7 @@ class CharacterSheet extends React.Component {
 					e.stopPropagation();
 					this.addCharacterBonuses(category);
 				}}>
-				Add {label} Bonuses
+				➕ {label} Bonuses
 			</button>
 		);
 	}
@@ -457,21 +465,21 @@ class CharacterSheet extends React.Component {
 				<form
 					className="character-form"
 					onSubmit={this.handleSubmit.bind(this)}>
-					<div className="save">
+					<div className="row">
 						<input type="submit" value="Save" />
 					</div>
-					<div className="name-level">{this.renderNameLevel()}</div>
-					<div className="physical">{this.renderPhysicalAttributes()}</div>
-					<div className="dropdowns">
+					<div className="row">{this.renderNameLevel()}</div>
+					<div className="row">{this.renderPhysicalAttributes()}</div>
+					<div className="row blocks">
 						<div className="alignment">
-							<h3>Alignment</h3>
 							<label>
+								<h3>Alignment</h3>
 								{this.renderAlignments(this.state.character.alignment)}
 							</label>
 						</div>
 						<div className="race">
-							<h3>Race</h3>
 							<label>
+								<h3>Race</h3>
 								{this.renderDropdownMenu(
 									this.props.races,
 									this.state.character.race ? this.state.character.race : '',
@@ -482,8 +490,8 @@ class CharacterSheet extends React.Component {
 							{this.renderAddBonusButton('race', 'Race')}
 						</div>
 						<div className="class">
-							<h3>Class</h3>
 							<label>
+								<h3>Class</h3>
 								{this.renderDropdownMenu(
 									this.props.charClasses,
 									this.state.character.charClass
@@ -496,8 +504,8 @@ class CharacterSheet extends React.Component {
 							{this.renderAddBonusButton('charClass', 'Class')}
 						</div>
 						<div className="background">
-							<h3>Background</h3>
 							<label>
+								<h3>Background</h3>
 								{this.renderDropdownMenu(
 									this.props.backgrounds,
 									this.state.character.background
@@ -510,47 +518,55 @@ class CharacterSheet extends React.Component {
 							{this.renderAddBonusButton('background', 'Background')}
 						</div>
 					</div>
-					<div className="health">{this.renderHealth()}</div>
-					<div className="calculated">{this.renderCalculatedFields()}</div>
-					<div className="ability-scores">
-						<h3>Ability Scores</h3>
-						<div>{this.renderAbilityScores()}</div>
-					</div>
-					<div className="saving-throws">
-						<h3>Saving Throws</h3>
-						<div>{this.renderSavingThrows()}</div>
-					</div>
-					<div className="skills">
-						<h3>Skills</h3>
-						<div>{this.renderSkills()}</div>
-					</div>
-					<div className="shield-armor">
-						<div className="shield">
-							<h3>Shield</h3>
-							<label>
-								Shielded
-								<input
-									type="checkbox"
-									value={this.state.character.shielded}
-									onChange={this.handleChange('shielded')}
-								/>
-							</label>
-						</div>
-						<div className="armor">
-							<h3>Armor </h3>
-							{this.renderDropdownMenu(
-								this.props.armors,
-								this.state.character.armor ? this.state.character.armor : '',
-								this.handleChange('armor'),
-								'Armor'
-							)}
+					<div className="row">
+						{this.renderHealth()}
+						<div className="row">
+							<div className="shield">
+								<label>
+									<h3>Shield</h3>
+									Shielded
+									<input
+										type="checkbox"
+										value={this.state.character.shielded}
+										onChange={this.handleChange('shielded')}
+									/>
+								</label>
+							</div>
+							<div className="armor">
+								<label>
+									<h3>Armor </h3>
+									{this.renderDropdownMenu(
+										this.props.armors,
+										this.state.character.armor
+											? this.state.character.armor
+											: '',
+										this.handleChange('armor'),
+										'Armor'
+									)}
+								</label>
+							</div>
 						</div>
 					</div>
-					<div className="money">
+					<div className="row">{this.renderCalculatedFields()}</div>
+					<div className="row">
+						<div className="col">
+							<h3>Ability Scores</h3>
+							<div>{this.renderAbilityScores()}</div>
+						</div>
+						<div className="col">
+							<h3>Saving Throws</h3>
+							<div>{this.renderSavingThrows()}</div>
+						</div>
+						<div className="col">
+							<h3>Skills</h3>
+							<div>{this.renderSkills()}</div>
+						</div>
+					</div>
+					<div className="col">
 						<h3>Money</h3>
 						{this.renderMoney()}
 					</div>
-					<div className="proficiencies">{this.renderProficiencies()}</div>
+					<div className="row">{this.renderProficiencies()}</div>
 				</form>
 				<div className="proficiency-section">
 					<h3>Add Proficiencies</h3>

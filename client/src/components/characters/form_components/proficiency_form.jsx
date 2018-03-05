@@ -68,7 +68,7 @@ class ProficiencyForm extends React.Component {
 						onChange={this.handleChange('level')}
 					/>
 				</label>
-				<input type="submit" value="Add" />
+				<input type="submit" className="add-button tiny-button" value="➕" />
 			</form>
 		);
 	}
