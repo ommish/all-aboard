@@ -8,7 +8,7 @@ class ProficiencyForm extends React.Component {
 		this.state = {
 			type: '',
 			name: '',
-			level: 1,
+			level: 1
 		};
 	}
 
@@ -22,29 +22,32 @@ class ProficiencyForm extends React.Component {
 		e.preventDefault();
 		e.stopPropagation();
 		this.props.handleProficiencySubmit(this.state);
-		this.setState({type: '', name: '', level: 1});
+		this.setState({ type: '', name: '', level: 1 });
 	}
 
 	render() {
 		return (
 			<form
+				className="proficiency-form"
 				onSubmit={this.handleSubmit.bind(this)}>
-        <label>
-        Type
-        <select
-				required
-        value={this.state.type}
-        onChange={this.handleChange('type')}>
-        <option disabled value="">Select Type</option>
-        {_PROFICIENCY_TYPES.map((skill, i) => {
-          return (
-            <option key={i} value={camelCase(skill)}>
-            {skill}
-            </option>
-          );
-        })}
-        </select>
-        </label>
+				<label>
+					Type
+					<select
+						required
+						value={this.state.type}
+						onChange={this.handleChange('type')}>
+						<option disabled value="">
+							Select Type
+						</option>
+						{_PROFICIENCY_TYPES.map((skill, i) => {
+							return (
+								<option key={i} value={camelCase(skill)}>
+									{skill}
+								</option>
+							);
+						})}
+					</select>
+				</label>
 				<label>
 					Name
 					<input

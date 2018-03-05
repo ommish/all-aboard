@@ -1,35 +1,63 @@
-.character-form {
+.character-sheet {
   display: flex;
   flex-direction: column;
-  padding: 10px;
 }
 
-div[class|="character-form"] {
+.character-sheet nav {
+  background: white;
+  padding: 20px;
+}
+
+.character-sheet > .character-form,  .character-sheet > .proficiency-section, .bonus-section {
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+}
+
+.name-level, .physical {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  justify-content: flex-start;
+}
+
+.character-form > .dropdowns, .character-form > .health, .character-form > .calculated,
+.character-form > .shield-armor, .character-form .money-inputs, .proficiencies-of-type > ul, .character-form > .proficiency-form,
+.character-sheet .bonus-form {
   display: flex;
   flex-wrap: wrap;
 }
 
-div[class="character-form-3"], div[class="character-form-4"], div[class="character-form-5"], div[class="character-form-6"] {
+.ability-scores > div, .saving-throws > div, .skills > div, .calculated {
+  display: flex;
   flex-direction: column;
 }
 
-div[class|="character-form"] label {
-  margin: 10px;
-}
-
-.character-form input:first-child {
-  margin-left: 10px;
-}
-
-.character-form input[type="submit"], button {
-  margin: 0;
-  width: 200px;
-}
-
-.character-form h3 {
-  margin: 0;
-}
-
-.tooltip-container:hover .tooltip {
+.bonus-forms {
   display: flex;
+  flex-direction: column;
+}
+
+.character-sheet .remove-button {
+  border-radius: 7px;
+  background: white;
+  color: #A93226;
+  padding: 3px;
+  margin: 3px;
+  border: 1px solid #CCD1D1;
+  height: 25px;
+  width: 25px;
+}
+
+.character-sheet .remove-button:hover {
+  background: #A93226;
+  color: white;
+}
+
+.character-sheet label {
+  margin: 0 30px 20px 0;
+}
+
+.proficiencies-of-type > ul > li {
+  margin: 0 20px 20px 0;
 }

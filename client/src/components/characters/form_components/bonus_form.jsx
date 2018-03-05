@@ -1,5 +1,6 @@
 import React from 'react';
 import { camelCase, merge } from 'lodash';
+import Tooltip from '../../helpers/tooltip';
 
 class BonusForm extends React.Component {
 	constructor(props) {
@@ -40,11 +41,13 @@ class BonusForm extends React.Component {
 	render() {
 		return (
 			<form
+				className="tooltip-container bonus-form"
 				onSubmit={(e) => {
 					e.preventDefault();
 					e.stopPropagation();
 					this.props.handleBonusSubmit(merge({}, this.state));
 				}}>
+				<Tooltip listItems={[{ key: 'Source', val: this.state.source }]} />
 				<label>
 					Name
 					<input

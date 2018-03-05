@@ -3,9 +3,6 @@ import { camelCase } from 'lodash';
 import {
 	_ABILITIES,
 	_SKILLS,
-	_ALIGNMENTS,
-	_EDITABLE_FIELDS,
-	_CALCULATED_FIELDS
 } from './character_variables';
 
 export const modifiers = ({ newState }) => {
