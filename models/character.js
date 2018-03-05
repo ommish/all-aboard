@@ -69,7 +69,7 @@ const characterSchema = new Schema({
 	gold: { type: Number, default: 0, min: 0},
 	silver: { type: Number, default: 0, min: 0},
 	copper: { type: Number, default: 0, min: 0},
-	age: { type: Number, min: 0},
+	age: { type: String, default: '' },
 	height: { type: String, default: '' },
 	weight: { type: String, default: '' },
 	eyes: { type: String, default: '' },
