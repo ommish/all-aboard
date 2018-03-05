@@ -39,16 +39,14 @@ export const _ALIGNMENTS = [
 	'Lawful Good'
 ];
 
-export const _EDITABLE_FIELDS = {
-	Name: { type: 'text' },
-	Level: { type: 'number', min: 1, max: 20 },
-	Age: { type: 'number', min: 0 },
-	Height: { type: 'text' },
-	Weight: { type: 'text', min: 1 },
-	Eyes: { type: 'text' },
-	Skin: { type: 'text' },
-	Hair: { type: 'text' },
-};
+export const _PHYSICAL_ATTRIBUTES = [
+	'Age',
+	'Height',
+	'Weight',
+	'Eyes',
+	'Skin',
+	'Hair'
+];
 
 export const _CALCULATED_FIELDS = [
 	'Modifiers',
@@ -68,9 +66,4 @@ export const _CATEGORIES = {
 	background: 'backgrounds'
 };
 
-export const _PROFICIENCY_TYPES = [
-	'Armor',
-	'Weapon',
-	'Tool',
-	'Language'
-];
+export const _PROFICIENCY_TYPES = ['Armor', 'Weapon', 'Tool', 'Language'];

@@ -7,13 +7,13 @@ import DropdownMenu from './form_components/dropdown_menu';
 import Proficiencies from './form_components/proficiencies';
 import ProficiencyForm from './form_components/proficiency_form';
 import Money from './form_components/money';
+import Tooltip from '../helpers/tooltip';
 import './character_sheet.css';
 import {
 	_ABILITIES,
 	_SKILLS,
 	_PHYSICAL_ATTRIBUTES,
 	_ALIGNMENTS,
-	_EDITABLE_FIELDS,
 	_CALCULATED_FIELDS,
 	_CATEGORIES,
 	_PROFICIENCY_TYPES
@@ -166,19 +166,40 @@ class CharacterSheet extends React.Component {
 		);
 	}
 
-	renderEditableFields() {
-		return Object.keys(_EDITABLE_FIELDS).map((field, i) => {
-			const camel = field === 'Class' ? 'charClass' : camelCase(field);
+	renderNameLevel() {
+		return [
+			<label key={1}>
+				<h3>Name </h3>
+				<input
+					required
+					type="text"
+					value={this.state.character.name}
+					onChange={this.handleChange('name')}
+				/>
+			</label>,
+			<label key={2}>
+				<h3>Level </h3>
+				<input
+					type="number"
+					value={this.state.character.level}
+					onChange={this.handleChange('level')}
+					min="1"
+					max="20"
+				/>
+			</label>
+		];
+	}
+
+	renderPhysicalAttributes() {
+		return _PHYSICAL_ATTRIBUTES.map((attr, i) => {
+			const camel = camelCase(attr);
 			return (
 				<label key={i}>
-					<h3>{field} </h3>
+					<h3>{attr}</h3>
 					<input
-						required={Boolean(field === 'Name')}
-						type={_EDITABLE_FIELDS[field].type}
+						type="text"
 						value={this.state.character[camel]}
 						onChange={this.handleChange(camel)}
-						min={_EDITABLE_FIELDS[field].min}
-						max={_EDITABLE_FIELDS[field].max}
 					/>
 				</label>
 			);
@@ -208,15 +229,25 @@ class CharacterSheet extends React.Component {
 		);
 	}
 
-	renderHitDie() {
-		return (
-			<label>
+	renderHitDice() {
+		const charClass = this.props.charClasses[this.state.character.charClass];
+		return [
+			<label key={1} className="tooltip-container">
 				<h3>Hit Die</h3>
-				{this.state.character.charClass
-					? `d${this.props.charClasses[this.state.character.charClass].hitDie}`
-					: ''}
+				{charClass ? `d${charClass.hitDie}` : ''}
+				<Tooltip listItems={[{key: 'Source', val: charClass ? charClass.name : ""}]} />
+			</label>,
+			<label key={2}>
+				<h3>Hit Dice</h3>
+				<input
+					type="number"
+					value={this.state.character.hitDice}
+					min="0"
+					onChange={this.handleChange('hitDice')}
+				/>
+				<Tooltip listItems={[{key: 'Num', val: 'One per level'}]} />
 			</label>
-		);
+		];
 	}
 
 	renderCalculatedFields() {
@@ -261,7 +292,7 @@ class CharacterSheet extends React.Component {
 		return _ABILITIES.map((ability, i) => {
 			const camel = camelCase(ability);
 			return (
-				<label key={i}>
+				<label key={i} className="tooltip-container">
 					{ability}
 					{this.state.character[`${camel}SavingThrow`] >= 0 ? ' +' : '   '}
 					{this.state.character[`${camel}SavingThrow`]}
@@ -270,6 +301,14 @@ class CharacterSheet extends React.Component {
 						onChange={this.handleChange(`${camel}SaveProficiency`)}
 						checked={this.state.character[`${camel}SaveProficiency`].is}
 						value={`${camel}SaveProficiency`}
+					/>
+					<Tooltip
+						listItems={[
+							{
+								key: 'Source',
+								val: this.state.character[`${camel}SaveProficiency`].source
+							}
+						]}
 					/>
 				</label>
 			);
@@ -280,10 +319,18 @@ class CharacterSheet extends React.Component {
 		return Object.keys(_SKILLS).map((skill, i) => {
 			const camel = camelCase(skill);
 			return (
-				<label key={i}>
+				<label key={i} className="tooltip-container">
 					{skill} ({_SKILLS[skill].slice(0, 3)})
 					{this.state.character[camel] >= 0 ? ' +' : '   '}
 					{this.state.character[camel]}
+					<Tooltip
+						listItems={[
+							{
+								key: 'Source',
+								val: this.state.character[`${camel}Proficiency`].source
+							}
+						]}
+					/>
 					<input
 						type="checkbox"
 						onChange={this.handleChange(`${camel}Proficiency`)}
@@ -313,12 +360,13 @@ class CharacterSheet extends React.Component {
 
 	renderBonuses() {
 		const existing = this.state.character.bonuses.map((bonus, i) => (
-			<div key={i}>
+			<div key={i} className="tooltip-container">
 				<BonusForm
 					handleBonusSubmit={this.handleBonusSubmit.bind(this)}
 					bonus={bonus}
 					skills={_SKILLS}
-				/>,
+				/>
+				<Tooltip listItems={[{ key: 'Source', val: bonus.source }]} />
 				<button onClick={this.handleRemoveItem(bonus._id, 'bonuses')}>
 					Remove
 				</button>
@@ -377,7 +425,10 @@ class CharacterSheet extends React.Component {
 				className="character-form"
 				onSubmit={this.handleSubmit.bind(this)}>
 				<input type="submit" value="Save" />
-				<div className="character-form-1">{this.renderEditableFields()}</div>
+				<div className="character-form-1">{this.renderNameLevel()}</div>
+				<div className="character-form-1">
+					{this.renderPhysicalAttributes()}
+				</div>
 				<div className="character-form-1">
 					<h3>Alignment </h3>
 					{this.renderAlignments(this.state.character.alignment)}
@@ -417,7 +468,7 @@ class CharacterSheet extends React.Component {
 					{this.renderAddBonusButton('background', 'Background')}
 				</div>
 				<div className="character-form-1">{this.renderHealth()}</div>
-				<div className="character-form-1">{this.renderHitDie()}</div>
+				<div className="character-form-1">{this.renderHitDice()}</div>
 				<div className="character-form-2">{this.renderCalculatedFields()}</div>
 				<div className="character-form-3">
 					<h3>Ability Scores </h3>
@@ -463,7 +514,9 @@ class CharacterSheet extends React.Component {
 					<h3>Money</h3>
 					{this.renderMoney()}
 				</div>
-				{this.renderProficiencies()}
+				<div className="character-form-4">
+					{this.renderProficiencies()}
+				</div>
 			</form>,
 			<div key={3} className="character-form-4">
 				<h3>Add Proficiencies</h3>

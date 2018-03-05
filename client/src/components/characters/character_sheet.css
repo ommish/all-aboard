@@ -13,7 +13,7 @@ div[class="character-form-3"], div[class="character-form-4"], div[class="charact
   flex-direction: column;
 }
 
-.character-form label {
+div[class|="character-form"] label {
   margin: 10px;
 }
 
@@ -28,4 +28,8 @@ div[class="character-form-3"], div[class="character-form-4"], div[class="charact
 
 .character-form h3 {
   margin: 0;
+}
+
+.tooltip-container:hover .tooltip {
+  display: flex;
 }

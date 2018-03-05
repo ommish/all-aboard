@@ -5,23 +5,34 @@ class BonusForm extends React.Component {
 	constructor(props) {
 		super(props);
 		this.state = {
-      _id: this.props.bonus._id,
+			_id: this.props.bonus._id,
 			name: this.props.bonus.name,
 			field: this.props.bonus.field,
 			description: this.props.bonus.description,
 			bonusAmount: this.props.bonus.bonusAmount,
 			level: this.props.bonus.level,
-			source: this.props.bonus.source,
+			source: this.props.bonus.source
 		};
 	}
 
-	componentWillReceiveProps({ bonus: {_id, name, field, description, bonusAmount, level, source} }) {
-		this.setState({ _id, name, field, description, bonusAmount, level, source })
+	componentWillReceiveProps({
+		bonus: { _id, name, field, description, bonusAmount, level, source }
+	}) {
+		this.setState({
+			_id,
+			name,
+			field,
+			description,
+			bonusAmount,
+			level,
+			source
+		});
 	}
 
 	handleChange(field) {
 		return (e) => {
-      const newVal = e.target.type === "number" ? e.target.valueAsNumber : e.target.value;
+			const newVal =
+				e.target.type === 'number' ? e.target.valueAsNumber : e.target.value;
 			this.setState({ [field]: newVal });
 		};
 	}
@@ -62,10 +73,18 @@ class BonusForm extends React.Component {
 				</label>
 				<label>
 					Field
-					<select value={this.state.field} required={Boolean(this.state.bonusAmount)} name="field" onChange={this.handleChange('field')}>
+					<select
+						value={this.state.field}
+						required={Boolean(this.state.bonusAmount)}
+						name="field"
+						onChange={this.handleChange('field')}>
 						<option value="">Select a Field</option>
 						{Object.keys(this.props.skills).map((skill, i) => {
-							return <option key={i} value={camelCase(skill)}>{skill}</option>;
+							return (
+								<option key={i} value={camelCase(skill)}>
+									{skill}
+								</option>
+							);
 						})}
 						<option value="armorClass">Armor Class</option>
 						<option value="initiative">Initiative</option>
@@ -78,14 +97,8 @@ class BonusForm extends React.Component {
 							onChange={this.handleChange('bonusAmount')}
 						/>
 					</label>
-					<input
-						type="submit"
-						value={this.state._id ? 'Update' : 'Add'}
-					/>
-					{this.state.source ? <label>{`(Src: ${this.state.source})`}</label> : ""}
-
+					<input type="submit" value={this.state._id ? 'Update' : 'Add'} />
 				</label>
-
 			</form>
 		);
 	}
