@@ -62,7 +62,6 @@ const mapStateToProps = (state, ownProps) => {
     skin: '',
     hair: '',
     backstory: '',
-    bonuses: [],
     languageProficiencies: [],
     armorProficiencies: [],
     weaponProficiencies: [],

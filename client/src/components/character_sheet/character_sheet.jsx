@@ -23,7 +23,8 @@ class CharacterSheet extends React.Component {
 	constructor(props) {
 		super(props);
 		this.state = {
-			character: this.props.character
+			character: this.props.character,
+			saved: false,
 		};
 	}
 
@@ -121,9 +122,17 @@ class CharacterSheet extends React.Component {
 		this.setState(newState, () => this.handleSubmit());
 	}
 
-	handleProficiencySubmit(proficiency) {
+	handleProficiencySubmit(newProf) {
 		const newState = merge({}, this.state);
-		newState.character[`${proficiency.type}Proficiencies`].push(proficiency);
+		const category = `${newProf.type}Proficiencies`;
+		if (newProf._id) {
+			const profIdx = newState.character[category].findIndex(
+				(prof) => prof._id === newProf._id
+			);
+			newState.character[category][profIdx] = newProf;
+		} else {
+			newState.character[category].push(newProf);
+		}
 		this.setState(newState, () => this.handleSubmit());
 	}
 
@@ -141,8 +150,7 @@ class CharacterSheet extends React.Component {
 
 	handleSubmit(e) {
 		if (e) e.preventDefault();
-
-		this.props.submitCharacter(this.state.character).then(({character}) => {
+		if (this.state.character.name) this.props.submitCharacter(this.state.character).then(({character}) => {
 			if (!this.state.character._id) {
 				this.props.history.push(`/characters/${character._id}`)
 			}
@@ -405,12 +413,13 @@ class CharacterSheet extends React.Component {
 		return _PROFICIENCY_TYPES.map((type, i) => {
 			const camel = camelCase(type);
 			return (
-				<div key={i} className="col one-of">
+				<div key={i} className="col one-of-20">
 					<h3>{type} Proficiencies</h3>
 					<Proficiencies
 						type={camel}
 						items={this.state.character[`${camel}Proficiencies`]}
 						handleRemoveItem={this.handleRemoveItem.bind(this)}
+						handleProficiencySubmit={this.handleProficiencySubmit.bind(this)}
 					/>
 				</div>
 			);
@@ -528,12 +537,12 @@ class CharacterSheet extends React.Component {
 							<div className="shield">
 								<label>
 									<h3>Shield</h3>
-									Shielded
 									<input
 										type="checkbox"
 										value={this.state.character.shielded}
 										onChange={this.handleChange('shielded')}
 									/>
+								Shielded?
 								</label>
 							</div>
 							<div className="armor">
@@ -570,12 +579,13 @@ class CharacterSheet extends React.Component {
 						<h3>Money</h3>
 						{this.renderMoney()}
 					</div>
-					<div className="row">{this.renderProficiencies()}</div>
 				</form>
 				<div className="proficiency-section">
+					<div className="row">{this.renderProficiencies()}</div>
 					<h3>Add Proficiencies</h3>
 					<ProficiencyForm
 						handleProficiencySubmit={this.handleProficiencySubmit.bind(this)}
+						item={{name: '', type: '', level: 1}}
 					/>
 				</div>
 				<div className="bonus-section">

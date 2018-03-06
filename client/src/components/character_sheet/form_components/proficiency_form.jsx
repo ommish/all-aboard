@@ -6,9 +6,11 @@ class ProficiencyForm extends React.Component {
 	constructor(props) {
 		super(props);
 		this.state = {
-			type: '',
-			name: '',
-			level: 1
+			_id: props.item._id,
+			type: props.item.type || props.type,
+			name: props.item.name,
+			level: props.item.level,
+			source: props.item.source || "",
 		};
 	}
 
@@ -22,7 +24,7 @@ class ProficiencyForm extends React.Component {
 		e.preventDefault();
 		e.stopPropagation();
 		this.props.handleProficiencySubmit(this.state);
-		this.setState({ type: '', name: '', level: 1 });
+		if (!this.props.item._id) this.setState({ type: '', name: '', level: 1 });
 	}
 
 	render() {
@@ -30,7 +32,7 @@ class ProficiencyForm extends React.Component {
 			<form
 				className="proficiency-form"
 				onSubmit={this.handleSubmit.bind(this)}>
-				<label>
+				{this.state._id ? null : <label>
 					Type
 					<select
 						required
@@ -47,28 +49,28 @@ class ProficiencyForm extends React.Component {
 							);
 						})}
 					</select>
-				</label>
+				</label>}
 				<label>
 					Name
 					<input
-						required={true}
+						required
 						type="text"
 						value={this.state.name}
 						onChange={this.handleChange('name')}
 					/>
 				</label>
-				<label>
+				{this.state._id ? null : <label>
 					Level
 					<input
-						required={true}
+						required
 						type="number"
 						value={this.state.level}
 						min="1"
 						max="20"
 						onChange={this.handleChange('level')}
 					/>
-				</label>
-				<input type="submit" className="add-button tiny-button" value="➕" />
+				</label>}
+				<input type="submit" className="add-button tiny-button" value={this.props.item._id ? '✎' : '➕'} />
 			</form>
 		);
 	}

@@ -6,9 +6,9 @@ const Tooltip = ({listItems}) => {
 			<div className="tooltip">
 			<ul>
 			{listItems.map((item, i) => (
-				<li key={i}>
+				item.val ? <li key={i}>
 				<strong>{item.key}: </strong> {item.val}
-				</li>
+				</li> : null
 			))}
 			</ul>
 			</div>
