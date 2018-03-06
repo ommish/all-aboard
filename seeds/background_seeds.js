@@ -12,7 +12,8 @@ const backgrounds = [
 		],
 		toolProficiencies: [],
 		languageProficiencies: [
-			{ name: 'Choose Two', source: 'Acolyte' }
+			{ name: 'Choose One', source: 'Acolyte' },
+			{ name: 'Choose One', source: 'Acolyte' }
 		],
 		gold: 15
 	},
@@ -120,7 +121,8 @@ const backgrounds = [
 			{ name: 'history', source: 'Sage' }
 		],
 		languageProficiencies: [
-			{ name: 'Choose Two', source: 'Sage' }
+			{ name: 'Choose One', source: 'Sage' },
+			{ name: 'Choose One', source: 'Sage' }
 		],
 		gold: 10
 	},

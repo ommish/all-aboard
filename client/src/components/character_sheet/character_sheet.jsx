@@ -142,7 +142,11 @@ class CharacterSheet extends React.Component {
 	handleSubmit(e) {
 		if (e) e.preventDefault();
 
-		this.props.updateCharacter(this.state.character);
+		this.props.submitCharacter(this.state.character).then(({character}) => {
+			if (!this.state.character._id) {
+				this.props.history.push(`/characters/${character._id}`)
+			}
+		});
 	}
 
 	renderNameLevel() {
