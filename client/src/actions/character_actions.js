@@ -2,16 +2,23 @@ import axios from 'axios';
 
 export const RECEIVE_CHARACTERS = 'RECEIVE_CHARACTERS';
 export const RECEIVE_CHARACTER = 'RECEIVE_CHARACTER';
+export const REMOVE_CHARACTER = 'REMOVE_CHARACTER';
 export const receiveCharacters = (characters) => {
 	return {
 		type: RECEIVE_CHARACTERS,
 		characters
 	};
 };
-export const receiveCharacter = (character) => {
+const receiveCharacter = (character) => {
 	return {
 		type: RECEIVE_CHARACTER,
 		character
+	};
+};
+const removeCharacter = (characterId) => {
+	return {
+		type: REMOVE_CHARACTER,
+		characterId
 	};
 };
 
@@ -23,11 +30,16 @@ export const fetchCharacters = (userId) => {
 };
 
 export const createCharacter = (character) => {
-	character = {};
-	character.name = 'peika'
 	return async (dispatch) => {
 		const { data } = await axios.post(`/api/characters`, character);
 		return dispatch(receiveCharacter(data));
+	};
+};
+
+export const deleteCharacter = (characterId) => {
+	return async (dispatch) => {
+		const { data } = await axios.delete(`/api/characters/${characterId}`);
+		return dispatch(removeCharacter(characterId));
 	};
 };
 

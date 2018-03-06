@@ -10,6 +10,12 @@ module.exports = (app) => {
 		CharactersController.put
 	);
 
+	app.delete(
+		'/api/characters/:characterId',
+		requireLogin,
+		CharactersController.delete
+	);
+
 	app.get(
 		'/api/characters/:characterId',
 		requireLogin,

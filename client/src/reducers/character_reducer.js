@@ -1,5 +1,5 @@
 import { merge } from 'lodash';
-import { RECEIVE_CHARACTERS, RECEIVE_CHARACTER } from '../actions/character_actions';
+import { RECEIVE_CHARACTERS, RECEIVE_CHARACTER, REMOVE_CHARACTER } from '../actions/character_actions';
 
 const CharacterReducer = (state = {}, action) => {
   let newState = merge({}, state);
@@ -11,6 +11,9 @@ const CharacterReducer = (state = {}, action) => {
       break;
     case RECEIVE_CHARACTER:
       newState[action.character._id] = action.character;
+      break;
+    case REMOVE_CHARACTER:
+      delete newState[action.characterId];
       break;
     default:
     break;

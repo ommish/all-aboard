@@ -3,12 +3,12 @@ const Character = mongoose.model('Character');
 
 module.exports = {
 	post: async (req, res) => {
-		let newChar = new Character(req.body);
-		newChar._user = req.user._id;
 		if (!req.body.charClass) req.body.charClass = undefined;
 		if (!req.body.race) req.body.race = undefined;
 		if (!req.body.background) req.body.background = undefined;
 		if (!req.body.armor) req.body.armor = undefined;
+		let newChar = new Character(req.body);
+		newChar._user = req.user._id;
 		try {
 			newChar = await newChar.save();
 			res.send(newChar);
@@ -34,6 +34,21 @@ module.exports = {
 			}
 		} catch (err) {
 			res.status(422).send(err);
+		}
+	},
+	delete: async (req, res) => {
+		try {
+			const char = await Character.findById(req.params.characterId);
+			if (JSON.stringify(char._user) !== JSON.stringify(req.user._id)) {
+				res
+					.status(401)
+					.send({ error: 'You are not authorized to remove this character' });
+			} else {				
+				await char.remove();
+				res.send(char._id);
+			}
+		} catch (err) {
+			res.status(404).send(err);
 		}
 	},
   get: async (req, res) => {
