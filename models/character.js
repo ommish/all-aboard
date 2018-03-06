@@ -76,7 +76,6 @@ const characterSchema = new Schema({
 	skin: { type: String, default: '' },
 	hair: { type: String, default: '' },
 	backstory: { type: String, default: '' },
-	bonuses: { type: [bonus.bonusSchema] },
 	languageProficiencies: { type: [proficiency.proficiencySchema] },
 	armorProficiencies: { type: [proficiency.proficiencySchema] },
 	weaponProficiencies: { type: [proficiency.proficiencySchema] },
