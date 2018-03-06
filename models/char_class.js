@@ -12,6 +12,7 @@ const charClassSchema = new Schema({
 	weaponProficiencies: { type: [proficiency.proficiencySchema] },
 	toolProficiencies: { type: [proficiency.proficiencySchema] },
 	saveProficiencies: { type: [proficiency.proficiencySchema] },
+	skillProficiencies:  { type: [proficiency.proficiencySchema] },
 	bonuses: { type: [bonus.bonusSchema] },
 	equipment: { type: String, default: '[]' }
 });

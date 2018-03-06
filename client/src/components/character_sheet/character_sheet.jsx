@@ -69,7 +69,7 @@ class CharacterSheet extends React.Component {
 				if (
 					!newState.character[`${type}Proficiencies`].some(
 						(prof) => prof._id === item._id
-					)
+					) && item.level <= newState.character.level
 				)
 					newState.character[`${type}Proficiencies`].push(item);
 			});
@@ -81,7 +81,7 @@ class CharacterSheet extends React.Component {
 			newState.character[`${save.name}SaveProficiency`] = save;
 		});
 		(categoryInfo.bonuses || []).forEach((bonus) => {
-			if (!newState.character.bonuses.some((bon) => bon._id === bonus._id))
+			if (!newState.character.bonuses.some((bon) => bon._id === bonus._id) && bonus.level <= newState.character.level)
 				newState.character.bonuses.push(bonus);
 		});
 		newState.character.gold += categoryInfo.gold || 0;
