@@ -27,6 +27,10 @@ class ProficiencyForm extends React.Component {
 		if (!this.props.item._id) this.setState({ type: '', name: '', level: 1 });
 	}
 
+	componentWillReceiveProps(props) {
+		this.setState(props.item);
+	}
+
 	render() {
 		return (
 			<form
