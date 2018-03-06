@@ -92,9 +92,13 @@ class CharacterSheet extends React.Component {
 		return (e) => {
 			const newState = merge({}, this.state);
 			if (e.target.type === 'checkbox') {
-				newState.character[field] = e.target.checked
+				if (field === 'shielded') {
+					newState.character[field] = e.target.checked;
+				} else {
+					newState.character[field] = e.target.checked
 					? { name: e.target.value, is: true }
 					: { name: e.target.value, is: false };
+				}
 			} else {
 				newState.character[field] = e.target.value;
 			}
