@@ -3,7 +3,7 @@ import { merge } from 'lodash';
 
 const initialState = {
   characterSheet: {
-    physical: true,
+    appearance: true,
     bonuses: true,
     proficiencies: true,
   }
