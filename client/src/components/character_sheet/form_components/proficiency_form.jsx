@@ -10,7 +10,7 @@ class ProficiencyForm extends React.Component {
 			type: props.item.type || props.type,
 			name: props.item.name,
 			level: props.item.level,
-			source: props.item.source || "",
+			source: props.item.source || ''
 		};
 	}
 
@@ -22,7 +22,6 @@ class ProficiencyForm extends React.Component {
 
 	handleSubmit(e) {
 		e.preventDefault();
-		e.stopPropagation();
 		this.props.handleProficiencySubmit(this.state);
 		if (!this.props.item._id) this.setState({ type: '', name: '', level: 1 });
 	}
@@ -36,26 +35,29 @@ class ProficiencyForm extends React.Component {
 			<form
 				className="proficiency-form"
 				onSubmit={this.handleSubmit.bind(this)}>
-				{this.state._id ? null : <label>
-					Type
-					<select
-						required
-						value={this.state.type}
-						onChange={this.handleChange('type')}>
-						<option disabled value="">
-							---
-						</option>
-						{_PROFICIENCY_TYPES.map((skill, i) => {
-							return (
-								<option key={i} value={camelCase(skill)}>
-									{skill}
-								</option>
-							);
-						})}
-					</select>
-				</label>}
-				<label>
-					Name
+				{this.state._id ? null : (
+					<label>
+						Type
+						<select
+							name="type"
+							required
+							value={this.state.type}
+							onChange={this.handleChange('type')}>
+							<option disabled value="">
+								---
+							</option>
+							{_PROFICIENCY_TYPES.map((skill, i) => {
+								return (
+									<option key={i} value={camelCase(skill)}>
+										{skill}
+									</option>
+								);
+							})}
+						</select>
+					</label>
+				)}
+				<label name="name">
+					{this.state._id ? null : "Name"}
 					<input
 						required
 						type="text"
@@ -63,18 +65,24 @@ class ProficiencyForm extends React.Component {
 						onChange={this.handleChange('name')}
 					/>
 				</label>
-				{this.state._id ? null : <label>
-					Level
-					<input
-						required
-						type="number"
-						value={this.state.level}
-						min="1"
-						max="20"
-						onChange={this.handleChange('level')}
-					/>
-				</label>}
-				<input type="submit" className="add-button tiny-button" value={this.props.item._id ? '✎' : '➕'} />
+				{this.state._id ? null : (
+					<label>
+						Level
+						<input
+							required
+							type="number"
+							value={this.state.level}
+							min="1"
+							max="20"
+							onChange={this.handleChange('level')}
+						/>
+					</label>
+				)}
+				<input
+					type="submit"
+					className="add-button sq-button"
+					value={this.props.item._id ? '💾' : '➕'}
+				/>
 			</form>
 		);
 	}

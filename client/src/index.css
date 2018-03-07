@@ -32,7 +32,10 @@ body, ul, ol, li, h1, h2, h3, h4, h5, h6, div, nav, header, footer, section, mai
 
 button, input[type="submit"] {
 	cursor: pointer;
-	padding: 0 3px 0 3px;
+	max-width: 200px;
+	margin: 0 3px 0 3px;
+	border: 1px solid #CCD1D1;
+	padding: 2px;
 }
 
 select {
@@ -48,15 +51,14 @@ input[type="text"], input[type="number"], textarea, select {
 }
 
 .tiny-button {
-  border-radius: 7px;
-  padding: 3px;
-  margin: 3px;
-  border: 1px solid #CCD1D1;
-  height: 25px;
-  width: 25px;
+	padding: 1px;
+	margin: 3px;
+  height: 20px;
+  width: 20px;
 }
 
 .remove-button {
+	border: 1px solid #A93226;
 	background: white;
 	color: #A93226;
 }
@@ -67,6 +69,7 @@ input[type="text"], input[type="number"], textarea, select {
 }
 
 .add-button {
+	border: 1px solid #1E8449;
 	background: white;
 	color: #1E8449;
 }
@@ -74,4 +77,86 @@ input[type="text"], input[type="number"], textarea, select {
 .add-button:hover {
 	background: #1E8449;
 	color: white;
+}
+
+.small-input {
+	width: 60px;
+}
+
+.hide-button {
+	background: rgba(255, 255, 255, 0);
+	border: 1px solid black;
+	background: white;
+	height: 20px;
+	width: 20px;
+	line-height: 0.3;
+}
+
+.hide-button:hover {
+	background: black;
+	color: white;
+}
+
+.mar-20 {
+	margin: 20px;
+}
+
+.pa-10 {
+	padding: 10px;
+}
+
+.sq-button {
+	height: 25px;
+	width: 25px;
+}
+
+.row {
+  display: flex;
+  flex-wrap: wrap;
+  margin-bottom: 10px;
+}
+
+.row.no-margin{
+  display: flex;
+  flex-wrap: wrap;
+  margin: 0;
+}
+
+.col {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 10px;
+}
+
+
+.space-around {
+  justify-content: space-around;
+}
+
+.col-15 {
+  width: 10%;
+}
+
+.col-30 {
+  width: 30%;
+}
+
+.col-40 {
+  width: 40%;
+}
+
+.col-50 {
+  width: 50%;
+}
+
+.col-60 {
+  width: 60%;
+}
+
+.blocks > div, .blocks > label {
+  margin-right: 20px;
+}
+
+.blocks > div:last-child, .blocks > label:last-child {
+  margin-right: 0;
 }
