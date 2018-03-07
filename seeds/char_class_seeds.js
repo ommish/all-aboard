@@ -56,7 +56,7 @@ const charClasses = [
 			checkProf('Musical Instrument (your choice)', 'Bard', 1),
 		],
 		bonuses: [
-			bonus('Skill Proficiency', 'Choose any three', 1, '', 0, 'Barbarian'),
+			bonus('Skill Proficiency', 'Choose any three', 1, '', 0, 'Bard'),
 			bonus('Bardic Inspiration', 'You can inspire others through stirring words or music. To do so, you use a Bonus Action on Your Turn to choose one creature other than yourself within 60 feet of you who can hear you. That creature gains one Bardic Inspiration die, a d6.', 1, '', 0, 'Bard'),
 			bonus('Jack of All Trades', "Starting at 2nd level, you can add half your proficiency bonus, rounded down, to any ability check you make that doesn't already include your proficiency bonus.", 2, '', 0, 'Bard'),
 			bonus('Song of Rest', 'Beginning at 2nd level, you can use soothing music or oration to help revitalize your wounded allies during a Short Rest. If you or any friendly creatures who can hear your performance regain hit points by spending Hit Dice at the end of the Short Rest, each of those creatures regains an extra 1d6 hit points.', 2, '', 0, 'Bard'),
