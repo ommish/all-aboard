@@ -19,3 +19,21 @@
 label > input[type="checkbox"]:first-child {
   margin-right: 5px;
 }
+
+@media only screen and (max-width: 640px) {
+  .character-sheet .basics-and-scores.row > .col-50 {
+    width: 100%;
+  }
+}
+
+@media only screen and (max-width: 400px) {
+  .character-sheet .scores.row.blocks > .col-30 {
+    width: 100%;
+  }
+}
+
+@media only screen and (max-width: 400px) {
+  .character-sheet .row {
+    flex-direction: column;
+  }
+}

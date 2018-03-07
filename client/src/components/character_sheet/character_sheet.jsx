@@ -591,7 +591,7 @@ class CharacterSheet extends React.Component {
 							value="💾 Save Character"
 						/>
 					</div>
-					<div className="row">
+					<div className="basics-and-scores row">
 						<div className="col-50">
 							{this.renderNameLevel()}
 							<div className="row blocks">
@@ -671,7 +671,7 @@ class CharacterSheet extends React.Component {
 								<div className="row blocks">
 									{this.renderCalculatedFields()}
 								</div>
-								<div className="row blocks">
+								<div className="scores row blocks">
 									<div className="col-30">
 										<h3>Ability Scores</h3>
 										<div>{this.renderAbilityScores()}</div>
@@ -724,10 +724,7 @@ export default CharacterSheet;
 // TODO:
 // inventory
 // weapons
-// character create flow
 // character image
-// hide bonus field and amount until click
-// hide bonus details
 // refresh shouldn't redirect - because fetching user happens after component mount. try moving this to app load
 // add campaign (character can belong to campaign)
 // list more than name in character list

@@ -12,7 +12,7 @@ class CharacterIndex extends React.Component {
     const characters = this.props.characters.map((character, i) => {
       return (
         <li key={i}>
-          <Link to={`/characters/${character._id}`}>{character.name}</Link>
+          {i + 1}. <Link to={`/characters/${character._id}`}>{character.name}</Link>
           <button onClick={(e) => this.props.deleteCharacter(character._id)} className="remove-button tiny-button">✘</button>
         </li>
       );
