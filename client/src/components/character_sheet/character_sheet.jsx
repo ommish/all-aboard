@@ -19,6 +19,7 @@ import {
 	_PROFICIENCY_TYPES
 } from './character_variables';
 import * as Calculators from './calculators';
+import { _ASC } from '../../util/sorters';
 
 class CharacterSheet extends React.Component {
 	constructor(props) {
@@ -505,6 +506,7 @@ class CharacterSheet extends React.Component {
 	}
 
 	renderBonuses() {
+		const sorted = this.state.character.bonuses.sort(_ASC('level', 'source'))
 		let forms = this.state.character.bonuses.map(
 			(bonus, i) =>
 				bonus.editing ? (

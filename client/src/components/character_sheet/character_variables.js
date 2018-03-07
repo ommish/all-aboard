@@ -28,15 +28,15 @@ export const _SKILLS = {
 };
 
 export const _ALIGNMENTS = [
-	'Chaotic Evil',
-	'Neutral Evil',
-	'Lawful Evil',
-	'Chaotic Neutral',
-	'True Neutral',
-	'Lawful Neutral',
-	'Chaotic Good',
+	'Lawful Good',
 	'Neutral Good',
-	'Lawful Good'
+	'Chaotic Good',
+	'Lawful Neutral',
+	'True Neutral',
+	'Chaotic Neutral',
+	'Lawful Evil',
+	'Neutral Evil',
+	'Chaotic Evil'
 ];
 
 export const _PHYSICAL_ATTRIBUTES = [
