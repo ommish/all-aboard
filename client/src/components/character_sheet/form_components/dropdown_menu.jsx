@@ -14,7 +14,7 @@ const DropdownMenu = ({ options, handleChange, selectedOption, field }) => {
 		<select
 			value={selectedOption}
 			onChange={handleChange}>
-			<option value="">Select {field}</option>
+			<option value="">---</option>
 			{optionTags}
 		</select>
 	);

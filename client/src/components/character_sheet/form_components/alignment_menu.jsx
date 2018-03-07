@@ -5,7 +5,7 @@ const AlignmentMenu = ({ selectedAlignment, handleChange, alignments }) => {
 		<select
 			value={selectedAlignment}
 			onChange={handleChange}>
-			<option value="">Select Alignment</option>
+			<option value="">---</option>
 			{alignments.map((alignment, i) => (
 				<option key={i} value={alignment}>{alignment}</option>
 			))}
