@@ -506,8 +506,8 @@ class CharacterSheet extends React.Component {
 	}
 
 	renderBonuses() {
-		const sorted = this.state.character.bonuses.sort(_ASC('level', 'source'))
-		let forms = this.state.character.bonuses.map(
+		let sortedBonuses = merge([], this.state.character.bonuses).sort(_ASC('level', 'source'));
+		let forms = sortedBonuses.map(
 			(bonus, i) =>
 				bonus.editing ? (
 					<div key={i} className="row">
