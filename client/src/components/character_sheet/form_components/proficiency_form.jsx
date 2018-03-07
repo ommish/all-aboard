@@ -43,7 +43,7 @@ class ProficiencyForm extends React.Component {
 						value={this.state.type}
 						onChange={this.handleChange('type')}>
 						<option disabled value="">
-							Select Type
+							---
 						</option>
 						{_PROFICIENCY_TYPES.map((skill, i) => {
 							return (
