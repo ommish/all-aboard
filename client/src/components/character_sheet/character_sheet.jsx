@@ -24,7 +24,7 @@ class CharacterSheet extends React.Component {
 		super(props);
 		this.state = {
 			character: this.props.character,
-			saved: false,
+			saved: false
 		};
 	}
 
@@ -69,7 +69,8 @@ class CharacterSheet extends React.Component {
 				if (
 					!newState.character[`${type}Proficiencies`].some(
 						(prof) => prof._id === item._id
-					) && item.level <= newState.character.level
+					) &&
+					item.level <= newState.character.level
 				)
 					newState.character[`${type}Proficiencies`].push(item);
 			});
@@ -81,7 +82,10 @@ class CharacterSheet extends React.Component {
 			newState.character[`${save.name}SaveProficiency`] = save;
 		});
 		(categoryInfo.bonuses || []).forEach((bonus) => {
-			if (!newState.character.bonuses.some((bon) => bon._id === bonus._id) && bonus.level <= newState.character.level)
+			if (
+				!newState.character.bonuses.some((bon) => bon._id === bonus._id) &&
+				bonus.level <= newState.character.level
+			)
 				newState.character.bonuses.push(bonus);
 		});
 		newState.character.gold += categoryInfo.gold || 0;
@@ -96,8 +100,8 @@ class CharacterSheet extends React.Component {
 					newState.character[field] = e.target.checked;
 				} else {
 					newState.character[field] = e.target.checked
-					? { name: e.target.value, is: true }
-					: { name: e.target.value, is: false };
+						? { name: e.target.value, is: true }
+						: { name: e.target.value, is: false };
 				}
 			} else {
 				newState.character[field] = e.target.value;
@@ -154,11 +158,12 @@ class CharacterSheet extends React.Component {
 
 	handleSubmit(e) {
 		if (e) e.preventDefault();
-		if (this.state.character.name) this.props.submitCharacter(this.state.character).then(({character}) => {
-			if (!this.state.character._id) {
-				this.props.history.push(`/characters/${character._id}`)
-			}
-		});
+		if (this.state.character.name)
+			this.props.submitCharacter(this.state.character).then(({ character }) => {
+				if (!this.state.character._id) {
+					this.props.history.push(`/characters/${character._id}`);
+				}
+			});
 	}
 
 	renderNameLevel() {
@@ -413,6 +418,15 @@ class CharacterSheet extends React.Component {
 		);
 	}
 
+	renderBackstory() {
+		return (
+			<textarea
+				onChange={this.handleChange('backstory')}
+				value={this.state.character.backstory}
+			/>
+		);
+	}
+
 	renderProficiencies() {
 		return _PROFICIENCY_TYPES.map((type, i) => {
 			const camel = camelCase(type);
@@ -473,6 +487,19 @@ class CharacterSheet extends React.Component {
 		);
 	}
 
+	renderToggleButton(section) {
+		return (
+			<button
+				onClick={(e) => {
+					e.preventDefault();
+					e.stopPropagation();
+					this.props.toggleSection(section);
+				}}>
+				{this.props.uiState[section] ? 'Hide' : 'Expand'}
+			</button>
+		);
+	}
+
 	render() {
 		return (
 			<main className="character-sheet">
@@ -486,7 +513,12 @@ class CharacterSheet extends React.Component {
 						<input type="submit" value="Save" />
 					</div>
 					<div className="row">{this.renderNameLevel()}</div>
-					<div className="row">{this.renderPhysicalAttributes()}</div>
+					<div className="row">
+						<h3>Physical Attributes {this.renderToggleButton('physical')}</h3>
+						{this.props.uiState.physical
+							? this.renderPhysicalAttributes()
+							: null}
+					</div>
 					<div className="row blocks">
 						<div className="alignment">
 							<label>
@@ -546,7 +578,7 @@ class CharacterSheet extends React.Component {
 										value={this.state.character.shielded}
 										onChange={this.handleChange('shielded')}
 									/>
-								Shielded?
+									Shielded?
 								</label>
 							</div>
 							<div className="armor">
@@ -583,18 +615,33 @@ class CharacterSheet extends React.Component {
 						<h3>Money</h3>
 						{this.renderMoney()}
 					</div>
+					<div className="col">
+						<h3>Backstory</h3>
+						{this.renderBackstory()}
+					</div>
 				</form>
-				<div className="proficiency-section">
-					<div className="row">{this.renderProficiencies()}</div>
-					<h3>Add Proficiencies</h3>
-					<ProficiencyForm
-						handleProficiencySubmit={this.handleProficiencySubmit.bind(this)}
-						item={{name: '', type: '', level: 1}}
-					/>
-				</div>
 				<div className="bonus-section">
-					<h3>Traits, Bonuses, Feats, etc.</h3>
-					{this.renderBonuses()}
+					<h3>Traits, Bonuses, Feats, etc. {this.renderToggleButton('bonuses')}</h3>
+					{this.props.uiState.bonuses ? this.renderBonuses() : null}
+				</div>
+				<div className="proficiency-section">
+					<h3>Proficiencies {this.renderToggleButton('proficiencies')}</h3>
+					<div className="row">
+						{this.props.uiState.proficiencies
+							? this.renderProficiencies()
+							: null}
+					</div>
+					{this.props.uiState.proficiencies ? (
+						<div className="col">
+							<h3>Add Proficiencies</h3>
+							<ProficiencyForm
+								handleProficiencySubmit={this.handleProficiencySubmit.bind(
+									this
+								)}
+								item={{ name: '', type: '', level: 1 }}
+							/>
+						</div>
+					) : null}
 				</div>
 			</main>
 		);

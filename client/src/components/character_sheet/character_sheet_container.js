@@ -1,5 +1,6 @@
 import { connect } from 'react-redux';
 import { updateCharacter, createCharacter } from '../../actions/character_actions';
+import { toggleCharacterSheetSection } from '../../actions/ui_actions';
 import CharacterSheet from './character_sheet';
 
 const mapStateToProps = (state, ownProps) => {
@@ -77,6 +78,7 @@ const mapStateToProps = (state, ownProps) => {
     charClasses: state.charClasses,
     backgrounds: state.backgrounds,
     armors: state.armors,
+    uiState: state.ui.characterSheet,
   };
 };
 
@@ -84,6 +86,7 @@ const mapDispatchToProps = (dispatch, ownProps) => {
   const submitCharacter = ownProps.match.params.characterId ? updateCharacter : createCharacter;
   return {
     submitCharacter: (character) => dispatch(submitCharacter(character)),
+    toggleSection: (section) => dispatch(toggleCharacterSheetSection(section)),
   }
 }
 
