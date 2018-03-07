@@ -34,9 +34,7 @@ const bonusSchema = new Schema({
 		]
 	},
 	bonusAmount: { type: Number, default: 0 },
-	fromRace: { type: Boolean, default: false },
-	fromCharClass: { type: Boolean, default: false },
-	fromBackground: { type: Boolean, default: false }
+	editing: { type: Boolean, default: false}
 });
 
 const Bonus = mongoose.model('Bonus', bonusSchema);
