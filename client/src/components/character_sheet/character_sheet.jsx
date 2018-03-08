@@ -224,7 +224,7 @@ class CharacterSheet extends React.Component {
 			const camel = camelCase(attr);
 			return (
 				<label key={i}>
-					{attr}
+					{attr}: 
 					<input
 						className="small-input"
 						type="text"
