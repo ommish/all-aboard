@@ -2,6 +2,8 @@ const mongoose = require('mongoose');
 const { Schema } = mongoose;
 const bonus = require('./bonus');
 const proficiency = require('./proficiency');
+const equipment = require('./equipment');
+const weapon = require('./weapon');
 
 const characterSchema = new Schema({
 	name: { type: String, default: '' },
@@ -82,7 +84,9 @@ const characterSchema = new Schema({
 	toolProficiencies: { type: [proficiency.proficiencySchema] },
 	equipment: { type: String, default: '[]' },
 	weapons: { type: String, default: '[]' }, //eventually make weapon model
-	hitDice: { type: Number, default: 1, min: 0 }
+	hitDice: { type: Number, default: 1, min: 0 },
+	equipment: { type: [equipment.equipmentSchema] },
+	weapons: { type: [weapon.weaponSchema]},
 });
 
 mongoose.model('Character', characterSchema);
