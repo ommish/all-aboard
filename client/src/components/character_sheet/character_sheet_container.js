@@ -1,6 +1,6 @@
 import { connect } from 'react-redux';
 import { updateCharacter, createCharacter } from '../../actions/character_actions';
-import { toggleCharacterSheetSection } from '../../actions/ui_actions';
+import { toggleCharacterSheetSection, addNotification } from '../../actions/ui_actions';
 import CharacterSheet from './character_sheet';
 
 const mapStateToProps = (state, ownProps) => {
@@ -87,6 +87,7 @@ const mapDispatchToProps = (dispatch, ownProps) => {
   return {
     submitCharacter: (character) => dispatch(submitCharacter(character)),
     toggleSection: (section) => dispatch(toggleCharacterSheetSection(section)),
+    addNotification: (notification) => dispatch(addNotification(notification)),
   }
 }
 

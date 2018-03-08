@@ -42,7 +42,6 @@ export const deleteCharacter = (characterId) => {
 			await axios.delete(`/api/characters/${characterId}`);
 			return dispatch(removeCharacter(characterId));
 		} catch (err) {
-			console.log(err);
       // TODO: set up errors reducer to handle errors on front end
 		}
 	};

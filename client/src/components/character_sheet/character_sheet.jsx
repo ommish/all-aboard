@@ -26,7 +26,7 @@ class CharacterSheet extends React.Component {
 		super(props);
 		this.state = {
 			character: this.props.character,
-			saved: false
+			saved: true,
 		};
 	}
 
@@ -37,13 +37,13 @@ class CharacterSheet extends React.Component {
 			races: this.props.races,
 			charClasses: this.props.charClasses,
 			backgrounds: this.props.backgrounds,
-			armors: this.props.armors
+			armors: this.props.armors,
 		});
 		this.setState(newState);
 	}
 
 	componentWillReceiveProps(newProps) {
-		const newState = { character: merge({}, newProps.character) };
+		const newState = { character: merge({}, newProps.character), saved: true };
 		this.calculateFields({
 			newState,
 			races: this.props.races,
@@ -97,6 +97,7 @@ class CharacterSheet extends React.Component {
 	handleChange(field) {
 		return (e) => {
 			const newState = merge({}, this.state);
+			newState.saved = false;
 			if (e.target.type === 'checkbox') {
 				if (field === 'shielded') {
 					newState.character[field] = e.target.checked;
@@ -121,6 +122,7 @@ class CharacterSheet extends React.Component {
 
 	handleBonusSubmit(newBonus) {
 		const newState = merge({}, this.state);
+		newState.saved = false;
 		if (newBonus._id) {
 			const bonusIdx = newState.character.bonuses.findIndex(
 				(bonus) => bonus._id === newBonus._id
@@ -136,6 +138,7 @@ class CharacterSheet extends React.Component {
 	handleEditProficiency(editingProf, type) {
 		editingProf = merge({}, editingProf);
 		const newState = merge({}, this.state);
+		newState.saved = false;
 		const category = `${type}Proficiencies`;
 		const profIdx = newState.character[category].findIndex(
 			(prof) => prof._id === editingProf._id
@@ -148,6 +151,7 @@ class CharacterSheet extends React.Component {
 	handleEditBonus(editingBonus) {
 		editingBonus = merge({}, editingBonus);
 		const newState = merge({}, this.state);
+		newState.saved = false;
 		const bonusIdx = newState.character.bonuses.findIndex(
 			(bonus) => bonus._id === editingBonus._id
 		);
@@ -158,6 +162,7 @@ class CharacterSheet extends React.Component {
 
 	handleProficiencySubmit(newProf) {
 		const newState = merge({}, this.state);
+		newState.saved = false;
 		const category = `${newProf.type}Proficiencies`;
 		if (newProf._id) {
 			const profIdx = newState.character[category].findIndex(
@@ -176,6 +181,7 @@ class CharacterSheet extends React.Component {
 			e.stopPropagation();
 			e.preventDefault();
 			const newState = merge({}, this.state);
+			newState.saved = false;
 			newState.character[itemType] = newState.character[itemType].filter(
 				(item) => item._id !== itemId
 			);
@@ -187,6 +193,12 @@ class CharacterSheet extends React.Component {
 		if (e) e.preventDefault();
 		if (this.state.character.name)
 			this.props.submitCharacter(this.state.character).then(({ character }) => {
+				this.setState({saved: true});
+				this.props.addNotification({
+					title: 'Saved!',
+					message: 'Your character has saved successfully',
+					type: 'success'
+				});
 				if (!this.state.character._id) {
 					this.props.history.push(`/characters/${character._id}`);
 				}
@@ -224,7 +236,7 @@ class CharacterSheet extends React.Component {
 			const camel = camelCase(attr);
 			return (
 				<label key={i}>
-					{attr}: 
+					{attr}:
 					<input
 						className="small-input"
 						type="text"
@@ -506,7 +518,9 @@ class CharacterSheet extends React.Component {
 	}
 
 	renderBonuses() {
-		let sortedBonuses = merge([], this.state.character.bonuses).sort(_ASC('level', 'source'));
+		let sortedBonuses = merge([], this.state.character.bonuses).sort(
+			_ASC('level', 'source')
+		);
 		let forms = sortedBonuses.map(
 			(bonus, i) =>
 				bonus.editing ? (
@@ -583,6 +597,7 @@ class CharacterSheet extends React.Component {
 					onSubmit={this.handleSubmit.bind(this)}>
 					<div className="mar-20">
 						<input
+							disabled={this.state.saved}
 							className="add-button"
 							type="submit"
 							value="💾 Save Character"
@@ -652,9 +667,7 @@ class CharacterSheet extends React.Component {
 							</div>
 							{this.renderMoney()}
 							<div>
-								<h3>
-									Appearance{this.renderToggleButton('appearance')}
-								</h3>
+								<h3>Appearance{this.renderToggleButton('appearance')}</h3>
 								<div className="row">
 									{this.props.uiState.appearance
 										? this.renderAppearance()
