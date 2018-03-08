@@ -92,6 +92,7 @@ class BonusForm extends React.Component {
 						})}
 						<option value="armorClass">Armor Class</option>
 						<option value="initiative">Initiative</option>
+						<option value="speed">Speed</option>
 					</select>
 					</label>
 					<label>
