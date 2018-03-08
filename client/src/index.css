@@ -13,6 +13,38 @@ body, ul, ol, li, h1, h2, h3, h4, h5, h6, div, nav, header, footer, section, mai
 	list-style: none;
 }
 
+main {
+	padding: 20px;
+}
+
+header {
+	background: #CD5C5C;
+	color: white;
+	padding: 20px;
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+}
+
+nav {
+	background: white;
+	padding: 20px;
+	display: flex;
+}
+
+nav > a {
+	margin: 0 10px 0 10px;
+}
+
+nav > a.active {
+	font-weight: bold;
+}
+
+a {
+	text-decoration: none;
+	color: inherit;
+}
+
 .tooltip-container:hover .tooltip {
 	display: flex;
 }
@@ -34,7 +66,6 @@ button, input[type="submit"] {
 	cursor: pointer;
 	max-width: 200px;
 	margin: 0 3px 0 3px;
-	border: 1px solid #CCD1D1;
 	padding: 2px;
 }
 
@@ -77,6 +108,16 @@ input[type="text"], input[type="number"], textarea, select {
 .add-button:hover {
 	background: #1E8449;
 	color: white;
+}
+
+.plain-button {
+	background: white;
+	border: 1px solid #CCD1D1;
+	padding: 5px 10px;
+}
+
+.plain-button:hover {
+	font-weight: 600;
 }
 
 .small-input {

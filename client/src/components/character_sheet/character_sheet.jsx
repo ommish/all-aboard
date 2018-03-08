@@ -578,9 +578,6 @@ class CharacterSheet extends React.Component {
 	render() {
 		return (
 			<main className="character-sheet">
-				<nav>
-					<Link to={`/users/${this.props.currentUser._id}`}>Back to Home</Link>
-				</nav>
 				<form
 					className="character-form"
 					onSubmit={this.handleSubmit.bind(this)}>

@@ -1,8 +1,8 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { charactersByUser } from '../util/selectors';
-import { fetchCharacters, deleteCharacter } from '../actions/character_actions';
 import { Link } from 'react-router-dom';
+import { charactersByUser } from '../../util/selectors';
+import { fetchCharacters, deleteCharacter } from '../../actions/character_actions';
 
 class CharacterIndex extends React.Component {
   componentDidMount() {
@@ -18,12 +18,12 @@ class CharacterIndex extends React.Component {
       );
     });
     return (
-      <main>
-        <Link to="/characters/new">Create New Character</Link>
+      <section>
+        <button className="plain-button"><Link to="/characters/new">Create New Character</Link></button>
         <ul>
           {characters}
         </ul>
-      </main>
+      </section>
     );
   }
 }

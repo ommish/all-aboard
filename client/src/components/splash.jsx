@@ -10,9 +10,9 @@ class Splash extends React.Component {
 
   render() {
     return (
-      <div>Welcome!
-        <a href="/auth/google" >Log In or Sign Up with Google</a>
-      </div>
+      <main>
+        <h2>All Aboard the Express Train! This app was built with Express and Create React App.</h2>
+      </main>
     );
   }
 }
