@@ -2,7 +2,7 @@ const mongoose = require('mongoose');
 const { Schema } = mongoose;
 const bonus = require('./bonus');
 const proficiency = require('./proficiency');
-
+const equipment = require('./equipment');
 
 const charClassSchema = new Schema({
 	name: { type: String, required: true },
@@ -14,7 +14,8 @@ const charClassSchema = new Schema({
 	saveProficiencies: { type: [proficiency.proficiencySchema] },
 	skillProficiencies:  { type: [proficiency.proficiencySchema] },
 	bonuses: { type: [bonus.bonusSchema] },
-	equipment: { type: String, default: '[]' }
+	equipment: {type: [equipment.equipmentSchema]},
+
 });
 
 const CharClass = mongoose.model('CharClass', charClassSchema);
