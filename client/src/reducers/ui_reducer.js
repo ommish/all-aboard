@@ -6,6 +6,7 @@ const initialState = {
     appearance: true,
     bonuses: true,
     proficiencies: true,
+    equipment: true,
   },
   notification: {
     type: null,

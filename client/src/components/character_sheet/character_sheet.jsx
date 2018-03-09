@@ -7,6 +7,8 @@ import AlignmentMenu from './form_components/alignment_menu';
 import DropdownMenu from './form_components/dropdown_menu';
 import Proficiency from './form_components/proficiency';
 import ProficiencyForm from './form_components/proficiency_form';
+import Equipment from './form_components/equipment';
+import EquipmentForm from './form_components/equipment_form';
 import Tooltip from '../helpers/tooltip';
 import './character_sheet.css';
 import {
@@ -26,7 +28,7 @@ class CharacterSheet extends React.Component {
 		super(props);
 		this.state = {
 			character: this.props.character,
-			saved: true,
+			saved: true
 		};
 	}
 
@@ -37,7 +39,7 @@ class CharacterSheet extends React.Component {
 			races: this.props.races,
 			charClasses: this.props.charClasses,
 			backgrounds: this.props.backgrounds,
-			armors: this.props.armors,
+			armors: this.props.armors
 		});
 		this.setState(newState);
 	}
@@ -120,21 +122,6 @@ class CharacterSheet extends React.Component {
 		};
 	}
 
-	handleBonusSubmit(newBonus) {
-		const newState = merge({}, this.state);
-		newState.saved = false;
-		if (newBonus._id) {
-			const bonusIdx = newState.character.bonuses.findIndex(
-				(bonus) => bonus._id === newBonus._id
-			);
-			newBonus.editing = false;
-			newState.character.bonuses[bonusIdx] = newBonus;
-		} else {
-			newState.character.bonuses.push(newBonus);
-		}
-		this.setState(newState, () => this.handleSubmit());
-	}
-
 	handleEditProficiency(editingProf, type) {
 		editingProf = merge({}, editingProf);
 		const newState = merge({}, this.state);
@@ -160,6 +147,18 @@ class CharacterSheet extends React.Component {
 		this.setState(newState);
 	}
 
+	handleEditEquipment(editingEquipment) {
+		editingEquipment = merge({}, editingEquipment);
+		const newState = merge({}, this.state);
+		newState.saved = false;
+		const equipIdx = newState.character.equipment.findIndex(
+			(equip) => equip._id === editingEquipment._id
+		);
+		editingEquipment.editing = true;
+		newState.character.equipment[equipIdx] = editingEquipment;
+		this.setState(newState);
+	}
+
 	handleProficiencySubmit(newProf) {
 		const newState = merge({}, this.state);
 		newState.saved = false;
@@ -172,6 +171,36 @@ class CharacterSheet extends React.Component {
 			newState.character[category][profIdx] = newProf;
 		} else {
 			newState.character[category].push(newProf);
+		}
+		this.setState(newState, () => this.handleSubmit());
+	}
+
+	handleBonusSubmit(newBonus) {
+		const newState = merge({}, this.state);
+		newState.saved = false;
+		if (newBonus._id) {
+			const bonusIdx = newState.character.bonuses.findIndex(
+				(bonus) => bonus._id === newBonus._id
+			);
+			newBonus.editing = false;
+			newState.character.bonuses[bonusIdx] = newBonus;
+		} else {
+			newState.character.bonuses.push(newBonus);
+		}
+		this.setState(newState, () => this.handleSubmit());
+	}
+
+	handleEquipmentSubmit(newEquip) {
+		const newState = merge({}, this.state);
+		newState.saved = false;
+		if (newEquip._id) {
+			const equipIdx = newState.character.equipment.findIndex(
+				(equip) => equip._id === newEquip._id
+			);
+			newEquip.editing = false;
+			newState.character.equipment[equipIdx] = newEquip;
+		} else {
+			newState.character.equipment.push(newEquip);
 		}
 		this.setState(newState, () => this.handleSubmit());
 	}
@@ -193,7 +222,7 @@ class CharacterSheet extends React.Component {
 		if (e) e.preventDefault();
 		if (this.state.character.name)
 			this.props.submitCharacter(this.state.character).then(({ character }) => {
-				this.setState({saved: true});
+				this.setState({ saved: true });
 				this.props.addNotification({
 					title: 'Saved!',
 					message: 'Your character has saved successfully',
@@ -517,6 +546,28 @@ class CharacterSheet extends React.Component {
 		});
 	}
 
+	renderEquipment() {
+		return this.state.character.equipment.map((equipment, i) => {
+			const camel = camelCase(equipment);
+			return equipment.editing ? (
+				<EquipmentForm
+					key={i}
+					item={equipment}
+					handleEquipmentSubmit={this.handleEquipmentSubmit.bind(this)}
+					handleEditEquipment={this.handleEditEquipment.bind(this)}
+				/>
+			) : (
+				<Equipment
+					key={i}
+					item={equipment}
+					type="equipment"
+					handleRemoveItem={this.handleRemoveItem.bind(this)}
+					handleEditEquipment={this.handleEditEquipment.bind(this)}
+				/>
+			);
+		});
+	}
+
 	renderBonuses() {
 		let sortedBonuses = merge([], this.state.character.bonuses).sort(
 			_ASC('level', 'source')
@@ -541,7 +592,7 @@ class CharacterSheet extends React.Component {
 				)
 		);
 		forms = forms.concat(
-			<div key={forms.length} className="col">
+			<div key={forms.length}>
 				<h3>Add Bonus</h3>
 				<BonusForm
 					handleBonusSubmit={this.handleBonusSubmit.bind(this)}
@@ -720,6 +771,25 @@ class CharacterSheet extends React.Component {
 									this
 								)}
 								item={{ name: '', type: '', level: 1 }}
+							/>
+						</div>
+					) : null}
+				</div>
+				<div className="equipment-section">
+					<h3>Equipment {this.renderToggleButton('equipment')}</h3>
+					<div className="col">
+						{this.props.uiState.equipment
+							? this.renderEquipment()
+							: null}
+					</div>
+					{this.props.uiState.equipment ? (
+						<div className="col">
+							<h3>Add Equipment</h3>
+							<EquipmentForm
+								handleEquipmentSubmit={this.handleEquipmentSubmit.bind(
+									this
+								)}
+								item={{ name: '', description: '', weight: 0, source: ''}}
 							/>
 						</div>
 					) : null}

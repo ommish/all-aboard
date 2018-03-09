@@ -1,16 +1,15 @@
 import React from 'react';
 import { camelCase } from 'lodash';
-import { _PROFICIENCY_TYPES } from '../character_variables';
 
-class ProficiencyForm extends React.Component {
+class EquipmentForm extends React.Component {
 	constructor(props) {
 		super(props);
 		this.state = {
 			_id: props.item._id,
-			type: props.item.type || props.type,
 			name: props.item.name,
-			level: props.item.level,
-			source: props.item.source || ''
+			description: props.item.description,
+			weight: props.item.weight,
+			source: props.item.source,
 		};
 	}
 
@@ -22,8 +21,9 @@ class ProficiencyForm extends React.Component {
 
 	handleSubmit(e) {
 		e.preventDefault();
-		this.props.handleProficiencySubmit(this.state);
-		if (!this.props.item._id) this.setState({ type: '', name: '', level: 1 });
+		this.props.handleEquipmentSubmit(this.state);
+		if (!this.props.item._id)
+			this.setState({ name: '', weight: 0, source: '', description: '' });
 	}
 
 	componentWillReceiveProps(props) {
@@ -32,32 +32,9 @@ class ProficiencyForm extends React.Component {
 
 	render() {
 		return (
-			<form
-				className="proficiency-form"
-				onSubmit={this.handleSubmit.bind(this)}>
-				{this.state._id ? null : (
-					<label>
-						Type
-						<select
-							name="type"
-							required
-							value={this.state.type}
-							onChange={this.handleChange('type')}>
-							<option disabled value="">
-								---
-							</option>
-							{_PROFICIENCY_TYPES.map((skill, i) => {
-								return (
-									<option key={i} value={camelCase(skill)}>
-										{skill}
-									</option>
-								);
-							})}
-						</select>
-					</label>
-				)}
+			<form className="equipment-form" onSubmit={this.handleSubmit.bind(this)}>
 				<label name="name">
-					{this.state._id ? null : "Name"}
+					Name
 					<input
 						required
 						type="text"
@@ -65,19 +42,26 @@ class ProficiencyForm extends React.Component {
 						onChange={this.handleChange('name')}
 					/>
 				</label>
-				{this.state._id ? null : (
-					<label>
-						Level
-						<input
-							required
-							type="number"
-							value={this.state.level}
-							min="1"
-							max="20"
-							onChange={this.handleChange('level')}
-						/>
-					</label>
-				)}
+				<label name="description">
+					Description
+					<textarea
+						required
+						type="text"
+						value={this.state.description}
+						onChange={this.handleChange('description')}
+					/>
+				</label>
+				<label>
+					Weight (lb)
+					<input
+						required
+						type="number"
+						value={this.state.weight}
+						min="0"
+						max="1000"
+						onChange={this.handleChange('weight')}
+					/>
+				</label>
 				<input
 					type="submit"
 					className="add-button sq-button"
@@ -88,4 +72,4 @@ class ProficiencyForm extends React.Component {
 	}
 }
 
-export default ProficiencyForm;
+export default EquipmentForm;

@@ -10,10 +10,12 @@
 
 .character-sheet > .character-form,
 .character-sheet > .proficiency-section,
-.character-sheet > .bonus-section {
+.character-sheet > .bonus-section,
+.character-sheet > .equipment-section {
   padding: 0px 20px 0px 20px;
   display: flex;
   flex-direction: column;
+  margin-bottom: 20px;
 }
 
 label > input[type="checkbox"]:first-child {
@@ -37,7 +39,7 @@ label > input[type="checkbox"]:first-child {
     flex-direction: column;
   }
 }
-/* 
+/*
 .character-sheet input[type="text"], .character-sheet input[type="number"], .character-sheet textarea {
   background: none;
   border: none;

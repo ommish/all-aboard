@@ -1,30 +1,31 @@
 import React from 'react';
 import Tooltip from '../../helpers/tooltip';
 
-const Proficiency = ({ type, item, handleRemoveItem, handleEditProficiency }) => {
+const Equipment = ({ type, item, handleRemoveItem, handleEditEquipment }) => {
 	return (
 		<div className="tooltip-container row">
 			<div>
 				{item.name}
 				<button
 					className="add-button tiny-button"
-					onClick={(e) => handleEditProficiency(item, type)}>
+					onClick={(e) => handleEditEquipment(item, type)}>
 					✎
 				</button>
 			</div>
 			<Tooltip
 				listItems={[
+					{ key: 'Description', val: item.description },
 					{ key: 'Source', val: item.source },
-					{ key: 'Level', val: item.level }
+					{ key: 'Weight', val: item.weight },
 				]}
 			/>
 			<button
 				className="remove-button tiny-button"
-				onClick={handleRemoveItem(item._id, `${type}Proficiencies`)}>
+				onClick={handleRemoveItem(item._id, type)}>
 				✘
 			</button>
 		</div>
 	);
 };
 
-export default Proficiency;
+export default Equipment;
