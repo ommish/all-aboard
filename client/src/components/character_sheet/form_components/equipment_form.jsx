@@ -45,7 +45,6 @@ class EquipmentForm extends React.Component {
 				<label name="description">
 					Description
 					<textarea
-						required
 						type="text"
 						value={this.state.description}
 						onChange={this.handleChange('description')}
@@ -54,7 +53,6 @@ class EquipmentForm extends React.Component {
 				<label>
 					Weight (lb)
 					<input
-						required
 						type="number"
 						value={this.state.weight}
 						min="0"
