@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 const CharClass = mongoose.model('CharClass');
-
+// make separate model instances for each subclass?
 const bonus = (name, description, level, field, bonusAmount, source) => {
 	return {
 		name, description, level, field, bonusAmount, source
@@ -23,6 +23,8 @@ const charClasses = [
 		hitDie: 12,
 		armorProficiencies: [
 			checkProf('Light Armor', 'Barbarian', 1),
+			checkProf('Medium Armor', 'Barbarian', 1),
+			checkProf('Shields', 'Barbarian', 1),
 		],
 		saveProficiencies: [
 			checkProf('strength', 'Barbarian', 1),
@@ -70,15 +72,59 @@ const charClasses = [
 	},
 	{
 		name: 'Cleric',
-		hitDie: 8
+		hitDie: 8,
+		saveProficiencies: [
+			checkProf('wisdom', 'Cleric', 1),
+			checkProf('charisma', 'Cleric', 1),
+		],
+		armorProficiencies: [
+			checkProf('Light Armor', 'Cleric', 1),
+			checkProf('Medium Armor', 'Cleric', 1),
+			checkProf('Shields', 'Cleric', 1),
+		],
+		bonuses: [
+			bonus('Skill Proficiency', 'Choose two from History, Insight, Medicine, and Religion', 1, '', 0, 'Cleric'),
+		]
 	},
 	{
 		name: 'Druid',
-		hitDie: 8
+		hitDie: 8,
+		saveProficiencies: [
+			checkProf('intelligence', 'Druid', 1),
+			checkProf('wisdom', 'Druid', 1),
+		],
+		armorProficiencies: [
+			checkProf('Light Armor (non-metal)', 'Druid', 1),
+			checkProf('Medium Armor (non-metal)', 'Druid', 1),
+			checkProf('Shields (non-metal)', 'Druid', 1),
+		],
+		toolProficiencies: [
+			checkProf('Herbalism Kit', 'Druid', 1),
+		],
+		languageProficiencies:[
+			checkProf('Druidid', 'Druid', 1),
+		],
+		bonuses: [
+			bonus('Skill Proficiency', 'Choose two from Arcana, Animal Handling, Insight, Medicine, Nature, Perception, Religion, and Survival', 1, '', 0, 'Druid'),
+			bonus('Wild Shape', 'Starting at 2nd level, you can use your action to magically assume the shape of a beast that you have seen before. You can use this feature twice. You regain expended uses when you finish a short or long rest.', 2, '', 0, 'Druid'),
+		]
 	},
 	{
 		name: 'Fighter',
-		hitDie: 10
+		hitDie: 10,
+		saveProficiencies: [
+			checkProf('strength', 'Fighter', 1),
+			checkProf('constitution', 'Fighter', 1),
+		],
+		armorProficiencies: [
+			checkProf('Light Armor', 'Fighter', 1),
+			checkProf('Medium Armor', 'Fighter', 1),
+			checkProf('Heavy Armor', 'Fighter', 1),
+			checkProf('Shields', 'Fighter', 1),
+		],
+		bonuses: [
+			bonus('Skill Proficiency', 'Choose two from Acrobatics. Animal Handling, Athletics, History, Insight, Intimidation, Perception, and Survival', 1, '', 0, 'Fighter'),
+		]
 	},
 	{
 		name: 'Monk',
