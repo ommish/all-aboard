@@ -6,6 +6,8 @@ const weaponSchema = new Schema({
 	modifier: { type: String, enum: ['strength', 'dexterity', 'wisdom', 'charisma', 'intelligence'], default: 'strength'},
 	proficiency: { type: Boolean, default: false },
 	description: { type: String, default: ''},
+	bonusAmount: { type: Number, default: 0},
+	damageDice: { type: Number, default: 1},
 });
 
 const Weapon = mongoose.model('Weapon', weaponSchema);

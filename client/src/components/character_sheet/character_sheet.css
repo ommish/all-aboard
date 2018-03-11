@@ -9,13 +9,31 @@
 }
 
 .character-sheet > .character-form,
-.character-sheet > .proficiency-section,
-.character-sheet > .bonus-section,
-.character-sheet > .equipment-section {
-  padding: 0px 20px 0px 20px;
+.character-sheet .proficiency-section,
+.character-sheet .bonus-section,
+.character-sheet .equipment-section,
+.character-sheet .weapon-section {
+  margin: 0px 10px 0px 10px;
+  padding: 10px 10px 10px 10px;
   display: flex;
   flex-direction: column;
   margin-bottom: 20px;
+}
+
+.weapon-section {
+  background: #F6DDCC;
+}
+
+.equipment-section {
+  background: #FCF3CF;
+}
+
+.proficiency-section {
+  background: #D4EFDF;
+}
+
+.bonus-section {
+  background: #D4E6F1;
 }
 
 label > input[type="checkbox"]:first-child {
@@ -30,6 +48,12 @@ label > input[type="checkbox"]:first-child {
 
 @media only screen and (max-width: 400px) {
   .character-sheet .scores.row.blocks > .col-30 {
+    width: 100%;
+  }
+}
+
+@media only screen and (max-width: 640px) {
+  .character-sheet .weapons-and-profs > .col-60, .character-sheet .weapons-and-profs > .col-30 {
     width: 100%;
   }
 }

@@ -2,38 +2,53 @@ import React from 'react';
 import { camelCase, merge } from 'lodash';
 import Tooltip from '../../helpers/tooltip';
 
-class BonusForm extends React.Component {
+class WeaponForm extends React.Component {
 	constructor(props) {
 		super(props);
 		this.state = {
-			_id: this.props.bonus._id,
-			name: this.props.bonus.name,
-			field: this.props.bonus.field,
-			description: this.props.bonus.description,
-			bonusAmount: this.props.bonus.bonusAmount,
-			level: this.props.bonus.level,
-			source: this.props.bonus.source
+			_id: this.props.item._id,
+			name: this.props.item.name,
+			description: this.props.item.description,
+			damageRoll: this.props.item.damageRoll,
+			proficiency: this.props.item.proficiency,
+			modifier: this.props.item.modifier,
+			bonusAmount: this.props.item.bonusAmount,
+			damageDice: this.props.item.damageDice
 		};
 	}
 
 	componentWillReceiveProps({
-		bonus: { _id, name, field, description, bonusAmount, level, source }
+		item: {
+			_id,
+			name,
+			damageRoll,
+			description,
+			modifier,
+			proficiency,
+			bonusAmount
+		}
 	}) {
 		this.setState({
 			_id,
 			name,
-			field,
+			damageRoll,
 			description,
-			bonusAmount,
-			level,
-			source
+			modifier,
+			proficiency,
+			bonusAmount
 		});
 	}
 
 	handleChange(field) {
 		return (e) => {
-			const newVal =
-				e.target.type === 'number' ? e.target.valueAsNumber : e.target.value;
+			let newVal;
+			if (e.target.type === 'checkbox') {
+				newVal = e.target.checked;
+			} else if (e.target.type === 'number') {
+				newVal = e.target.valueAsNumber;
+			} else {
+				newVal = e.target.value;
+			}
 			this.setState({ [field]: newVal });
 		};
 	}
@@ -45,7 +60,7 @@ class BonusForm extends React.Component {
 				onSubmit={(e) => {
 					e.preventDefault();
 					e.stopPropagation();
-					this.props.handleBonusSubmit(merge({}, this.state));
+					this.props.handleWeaponSubmit(merge({}, this.state));
 				}}>
 				<Tooltip listItems={[{ key: 'Source', val: this.state.source }]} />
 				<label>
@@ -60,53 +75,86 @@ class BonusForm extends React.Component {
 				<label>
 					Description
 					<textarea
-					rows="1"
+						rows="1"
 						value={this.state.description}
 						onChange={this.handleChange('description')}
 					/>
 				</label>
 				<label>
-					Level
+					Proficiency
 					<input
-						min="1"
-						max="20"
-						type="number"
-						value={this.state.level}
-						onChange={this.handleChange('level')}
+						type="checkbox"
+						checked={this.state.proficiency}
+						onChange={this.handleChange('proficiency')}
 					/>
 				</label>
 				<label>
-					Field
+					Modifier
 					<select
-						value={this.state.field}
-						required={Boolean(this.state.bonusAmount)}
-						name="field"
-						onChange={this.handleChange('field')}>
-						<option value="">---</option>
-						{Object.keys(this.props.skills).map((skill, i) => {
+						value={this.state.modifier}
+						required
+						name="modifier"
+						onChange={this.handleChange('modifier')}>
+						{[
+							'Strength',
+							'Dexterity',
+							'Wisdom',
+							'Charisma',
+							'Intelligence'
+						].map((skill, i) => {
 							return (
 								<option key={i} value={camelCase(skill)}>
 									{skill}
 								</option>
 							);
 						})}
-						<option value="armorClass">Armor Class</option>
-						<option value="initiative">Initiative</option>
-						<option value="speed">Speed</option>
 					</select>
-					</label>
-					<label>
-						Bonus Amount
-						<input
-							type="number"
-							value={this.state.bonusAmount}
-							onChange={this.handleChange('bonusAmount')}
-						/>
-					</label>
-					<input className="add-button sq-button" type="submit" value={this.state._id ? '💾' : '➕'} />
+				</label>
+				<label>
+					Damage Dice
+					<input
+						type="number"
+						name="damageDice"
+						onChange={this.handleChange('damageDice')}
+						value={this.state.damageDice}
+						className="small-input"
+					/>
+				</label>
+				<label>
+					Damage Die
+					<select
+						value={this.state.damageRoll}
+						required
+						name="damageRoll"
+						onChange={this.handleChange('damageRoll')}>
+						<option value="">---</option>
+						{[4, 6, 8, 12, 20].map((die, i) => {
+							return (
+								<option key={i} value={camelCase(die)}>
+									d{die}
+								</option>
+							);
+						})}
+					</select>
+				</label>
+				<label>
+					Extra Attack/Damage
+					<input
+						type="number"
+						name="bonusAmount"
+						onChange={this.handleChange('bonusAmount')}
+						value={this.state.bonusAmount}
+						className="small-input"
+					/>
+				</label>
+				<input
+					className="add-button sq-button"
+					type="submit"
+					value={this.state._id ? '💾' : '➕'}
+				/>
 			</form>
 		);
 	}
 }
 
-export default BonusForm;
+export default WeaponForm;

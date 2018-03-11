@@ -9,6 +9,8 @@ import Proficiency from './form_components/proficiency';
 import ProficiencyForm from './form_components/proficiency_form';
 import Equipment from './form_components/equipment';
 import EquipmentForm from './form_components/equipment_form';
+import Weapon from './form_components/weapon';
+import WeaponForm from './form_components/weapon_form';
 import Tooltip from '../helpers/tooltip';
 import './character_sheet.css';
 import {
@@ -21,7 +23,7 @@ import {
 	_PROFICIENCY_TYPES
 } from './character_variables';
 import * as Calculators from './calculators';
-import { _ASC } from '../../util/sorters';
+import { sortByParams } from '../../util/sorters';
 
 class CharacterSheet extends React.Component {
 	constructor(props) {
@@ -159,6 +161,18 @@ class CharacterSheet extends React.Component {
 		this.setState(newState);
 	}
 
+	handleEditWeapon(editingWeapon) {
+		editingWeapon = merge({}, editingWeapon);
+		const newState = merge({}, this.state);
+		newState.saved = false;
+		const weaponIdx = newState.character.weapons.findIndex(
+			(weapon) => weapon._id === editingWeapon._id
+		);
+		editingWeapon.editing = true;
+		newState.character.weapons[weaponIdx] = editingWeapon;
+		this.setState(newState);
+	}
+
 	handleProficiencySubmit(newProf) {
 		const newState = merge({}, this.state);
 		newState.saved = false;
@@ -201,6 +215,21 @@ class CharacterSheet extends React.Component {
 			newState.character.equipment[equipIdx] = newEquip;
 		} else {
 			newState.character.equipment.push(newEquip);
+		}
+		this.setState(newState, () => this.handleSubmit());
+	}
+
+	handleWeaponSubmit(newWeapon) {
+		const newState = merge({}, this.state);
+		newState.saved = false;
+		if (newWeapon._id) {
+			const weaponIdx = newState.character.weapons.findIndex(
+				(weapon) => weapon._id === newWeapon._id
+			);
+			newWeapon.editing = false;
+			newState.character.weapons[weaponIdx] = newWeapon;
+		} else {
+			newState.character.weapons.push(newWeapon);
 		}
 		this.setState(newState, () => this.handleSubmit());
 	}
@@ -525,7 +554,6 @@ class CharacterSheet extends React.Component {
 						type={camel}
 						item={proficiency}
 						handleProficiencySubmit={this.handleProficiencySubmit.bind(this)}
-						handleEditProficiency={this.handleEditProficiency.bind(this)}
 					/>
 				) : (
 					<Proficiency
@@ -554,7 +582,6 @@ class CharacterSheet extends React.Component {
 					key={i}
 					item={equipment}
 					handleEquipmentSubmit={this.handleEquipmentSubmit.bind(this)}
-					handleEditEquipment={this.handleEditEquipment.bind(this)}
 				/>
 			) : (
 				<Equipment
@@ -568,47 +595,50 @@ class CharacterSheet extends React.Component {
 		});
 	}
 
-	renderBonuses() {
-		let sortedBonuses = merge([], this.state.character.bonuses).sort(
-			_ASC('level', 'source')
-		);
-		let forms = sortedBonuses.map(
-			(bonus, i) =>
-				bonus.editing ? (
-					<div key={i} className="row">
-						<BonusForm
-							handleBonusSubmit={this.handleBonusSubmit.bind(this)}
-							bonus={bonus}
-							skills={_SKILLS}
-						/>
-					</div>
-				) : (
-					<Bonus
-						key={i}
-						handleEditBonus={this.handleEditBonus.bind(this)}
-						handleRemoveItem={this.handleRemoveItem(bonus._id, 'bonuses')}
-						bonus={bonus}
-					/>
-				)
-		);
-		forms = forms.concat(
-			<div key={forms.length}>
-				<h3>Add Bonus</h3>
-				<BonusForm
-					handleBonusSubmit={this.handleBonusSubmit.bind(this)}
-					bonus={{
-						name: '',
-						field: '',
-						description: '',
-						bonusAmount: 0,
-						level: this.state.character.level,
-						source: ''
-					}}
-					skills={_SKILLS}
+	renderWeapons() {
+		return this.state.character.weapons.map((weapon, i) => {
+			const camel = camelCase(weapon);
+			return weapon.editing ? (
+				<WeaponForm
+					key={i}
+					item={weapon}
+					handleWeaponSubmit={this.handleWeaponSubmit.bind(this)}
 				/>
-			</div>
+			) : (
+				<Weapon
+					key={i}
+					item={weapon}
+					type="weapons"
+					character={this.state.character}
+					handleRemoveItem={this.handleRemoveItem.bind(this)}
+					handleEditWeapon={this.handleEditWeapon.bind(this)}
+				/>
+			);
+		});
+	}
+
+	renderBonuses() {
+		const sortedBonuses = merge([], this.state.character.bonuses).sort(
+			sortByParams(1, 'level', 'source')
 		);
-		return <div className="col">{forms}</div>;
+		return sortedBonuses.map((bonus, i) => {
+			const camel = camelCase(bonus);
+			return bonus.editing ? (
+				<BonusForm
+					key={i}
+					bonus={bonus}
+					handleBonusSubmit={this.handleBonusSubmit.bind(this)}
+				/>
+			) : (
+				<Bonus
+					key={i}
+					bonus={bonus}
+					type="bonuses"
+					handleRemoveItem={this.handleRemoveItem.bind(this)}
+					handleEditBonus={this.handleEditBonus.bind(this)}
+				/>
+			);
+		});
 	}
 
 	renderAddBonusButton(category, label) {
@@ -627,6 +657,7 @@ class CharacterSheet extends React.Component {
 	}
 
 	renderToggleButton(section) {
+		const symbol = section.includes('Form') ? ['⬏', '⬎'] : ['▼', '▲']
 		return (
 			<button
 				className="hide-button"
@@ -635,7 +666,7 @@ class CharacterSheet extends React.Component {
 					e.stopPropagation();
 					this.props.toggleSection(section);
 				}}>
-				{this.props.uiState[section] ? <strong>▼</strong> : <strong>▲</strong>}
+				{this.props.uiState[section] ? symbol[0] : symbol[1]}
 			</button>
 		);
 	}
@@ -750,47 +781,87 @@ class CharacterSheet extends React.Component {
 						</div>
 					</div>
 				</form>
+				<div className="weapons-and-profs row block">
+				<div className="weapon-section col-30">
+					<h3>Weapons</h3>
+					<div className="col">{this.renderWeapons()}</div>
+					<div className="col">
+						<h4>Add Weapon {this.renderToggleButton('weaponForm')}</h4>
+						{this.props.uiState.weaponForm ? (<WeaponForm
+							handleWeaponSubmit={this.handleWeaponSubmit.bind(this)}
+							item={{
+								name: '',
+								description: '',
+								bonusAmount: 0,
+								modifier: 'strength',
+								damageRoll: 8,
+								proficiency: false,
+								damageDice: 1,
+							}}
+						/>) : null}
+					</div>
+				</div>
+				<div className="proficiency-section col-60">
+				<h3>Proficiencies {this.renderToggleButton('proficiencies')}</h3>
+				<div className="row blocks">
+				{this.props.uiState.proficiencies
+					? this.renderProficiencies()
+					: null}
+					</div>
+					{this.props.uiState.proficiencies ? (
+						<div className="col">
+						<h4>
+						Add Proficiency {this.renderToggleButton('proficiencyForm')}
+						</h4>
+						{this.props.uiState.proficiencyForm ? (
+							<ProficiencyForm
+							handleProficiencySubmit={this.handleProficiencySubmit.bind(
+								this
+							)}
+							item={{ name: '', type: '', level: 1 }}
+							/>
+						) : null}
+						</div>
+					) : null}
+					</div>
+				</div>
 				<div className="bonus-section">
 					<h3>
 						Traits, Bonuses, Feats, etc. {this.renderToggleButton('bonuses')}
 					</h3>
+					<div className="col blocks">
 					{this.props.uiState.bonuses ? this.renderBonuses() : null}
-				</div>
-				<div className="proficiency-section">
-					<h3>Proficiencies {this.renderToggleButton('proficiencies')}</h3>
-					<div className="row blocks">
-						{this.props.uiState.proficiencies
-							? this.renderProficiencies()
-							: null}
 					</div>
-					{this.props.uiState.proficiencies ? (
+					{this.props.uiState.bonuses ? (
 						<div className="col">
-							<h3>Add Proficiency</h3>
-							<ProficiencyForm
-								handleProficiencySubmit={this.handleProficiencySubmit.bind(
-									this
-								)}
-								item={{ name: '', type: '', level: 1 }}
-							/>
+							<h4>
+								Add Bonus {this.renderToggleButton('bonusForm')}
+							</h4>
+							{this.props.uiState.bonusForm ? (
+								<BonusForm
+									handleBonusSubmit={this.handleBonusSubmit.bind(
+										this
+									)}
+									bonus={{ name: '', description: '', source: '',  level: 1, field: '', bonusAmount: 0}}
+								/>
+							) : null}
 						</div>
 					) : null}
 				</div>
 				<div className="equipment-section">
 					<h3>Equipment {this.renderToggleButton('equipment')}</h3>
 					<div className="col">
-						{this.props.uiState.equipment
-							? this.renderEquipment()
-							: null}
+						{this.props.uiState.equipment ? this.renderEquipment() : null}
 					</div>
 					{this.props.uiState.equipment ? (
 						<div className="col">
-							<h3>Add Equipment</h3>
-							<EquipmentForm
-								handleEquipmentSubmit={this.handleEquipmentSubmit.bind(
-									this
-								)}
-								item={{ name: '', description: '', weight: 0, source: ''}}
-							/>
+							<h4>Add Equipment {this.renderToggleButton('equipmentForm')}</h4>
+							{this.props.uiState.equipmentForm ? (
+								<EquipmentForm
+									handleEquipmentSubmit={this.handleEquipmentSubmit.bind(this)}
+									item={{ name: '', description: '', weight: 0, source: '' }}
+								/>
+							) : null}
 						</div>
 					) : null}
 				</div>

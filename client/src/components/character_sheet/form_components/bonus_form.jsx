@@ -1,6 +1,7 @@
 import React from 'react';
 import { camelCase, merge } from 'lodash';
 import Tooltip from '../../helpers/tooltip';
+import { _SKILLS } from '../character_variables';
 
 class BonusForm extends React.Component {
 	constructor(props) {
@@ -41,13 +42,12 @@ class BonusForm extends React.Component {
 	render() {
 		return (
 			<form
-				className="tooltip-container row"
+				className="bonus-form"
 				onSubmit={(e) => {
 					e.preventDefault();
 					e.stopPropagation();
 					this.props.handleBonusSubmit(merge({}, this.state));
 				}}>
-				<Tooltip listItems={[{ key: 'Source', val: this.state.source }]} />
 				<label>
 					Name
 					<input
@@ -60,7 +60,7 @@ class BonusForm extends React.Component {
 				<label>
 					Description
 					<textarea
-					rows="1"
+						rows="1"
 						value={this.state.description}
 						onChange={this.handleChange('description')}
 					/>
@@ -68,6 +68,7 @@ class BonusForm extends React.Component {
 				<label>
 					Level
 					<input
+						className="small-input"
 						min="1"
 						max="20"
 						type="number"
@@ -83,7 +84,7 @@ class BonusForm extends React.Component {
 						name="field"
 						onChange={this.handleChange('field')}>
 						<option value="">---</option>
-						{Object.keys(this.props.skills).map((skill, i) => {
+						{Object.keys(_SKILLS).map((skill, i) => {
 							return (
 								<option key={i} value={camelCase(skill)}>
 									{skill}
@@ -94,16 +95,21 @@ class BonusForm extends React.Component {
 						<option value="initiative">Initiative</option>
 						<option value="speed">Speed</option>
 					</select>
-					</label>
-					<label>
-						Bonus Amount
-						<input
-							type="number"
-							value={this.state.bonusAmount}
-							onChange={this.handleChange('bonusAmount')}
-						/>
-					</label>
-					<input className="add-button sq-button" type="submit" value={this.state._id ? '💾' : '➕'} />
+				</label>
+				<label>
+					Bonus Amount
+					<input
+						className="small-input"
+						type="number"
+						value={this.state.bonusAmount}
+						onChange={this.handleChange('bonusAmount')}
+					/>
+				</label>
+				<input
+					className="add-button sq-button"
+					type="submit"
+					value={this.state._id ? '💾' : '➕'}
+				/>
 			</form>
 		);
 	}

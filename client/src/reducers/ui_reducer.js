@@ -7,6 +7,10 @@ const initialState = {
     bonuses: true,
     proficiencies: true,
     equipment: true,
+    profiencyForm: false,
+    equipmentForm: false,
+    weaponForm: false,
+    bonusForm: false,
   },
   notification: {
     type: null,

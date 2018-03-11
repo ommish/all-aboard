@@ -9,7 +9,7 @@ class EquipmentForm extends React.Component {
 			name: props.item.name,
 			description: props.item.description,
 			weight: props.item.weight,
-			source: props.item.source,
+			source: props.item.source
 		};
 	}
 
@@ -53,6 +53,7 @@ class EquipmentForm extends React.Component {
 				<label>
 					Weight (lb)
 					<input
+						className="small-input"
 						type="number"
 						value={this.state.weight}
 						min="0"

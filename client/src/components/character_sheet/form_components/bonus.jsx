@@ -3,14 +3,14 @@ import Tooltip from '../../helpers/tooltip';
 
 const Bonus = ({ bonus, handleEditBonus, handleRemoveItem }) => {
 	return (
-		<ul className="col tooltip-container">
+		<div className="col tooltip-container">
       <Tooltip
         listItems={[
           { key: 'Source', val: bonus.source },
           { key: 'Level', val: bonus.level }
         ]}
       />
-			<li className="row no-margin">
+			<div className="row no-margin">
 				<h4>{bonus.name}</h4> (lvl. {bonus.level})
 				<div className="row no-margin">
 					<button
@@ -19,15 +19,15 @@ const Bonus = ({ bonus, handleEditBonus, handleRemoveItem }) => {
 						✎
 					</button>
 					<button
-						onClick={handleRemoveItem}
+						onClick={handleRemoveItem(bonus._id, 'bonuses')}
 						className="remove-button tiny-button">
 						✘
 					</button>
 				</div>
-			</li>
-			<li>{bonus.description}</li>
+			</div>
+			<div>{bonus.description}</div>
 			{bonus.field ? <li><em>+{bonus.bonusAmount} to {bonus.field}</em></li> : null}
-		</ul>
+		</div>
 	);
 };
 

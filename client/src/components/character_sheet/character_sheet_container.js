@@ -69,6 +69,7 @@ const mapStateToProps = (state, ownProps) => {
     toolProficiencies: [],
     hitDice: 1,
     equipment: [],
+    weapons: [],
   };
   const editable = character ? character._user ===  state.session.currentUser.id : false;
   return {

@@ -7,7 +7,7 @@ class ProficiencyForm extends React.Component {
 		super(props);
 		this.state = {
 			_id: props.item._id,
-			type: props.item.type || props.type,
+			type: props.item.type || props.type || '',
 			name: props.item.name,
 			level: props.item.level,
 			source: props.item.source || ''
@@ -22,6 +22,7 @@ class ProficiencyForm extends React.Component {
 
 	handleSubmit(e) {
 		e.preventDefault();
+		debugger;
 		this.props.handleProficiencySubmit(this.state);
 		if (!this.props.item._id) this.setState({ type: '', name: '', level: 1 });
 	}
@@ -57,7 +58,7 @@ class ProficiencyForm extends React.Component {
 					</label>
 				)}
 				<label name="name">
-					{this.state._id ? null : "Name"}
+					{this.state._id ? null : 'Name'}
 					<input
 						required
 						type="text"
@@ -72,6 +73,7 @@ class ProficiencyForm extends React.Component {
 							required
 							type="number"
 							value={this.state.level}
+							className="small-input"
 							min="1"
 							max="20"
 							onChange={this.handleChange('level')}
