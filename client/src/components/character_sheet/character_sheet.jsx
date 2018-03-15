@@ -94,7 +94,7 @@ class CharacterSheet extends React.Component {
 			)
 				newState.character.bonuses.push(bonus);
 		});
-		newState.character.gold += categoryInfo.gold || 0;
+		newState.character.gold = parseInt(newState.character.gold) + (parseInt(categoryInfo.gold) || 0)
 		this.setState(newState, () => this.handleSubmit());
 	}
 
