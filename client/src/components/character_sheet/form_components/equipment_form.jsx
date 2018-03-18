@@ -1,5 +1,4 @@
 import React from 'react';
-import { camelCase } from 'lodash';
 
 class EquipmentForm extends React.Component {
 	constructor(props) {

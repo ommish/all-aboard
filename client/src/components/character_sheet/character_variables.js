@@ -6,6 +6,16 @@ export const _ABILITIES = [
 	'Wisdom',
 	'Charisma'
 ];
+
+export const _SAVES = [
+	'Strength Saving Throw',
+	'Dexterity Saving Throw',
+	'Constitution Saving Throw',
+	'Intelligence Saving Throw',
+	'Wisdom Saving Throw',
+	'Charisma Saving Throw'
+];
+
 export const _SKILLS = {
 	Acrobatics: 'Dexterity',
 	'Animal Handling': 'Wisdom',
@@ -54,7 +64,7 @@ export const _CALCULATED_FIELDS = [
 	'SavingThrows',
 	'Skills',
 	'Initiative',
-	'PassiveWisdom',
+	'passivePerception',
 	'ArmorClass',
 	'Speed',
 	'Bonuses'

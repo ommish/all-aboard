@@ -1,6 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { NavLink, Route } from 'react-router-dom';
+import { Route } from 'react-router-dom';
 import { fetchCompendium } from '../../actions/compendium_actions';
 import CharacterIndex from './character_index';
 import './user_profile.css';

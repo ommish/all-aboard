@@ -36,6 +36,20 @@
   background: #D4E6F1;
 }
 
+.death-saves {
+  display: flex;
+  flex-direction: column;
+}
+
+.death-save-inputs {
+  display: flex;
+}
+
+.death-save-inputs > label {
+  display: flex;
+  flex-direction: column;
+}
+
 label > input[type="checkbox"]:first-child {
   margin-right: 5px;
 }

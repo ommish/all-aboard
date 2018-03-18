@@ -1,7 +1,6 @@
 import React from 'react';
 import { camelCase, merge } from 'lodash';
-import Tooltip from '../../helpers/tooltip';
-import { _SKILLS } from '../character_variables';
+import { _SKILLS, _SAVES } from '../character_variables';
 
 class BonusForm extends React.Component {
 	constructor(props) {
@@ -84,7 +83,7 @@ class BonusForm extends React.Component {
 						name="field"
 						onChange={this.handleChange('field')}>
 						<option value="">---</option>
-						{Object.keys(_SKILLS).map((skill, i) => {
+						{Object.keys(_SKILLS).concat(_SAVES).map((skill, i) => {
 							return (
 								<option key={i} value={camelCase(skill)}>
 									{skill}

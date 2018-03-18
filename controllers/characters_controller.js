@@ -7,6 +7,7 @@ module.exports = {
 		if (!req.body.race) req.body.race = undefined;
 		if (!req.body.background) req.body.background = undefined;
 		if (!req.body.armor) req.body.armor = undefined;
+		
 		let newChar = new Character(req.body);
 		newChar._user = req.user._id;
 		try {

@@ -82,11 +82,11 @@ const characterSchema = new Schema({
 	armorProficiencies: { type: [proficiency.proficiencySchema] },
 	weaponProficiencies: { type: [proficiency.proficiencySchema] },
 	toolProficiencies: { type: [proficiency.proficiencySchema] },
-	equipment: { type: String, default: '[]' },
-	weapons: { type: String, default: '[]' }, //eventually make weapon model
 	hitDice: { type: Number, default: 1, min: 0 },
 	equipment: { type: [equipment.equipmentSchema] },
 	weapons: { type: [weapon.weaponSchema]},
+	failedDeathSaves: { type: Number, default: 0, min: 0 },
+	successfulDeathSaves: { type: Number, default: 0, min: 0 },
 });
 
 mongoose.model('Character', characterSchema);

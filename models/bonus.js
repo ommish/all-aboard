@@ -30,7 +30,13 @@ const bonusSchema = new Schema({
 			'religion',
 			'sleightOfHand',
 			'stealth',
-			'survival'
+			'survival',
+			'strengthSavingThrow',
+			'dexteritySavingThrow',
+			'constitutionSavingThrow',
+			'intelligenceSavingThrow',
+			'wisdomSavingThrow',
+			'charismaSavingThrow',
 		]
 	},
 	bonusAmount: { type: Number, default: 0 },

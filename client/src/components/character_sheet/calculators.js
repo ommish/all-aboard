@@ -45,8 +45,8 @@ export const initiative = ({ newState }) => {
 	newState.character.initiative = newState.character.dexterityModifier;
 };
 
-export const passiveWisdom = ({ newState }) => {
-	newState.character.passiveWisdom = 10 + newState.character.perception;
+export const passivePerception = ({ newState }) => {
+	newState.character.passivePerception = 10 + newState.character.perception;
 };
 
 export const armorClass = ({ newState, charClasses, armors }) => {
@@ -84,7 +84,7 @@ export const speed = ({ newState, races }) => {
 export const bonuses = ({ newState }) => {
 	newState.character.bonuses.forEach((bonus) => {
 		if (bonus.field && newState.character.level >= bonus.level) {
-			newState.character[bonus.field] += bonus.bonusAmount;
+			newState.character[bonus.field] = (newState.character[bonus.field] || 0) + bonus.bonusAmount;
 		}
 	});
 };
