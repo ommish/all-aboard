@@ -15,7 +15,7 @@ const charClassSchema = new Schema({
 	skillProficiencies:  { type: [proficiency.proficiencySchema] },
 	bonuses: { type: [bonus.bonusSchema] },
 	equipment: {type: [equipment.equipmentSchema]},
-
+	level: { type: Number, default: 1 },
 });
 
 const CharClass = mongoose.model('CharClass', charClassSchema);
