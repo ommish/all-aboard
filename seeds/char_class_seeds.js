@@ -29,10 +29,7 @@ const charClasses = [
       checkProf('Medium Armor', 'Barbarian', 1),
       checkProf('Shields', 'Barbarian', 1),
     ],
-    saveProficiencies: [
-      checkProf('strength', 'Barbarian', 1),
-      checkProf('constitution', 'Barbarian', 1),
-    ],
+    saveProficiencies: [checkProf('strength', 'Barbarian', 1), checkProf('constitution', 'Barbarian', 1)],
     bonuses: [
       bonus(
         'Skill Proficiency',
@@ -153,23 +150,14 @@ const charClasses = [
   {
     name: 'Artificer',
     hitDie: 8,
-    armorProficiencies: [
-      checkProf('Light Armor', 'Artificer', 1),
-      checkProf('Medium Armor', 'Artificer', 1),
-    ],
-    saveProficiencies: [
-      checkProf('intelligence', 'Artificer', 1),
-      checkProf('constitution', 'Artificer', 1),
-    ],
+    armorProficiencies: [checkProf('Light Armor', 'Artificer', 1), checkProf('Medium Armor', 'Artificer', 1)],
+    saveProficiencies: [checkProf('intelligence', 'Artificer', 1), checkProf('constitution', 'Artificer', 1)],
     bonuses: [],
   },
   {
     name: 'Bard',
     hitDie: 8,
-    saveProficiencies: [
-      checkProf('dexterity', 'Bard', 1),
-      checkProf('charisma', 'Bard', 1),
-    ],
+    saveProficiencies: [checkProf('dexterity', 'Bard', 1), checkProf('charisma', 'Bard', 1)],
     armorProficiencies: [checkProf('Light Armor', 'Bard', 1)],
     toolProficiencies: [
       checkProf('Musical Instrument (your choice)', 'Bard', 1),
@@ -255,33 +243,44 @@ const charClasses = [
   {
     name: 'Cleric',
     hitDie: 8,
-    saveProficiencies: [
-      checkProf('wisdom', 'Cleric', 1),
-      checkProf('charisma', 'Cleric', 1),
-    ],
+    saveProficiencies: [checkProf('wisdom', 'Cleric', 1), checkProf('charisma', 'Cleric', 1)],
     armorProficiencies: [
       checkProf('Light Armor', 'Cleric', 1),
       checkProf('Medium Armor', 'Cleric', 1),
       checkProf('Shields', 'Cleric', 1),
     ],
     bonuses: [
-      bonus(
-        'Skill Proficiency',
-        'Choose two from History, Insight, Medicine, and Religion',
-        1,
-        '',
-        0,
-        'Cleric',
-      ),
+      bonus('Skill Proficiency', 'Choose two from History, Insight, Medicine, and Religion', 1, '', 0, 'Cleric'),
+      bonus('Channel Divinity', "When you use your Channel Divinity, you choose which effect to create. You must then finish a short or long rest to use your Channel Divinity again. Some Channel Divinity effects require saving throws. When you use such an effect from this class, the DC equals your cleric spell save DC. Beginning at 6th level, you can use your Channel Divinity twice between rests, and beginning at 18th level, you can use it three times between rests. When you finish a short or long rest, you regain your expended uses.", 2, '', 0, 'Nature Cleric'),
+      bonus('Turn Undead', "As an action, each undead that can see or hear you within 30 feet of you must make a Wisdom saving throw. If the creature fails its saving throw, it is turned for 1 minute or until it takes any damage. A turned creature must spend its turns trying to move as far away from you as it can, and it can't willingly move to a space within 30 feet of you. It also can't take reactions. For its action, it can use only the Dash action or try to escape from an effect that prevents it from moving. If there's nowhere to move, the creature can use the Dodge action.", 2, '', 0, 'Nature Cleric'),
+      bonus('Destroy Undead', "Starting at 5th level, when an undead of CR 1/2 or lower fails its saving throw against your Turn Undead feature, the creature is instantly destroyed. The CR of undead increases as you gain levels.", 5, '', 0, 'Nature Cleric'),
+      bonus('Ability Score Improvement', "you can increase one ability score of your choice by +2, or you can increase two ability scores of your choice by +1. As normal, you can't increase an ability score above 20 using this feature.", 4, '', 0, 'Nature Cleric'),
+    ],
+  },
+  {
+    name: 'Nature Cleric',
+    hitDie: 8,
+    saveProficiencies: [checkProf('wisdom', 'Nature Cleric', 1), checkProf('charisma', 'Nature Cleric', 1)],
+    armorProficiencies: [
+      checkProf('Light Armor', 'Nature Cleric', 1),
+      checkProf('Medium Armor', 'Nature Cleric', 1),
+      checkProf('Heavy Armor', 'Nature Cleric', 1),
+      checkProf('Shields', 'Nature Cleric', 1),
+    ],
+    bonuses: [
+      bonus('Skill Proficiency', 'Choose two from History, Insight, Medicine, and Religion', 1, '', 0, 'Nature Cleric'),
+      bonus('Channel Divinity', "When you use your Channel Divinity, you choose which effect to create. You must then finish a short or long rest to use your Channel Divinity again. Some Channel Divinity effects require saving throws. When you use such an effect from this class, the DC equals your cleric spell save DC. Beginning at 6th level, you can use your Channel Divinity twice between rests, and beginning at 18th level, you can use it three times between rests. When you finish a short or long rest, you regain your expended uses.", 2, '', 0, 'Nature Cleric'),
+      bonus('Turn Undead', "As an action, each undead that can see or hear you within 30 feet of you must make a Wisdom saving throw. If the creature fails its saving throw, it is turned for 1 minute or until it takes any damage. A turned creature must spend its turns trying to move as far away from you as it can, and it can't willingly move to a space within 30 feet of you. It also can't take reactions. For its action, it can use only the Dash action or try to escape from an effect that prevents it from moving. If there's nowhere to move, the creature can use the Dodge action.", 2, '', 0, 'Nature Cleric'),
+      bonus('Destroy Undead', "Starting at 5th level, when an undead of CR 1/2 or lower fails its saving throw against your Turn Undead feature, the creature is instantly destroyed. The CR of undead increases as you gain levels.", 5, '', 0, 'Nature Cleric'),
+      bonus('Acolyte of Nature', "At 1st level, you learn one druid cantrip of your choice. You also gain proficiency in one of the following skills of your choice: Animal Handling, Nature, or Survival.", 1, '', 0, 'Nature Cleric'),
+      bonus('Channel Divinity: Charm Animals and Plants', "Starting at 2nd level, as an action, you present your holy symbol and invoke the name of your deity. Each beast or plant creature that can see you within 30 feet of you must make a Wisdom saving throw. If the creature fails its saving throw, it is charmed by you for 1 minute or until it takes damage. While it is charmed by you, it is friendly to you and other creatures you designate.", 2, '', 0, 'Nature Cleric'),
+      bonus('Ability Score Improvement', "you can increase one ability score of your choice by +2, or you can increase two ability scores of your choice by +1. As normal, you can't increase an ability score above 20 using this feature.", 4, '', 0, 'Nature Cleric'),
     ],
   },
   {
     name: 'Druid',
     hitDie: 8,
-    saveProficiencies: [
-      checkProf('intelligence', 'Druid', 1),
-      checkProf('wisdom', 'Druid', 1),
-    ],
+    saveProficiencies: [checkProf('intelligence', 'Druid', 1), checkProf('wisdom', 'Druid', 1)],
     armorProficiencies: [
       checkProf('Light Armor (non-metal)', 'Druid', 1),
       checkProf('Medium Armor (non-metal)', 'Druid', 1),
@@ -311,10 +310,7 @@ const charClasses = [
   {
     name: 'Fighter',
     hitDie: 10,
-    saveProficiencies: [
-      checkProf('strength', 'Fighter', 1),
-      checkProf('constitution', 'Fighter', 1),
-    ],
+    saveProficiencies: [checkProf('strength', 'Fighter', 1), checkProf('constitution', 'Fighter', 1)],
     armorProficiencies: [
       checkProf('Light Armor', 'Fighter', 1),
       checkProf('Medium Armor', 'Fighter', 1),
@@ -335,6 +331,37 @@ const charClasses = [
   {
     name: 'Monk',
     hitDie: 8,
+    weaponPropifiencies: [
+      checkProf('Simple Weapons', 'Monk', 1),
+      checkProf('Shortsword', 'Monk', 1),
+    ],
+    saveProficiencies: [checkProf('strength', 'Monk', 1), checkProf('dexterity', 'Monk', 1)],
+    bonuses: [
+      bonus(
+        'Skill Proficiency',
+        'Choose two from Acrobatics, Athletics, History, Insight, Religion, Stealth',
+        1,
+        '',
+        0,
+        'Monk',
+      ),
+      bonus(
+        'Unarmored Defense',
+        'While unarmored and not weilding a shield, AC equals 10 + dex + wis',
+        1,
+        '',
+        0,
+        'Monk',
+      ),
+      bonus(
+        'Unarmored Defense',
+        'While unarmored and not weilding a shield, AC equals 10 + dex + wis',
+        1,
+        '',
+        0,
+        'Monk',
+      ),
+    ],
   },
   {
     name: 'Paladin',
@@ -364,7 +391,7 @@ const charClasses = [
 
 const seedCharClass = async () => {
   await CharClass.remove();
-  charClasses.forEach(async charClass => {
+  charClasses.forEach(async (charClass) => {
     await new CharClass(charClass).save();
   });
 };
