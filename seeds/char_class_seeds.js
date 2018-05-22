@@ -249,6 +249,9 @@ const charClasses = [
       checkProf('Medium Armor', 'Cleric', 1),
       checkProf('Shields', 'Cleric', 1),
     ],
+    weaponPropifiencies: [
+      checkProf('Simple Weapons', 'Cleric', 1),
+    ],
     bonuses: [
       bonus('Skill Proficiency', 'Choose two from History, Insight, Medicine, and Religion', 1, '', 0, 'Cleric'),
       bonus('Channel Divinity', "When you use your Channel Divinity, you choose which effect to create. You must then finish a short or long rest to use your Channel Divinity again. Some Channel Divinity effects require saving throws. When you use such an effect from this class, the DC equals your cleric spell save DC. Beginning at 6th level, you can use your Channel Divinity twice between rests, and beginning at 18th level, you can use it three times between rests. When you finish a short or long rest, you regain your expended uses.", 2, '', 0, 'Nature Cleric'),
@@ -261,6 +264,9 @@ const charClasses = [
     name: 'Nature Cleric',
     hitDie: 8,
     saveProficiencies: [checkProf('wisdom', 'Nature Cleric', 1), checkProf('charisma', 'Nature Cleric', 1)],
+    weaponPropifiencies: [
+      checkProf('Simple Weapons', 'Nature Cleric', 1),
+    ],
     armorProficiencies: [
       checkProf('Light Armor', 'Nature Cleric', 1),
       checkProf('Medium Armor', 'Nature Cleric', 1),
