@@ -39,7 +39,7 @@ const armors = [
 		stealthDisadvantage: false,
 		weight: 12,
 		strengthMin: 0,
-		baseAc: 11,
+		baseAc: 12,
 		acMod: 'dexterityModifier',
 		acModLimit: 2
 	},
@@ -49,7 +49,7 @@ const armors = [
 		stealthDisadvantage: false,
 		weight: 20,
 		strengthMin: 0,
-		baseAc: 11,
+		baseAc: 13,
 		acMod: 'dexterityModifier',
 		acModLimit: 2
 	},
@@ -59,7 +59,7 @@ const armors = [
 		stealthDisadvantage: true,
 		weight: 45,
 		strengthMin: 0,
-		baseAc: 11,
+		baseAc: 14,
 		acMod: 'dexterityModifier',
 		acModLimit: 2
 	},
@@ -69,7 +69,7 @@ const armors = [
 		stealthDisadvantage: false,
 		weight: 20,
 		strengthMin: 0,
-		baseAc: 11,
+		baseAc: 14,
 		acMod: 'dexterityModifier',
 		acModLimit: 2
 	},
@@ -79,7 +79,7 @@ const armors = [
 		stealthDisadvantage: true,
 		weight: 40,
 		strengthMin: 0,
-		baseAc: 11,
+		baseAc: 15,
 		acMod: 'dexterityModifier',
 		acModLimit: 2
 	},
@@ -89,7 +89,7 @@ const armors = [
 		stealthDisadvantage: true,
 		weight: 40,
 		strengthMin: 0,
-		baseAc: 11,
+		baseAc: 14,
 		acMod: '',
 		acModLimit: 0
 	},
@@ -99,7 +99,7 @@ const armors = [
 		stealthDisadvantage: true,
 		weight: 55,
 		strengthMin: 13,
-		baseAc: 11,
+		baseAc: 16,
 		acMod: '',
 		acModLimit: 0
 	},
@@ -109,7 +109,7 @@ const armors = [
 		stealthDisadvantage: true,
 		weight: 60,
 		strengthMin: 15,
-		baseAc: 11,
+		baseAc: 17,
 		acMod: '',
 		acModLimit: 0
 	},
@@ -119,7 +119,7 @@ const armors = [
 		stealthDisadvantage: true,
 		weight: 65,
 		strengthMin: 15,
-		baseAc: 11,
+		baseAc: 18,
 		acMod: '',
 		acModLimit: 0
 	}
