@@ -20,8 +20,8 @@ require('./models/character');
 
 // require('./seeds/armor_seeds');
 // require('./seeds/race_seeds');
-// require('./seeds/char_class_seeds');
-require('./seeds/background_seeds');
+require('./seeds/char_class_seeds');
+// require('./seeds/background_seeds');
 
 const cookieSession = require('cookie-session');
 const passport = require('passport');
