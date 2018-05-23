@@ -249,7 +249,7 @@ const charClasses = [
       checkProf('Medium Armor', 'Cleric', 1),
       checkProf('Shields', 'Cleric', 1),
     ],
-    weaponPropifiencies: [
+    weaponProficiencies: [
       checkProf('Simple Weapons', 'Cleric', 1),
     ],
     bonuses: [
@@ -264,7 +264,7 @@ const charClasses = [
     name: 'Nature Cleric',
     hitDie: 8,
     saveProficiencies: [checkProf('wisdom', 'Nature Cleric', 1), checkProf('charisma', 'Nature Cleric', 1)],
-    weaponPropifiencies: [
+    weaponProficiencies: [
       checkProf('Simple Weapons', 'Nature Cleric', 1),
     ],
     armorProficiencies: [
@@ -337,7 +337,7 @@ const charClasses = [
   {
     name: 'Monk',
     hitDie: 8,
-    weaponPropifiencies: [
+    weaponProficiencies: [
       checkProf('Simple Weapons', 'Monk', 1),
       checkProf('Shortsword', 'Monk', 1),
     ],
