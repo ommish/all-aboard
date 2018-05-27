@@ -50,6 +50,11 @@
   flex-direction: column;
 }
 
+.backstory textarea {
+  width: 100%;
+  height: 100px;
+}
+
 label > input[type="checkbox"]:first-child {
   margin-right: 5px;
 }

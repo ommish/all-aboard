@@ -629,7 +629,7 @@ class CharacterSheet extends React.Component {
 
   renderBackstory() {
     return (
-      <div>
+      <div className="backstory">
         <h3>Backstory</h3>
         <textarea
           onChange={this.handleChange("backstory")}
