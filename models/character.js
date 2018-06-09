@@ -87,6 +87,8 @@ const characterSchema = new Schema({
 	weapons: { type: [weapon.weaponSchema]},
 	failedDeathSaves: { type: Number, default: 0, min: 0 },
 	successfulDeathSaves: { type: Number, default: 0, min: 0 },
+	spells: { type: String, default: '' },
+	miscellaneous: { type: String, default: '' },
 });
 
 mongoose.model('Character', characterSchema);

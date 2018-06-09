@@ -21,19 +21,19 @@
 }
 
 .weapon-section {
-  background: #F6DDCC;
+  background: #f6ddcc;
 }
 
 .equipment-section {
-  background: #FCF3CF;
+  background: #fcf3cf;
 }
 
 .proficiency-section {
-  background: #D4EFDF;
+  background: #d4efdf;
 }
 
 .bonus-section {
-  background: #D4E6F1;
+  background: #d4e6f1;
 }
 
 .death-saves {
@@ -55,13 +55,33 @@
   height: 100px;
 }
 
-label > input[type="checkbox"]:first-child {
+.spell-section textarea {
+  width: 100%;
+  height: 100px;
+}
+
+.misc-section textarea {
+  width: 100%;
+  height: 100px;
+}
+
+.misc-section,
+.spell-section {
+  padding-left: 20px;
+}
+
+label > input[type='checkbox']:first-child {
   margin-right: 5px;
 }
 
 @media only screen and (max-width: 640px) {
   .character-sheet .basics-and-scores.row > .col-50 {
     width: 100%;
+  }
+
+  .misc-section,
+  .spell-section {
+    padding-left: 10px;
   }
 }
 
@@ -72,7 +92,14 @@ label > input[type="checkbox"]:first-child {
 }
 
 @media only screen and (max-width: 640px) {
-  .character-sheet .weapons-and-profs > .col-60, .character-sheet .weapons-and-profs > .col-30 {
+  .character-sheet .weapons-and-profs > .col-60,
+  .character-sheet .weapons-and-profs > .col-30 {
+    width: 100%;
+  }
+}
+
+@media only screen and (max-width: 640px) {
+  .character-sheet .equip-spells-misc > .col-30 {
     width: 100%;
   }
 }

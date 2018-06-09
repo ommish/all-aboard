@@ -1,17 +1,17 @@
-import React from "react";
-import { merge, camelCase } from "lodash";
-import BonusForm from "./form_components/bonus_form";
-import Bonus from "./form_components/bonus";
-import AlignmentMenu from "./form_components/alignment_menu";
-import DropdownMenu from "./form_components/dropdown_menu";
-import Proficiency from "./form_components/proficiency";
-import ProficiencyForm from "./form_components/proficiency_form";
-import Equipment from "./form_components/equipment";
-import EquipmentForm from "./form_components/equipment_form";
-import Weapon from "./form_components/weapon";
-import WeaponForm from "./form_components/weapon_form";
-import Tooltip from "../helpers/tooltip";
-import "./character_sheet.css";
+import React from 'react';
+import { merge, camelCase } from 'lodash';
+import BonusForm from './form_components/bonus_form';
+import Bonus from './form_components/bonus';
+import AlignmentMenu from './form_components/alignment_menu';
+import DropdownMenu from './form_components/dropdown_menu';
+import Proficiency from './form_components/proficiency';
+import ProficiencyForm from './form_components/proficiency_form';
+import Equipment from './form_components/equipment';
+import EquipmentForm from './form_components/equipment_form';
+import Weapon from './form_components/weapon';
+import WeaponForm from './form_components/weapon_form';
+import Tooltip from '../helpers/tooltip';
+import './character_sheet.css';
 import {
   _ABILITIES,
   _SKILLS,
@@ -19,17 +19,17 @@ import {
   _ALIGNMENTS,
   _CALCULATED_FIELDS,
   _CATEGORIES,
-  _PROFICIENCY_TYPES
-} from "./character_variables";
-import * as Calculators from "./calculators";
-import { sortByParams } from "../../util/sorters";
+  _PROFICIENCY_TYPES,
+} from './character_variables';
+import * as Calculators from './calculators';
+import { sortByParams } from '../../util/sorters';
 
 class CharacterSheet extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
       character: this.props.character,
-      saved: true
+      saved: true,
     };
   }
 
@@ -40,7 +40,7 @@ class CharacterSheet extends React.Component {
       races: this.props.races,
       charClasses: this.props.charClasses,
       backgrounds: this.props.backgrounds,
-      armors: this.props.armors
+      armors: this.props.armors,
     });
     this.setState(newState);
   }
@@ -52,13 +52,13 @@ class CharacterSheet extends React.Component {
       races: this.props.races,
       charClasses: this.props.charClasses,
       backgrounds: this.props.backgrounds,
-      armors: this.props.armors
+      armors: this.props.armors,
     });
     this.setState(newState, () => (window.character = this.state.character));
   }
 
   calculateFields({ newState, races, charClasses, backgrounds, armors }) {
-    _CALCULATED_FIELDS.forEach(field => {
+    _CALCULATED_FIELDS.forEach((field) => {
       const camel = camelCase(field);
       Calculators[camel]({ newState, races, charClasses, backgrounds, armors });
     });
@@ -68,42 +68,36 @@ class CharacterSheet extends React.Component {
     const newState = merge({}, this.state);
     const pluralized = _CATEGORIES[category];
     const categoryInfo = this.props[pluralized][this.state.character[category]];
-    const proficiencyTypes = _PROFICIENCY_TYPES.map(type => camelCase(type));
-    proficiencyTypes.forEach(type => {
-      (categoryInfo[`${type}Proficiencies`] || []).forEach(item => {
+    const proficiencyTypes = _PROFICIENCY_TYPES.map((type) => camelCase(type));
+    proficiencyTypes.forEach((type) => {
+      (categoryInfo[`${type}Proficiencies`] || []).forEach((item) => {
         if (
-          !newState.character[`${type}Proficiencies`].some(
-            prof => prof._id === item._id
-          ) &&
+          !newState.character[`${type}Proficiencies`].some((prof) => prof._id === item._id) &&
           item.level <= newState.character.level
         )
           newState.character[`${type}Proficiencies`].push(item);
       });
     });
-    (categoryInfo.skillProficiencies || []).forEach(skill => {
+    (categoryInfo.skillProficiencies || []).forEach((skill) => {
       newState.character[`${skill.name}Proficiency`] = skill;
     });
-    (categoryInfo.saveProficiencies || []).forEach(save => {
+    (categoryInfo.saveProficiencies || []).forEach((save) => {
       newState.character[`${save.name}SaveProficiency`] = save;
     });
-    (categoryInfo.bonuses || []).forEach(bonus => {
-      if (
-        !newState.character.bonuses.some(bon => bon._id === bonus._id) &&
-        bonus.level <= newState.character.level
-      )
+    (categoryInfo.bonuses || []).forEach((bonus) => {
+      if (!newState.character.bonuses.some((bon) => bon._id === bonus._id) && bonus.level <= newState.character.level)
         newState.character.bonuses.push(bonus);
     });
-    newState.character.gold =
-      parseInt(newState.character.gold) + (parseInt(categoryInfo.gold) || 0);
+    newState.character.gold = parseInt(newState.character.gold) + (parseInt(categoryInfo.gold) || 0);
     this.setState(newState, () => this.handleSubmit());
   }
 
   handleChange(field) {
-    return e => {
+    return (e) => {
       const newState = merge({}, this.state);
       newState.saved = false;
-      if (e.target.type === "checkbox") {
-        if (field === "shielded") {
+      if (e.target.type === 'checkbox') {
+        if (field === 'shielded') {
           newState.character[field] = e.target.checked;
         } else {
           newState.character[field] = e.target.checked
@@ -118,7 +112,7 @@ class CharacterSheet extends React.Component {
         races: this.props.races,
         charClasses: this.props.charClasses,
         backgrounds: this.props.backgrounds,
-        armors: this.props.armors
+        armors: this.props.armors,
       });
       this.setState(newState);
     };
@@ -129,9 +123,7 @@ class CharacterSheet extends React.Component {
     const newState = merge({}, this.state);
     newState.saved = false;
     const category = `${type}Proficiencies`;
-    const profIdx = newState.character[category].findIndex(
-      prof => prof._id === editingProf._id
-    );
+    const profIdx = newState.character[category].findIndex((prof) => prof._id === editingProf._id);
     editingProf.editing = true;
     newState.character[category][profIdx] = editingProf;
     this.setState(newState);
@@ -141,9 +133,7 @@ class CharacterSheet extends React.Component {
     editingBonus = merge({}, editingBonus);
     const newState = merge({}, this.state);
     newState.saved = false;
-    const bonusIdx = newState.character.bonuses.findIndex(
-      bonus => bonus._id === editingBonus._id
-    );
+    const bonusIdx = newState.character.bonuses.findIndex((bonus) => bonus._id === editingBonus._id);
     editingBonus.editing = true;
     newState.character.bonuses[bonusIdx] = editingBonus;
     this.setState(newState);
@@ -153,9 +143,7 @@ class CharacterSheet extends React.Component {
     editingEquipment = merge({}, editingEquipment);
     const newState = merge({}, this.state);
     newState.saved = false;
-    const equipIdx = newState.character.equipment.findIndex(
-      equip => equip._id === editingEquipment._id
-    );
+    const equipIdx = newState.character.equipment.findIndex((equip) => equip._id === editingEquipment._id);
     editingEquipment.editing = true;
     newState.character.equipment[equipIdx] = editingEquipment;
     this.setState(newState);
@@ -165,9 +153,7 @@ class CharacterSheet extends React.Component {
     editingWeapon = merge({}, editingWeapon);
     const newState = merge({}, this.state);
     newState.saved = false;
-    const weaponIdx = newState.character.weapons.findIndex(
-      weapon => weapon._id === editingWeapon._id
-    );
+    const weaponIdx = newState.character.weapons.findIndex((weapon) => weapon._id === editingWeapon._id);
     editingWeapon.editing = true;
     newState.character.weapons[weaponIdx] = editingWeapon;
     this.setState(newState);
@@ -178,9 +164,7 @@ class CharacterSheet extends React.Component {
     newState.saved = false;
     const category = `${newProf.type}Proficiencies`;
     if (newProf._id) {
-      const profIdx = newState.character[category].findIndex(
-        prof => prof._id === newProf._id
-      );
+      const profIdx = newState.character[category].findIndex((prof) => prof._id === newProf._id);
       newProf.editing = false;
       newState.character[category][profIdx] = newProf;
     } else {
@@ -193,9 +177,7 @@ class CharacterSheet extends React.Component {
     const newState = merge({}, this.state);
     newState.saved = false;
     if (newBonus._id) {
-      const bonusIdx = newState.character.bonuses.findIndex(
-        bonus => bonus._id === newBonus._id
-      );
+      const bonusIdx = newState.character.bonuses.findIndex((bonus) => bonus._id === newBonus._id);
       newBonus.editing = false;
       newState.character.bonuses[bonusIdx] = newBonus;
     } else {
@@ -208,9 +190,7 @@ class CharacterSheet extends React.Component {
     const newState = merge({}, this.state);
     newState.saved = false;
     if (newEquip._id) {
-      const equipIdx = newState.character.equipment.findIndex(
-        equip => equip._id === newEquip._id
-      );
+      const equipIdx = newState.character.equipment.findIndex((equip) => equip._id === newEquip._id);
       newEquip.editing = false;
       newState.character.equipment[equipIdx] = newEquip;
     } else {
@@ -223,9 +203,7 @@ class CharacterSheet extends React.Component {
     const newState = merge({}, this.state);
     newState.saved = false;
     if (newWeapon._id) {
-      const weaponIdx = newState.character.weapons.findIndex(
-        weapon => weapon._id === newWeapon._id
-      );
+      const weaponIdx = newState.character.weapons.findIndex((weapon) => weapon._id === newWeapon._id);
       newWeapon.editing = false;
       newState.character.weapons[weaponIdx] = newWeapon;
     } else {
@@ -235,14 +213,12 @@ class CharacterSheet extends React.Component {
   }
 
   handleRemoveItem(itemId, itemType) {
-    return e => {
+    return (e) => {
       e.stopPropagation();
       e.preventDefault();
       const newState = merge({}, this.state);
       newState.saved = false;
-      newState.character[itemType] = newState.character[itemType].filter(
-        item => item._id !== itemId
-      );
+      newState.character[itemType] = newState.character[itemType].filter((item) => item._id !== itemId);
       this.setState(newState, () => this.handleSubmit());
     };
   }
@@ -253,9 +229,9 @@ class CharacterSheet extends React.Component {
       this.props.submitCharacter(this.state.character).then(({ character }) => {
         this.setState({ saved: true });
         this.props.addNotification({
-          title: "Saved!",
-          message: "Your character has saved successfully",
-          type: "success"
+          title: 'Saved!',
+          message: 'Your character has saved successfully',
+          type: 'success',
         });
         if (!this.state.character._id) {
           this.props.history.push(`/characters/${character._id}`);
@@ -268,19 +244,14 @@ class CharacterSheet extends React.Component {
       <div className="row">
         <label>
           <h3>Name </h3>
-          <input
-            required
-            type="text"
-            value={this.state.character.name}
-            onChange={this.handleChange("name")}
-          />
+          <input required type="text" value={this.state.character.name} onChange={this.handleChange('name')} />
         </label>
         <label>
           <h3>Level </h3>
           <input
             type="number"
             value={this.state.character.level}
-            onChange={this.handleChange("level")}
+            onChange={this.handleChange('level')}
             min="1"
             max="20"
           />
@@ -312,7 +283,7 @@ class CharacterSheet extends React.Component {
         <h3>Alignment</h3>
         <AlignmentMenu
           alignments={_ALIGNMENTS}
-          handleChange={this.handleChange("alignment")}
+          handleChange={this.handleChange('alignment')}
           selectedAlignment={selectedAlignment}
         />
       </label>
@@ -323,12 +294,7 @@ class CharacterSheet extends React.Component {
     return (
       <label>
         <h3>{field}</h3>
-        <DropdownMenu
-          options={options}
-          selectedOption={selectedOption}
-          handleChange={handleChange}
-          field={field}
-        />
+        <DropdownMenu options={options} selectedOption={selectedOption} handleChange={handleChange} field={field} />
       </label>
     );
   }
@@ -342,7 +308,7 @@ class CharacterSheet extends React.Component {
           min="0"
           max="999"
           value={this.state.character.currentHealth}
-          onChange={this.handleChange("currentHealth")}
+          onChange={this.handleChange('currentHealth')}
         />
         /
         <input
@@ -350,11 +316,11 @@ class CharacterSheet extends React.Component {
           min="0"
           max="999"
           value={this.state.character.maxHealth}
-          onChange={this.handleChange("maxHealth")}
+          onChange={this.handleChange('maxHealth')}
         />
       </label>,
-	  this.renderHitDice(),
-	  this.renderDeathSaves()
+      this.renderHitDice(),
+      this.renderDeathSaves(),
     ];
   }
 
@@ -363,10 +329,8 @@ class CharacterSheet extends React.Component {
     return [
       <label key={2} className="tooltip-container">
         <h3>Hit Die</h3>
-        {charClass ? `d${charClass.hitDie}` : ""}
-        <Tooltip
-          listItems={[{ key: "Source", val: charClass ? charClass.name : "" }]}
-        />
+        {charClass ? `d${charClass.hitDie}` : ''}
+        <Tooltip listItems={[{ key: 'Source', val: charClass ? charClass.name : '' }]} />
       </label>,
       <label key={3}>
         <h3>Hit Dice</h3>
@@ -375,10 +339,10 @@ class CharacterSheet extends React.Component {
           type="number"
           value={this.state.character.hitDice}
           min="0"
-          onChange={this.handleChange("hitDice")}
+          onChange={this.handleChange('hitDice')}
         />
-        <Tooltip listItems={[{ key: "Num", val: "One per level" }]} />
-      </label>
+        <Tooltip listItems={[{ key: 'Num', val: 'One per level' }]} />
+      </label>,
     ];
   }
 
@@ -387,7 +351,7 @@ class CharacterSheet extends React.Component {
       <div key={4} className="death-saves">
         <h3>Death Saves</h3>
         <label className="death-save-inputs">
-		👍
+          👍
           <label>
             0
             <input
@@ -395,7 +359,7 @@ class CharacterSheet extends React.Component {
               type="radio"
               value="0"
               checked={this.state.character.successfulDeathSaves == 0}
-              onChange={this.handleChange("successfulDeathSaves")}
+              onChange={this.handleChange('successfulDeathSaves')}
             />
           </label>
           <label>
@@ -405,7 +369,7 @@ class CharacterSheet extends React.Component {
               type="radio"
               value="1"
               checked={this.state.character.successfulDeathSaves == 1}
-              onChange={this.handleChange("successfulDeathSaves")}
+              onChange={this.handleChange('successfulDeathSaves')}
             />
           </label>
           <label>
@@ -415,7 +379,7 @@ class CharacterSheet extends React.Component {
               type="radio"
               value="2"
               checked={this.state.character.successfulDeathSaves == 2}
-              onChange={this.handleChange("successfulDeathSaves")}
+              onChange={this.handleChange('successfulDeathSaves')}
             />
           </label>
           <label>
@@ -425,20 +389,20 @@ class CharacterSheet extends React.Component {
               type="radio"
               value="3"
               checked={this.state.character.successfulDeathSaves == 3}
-              onChange={this.handleChange("successfulDeathSaves")}
+              onChange={this.handleChange('successfulDeathSaves')}
             />
           </label>
         </label>
         <label className="death-save-inputs">
-		👎
-		<label>
+          👎
+          <label>
             0
             <input
               name="failedDeathSaves"
               type="radio"
               value="0"
               checked={this.state.character.failedDeathSaves == 0}
-              onChange={this.handleChange("failedDeathSaves")}
+              onChange={this.handleChange('failedDeathSaves')}
             />
           </label>
           <label>
@@ -448,7 +412,7 @@ class CharacterSheet extends React.Component {
               type="radio"
               value="1"
               checked={this.state.character.failedDeathSaves == 1}
-              onChange={this.handleChange("failedDeathSaves")}
+              onChange={this.handleChange('failedDeathSaves')}
             />
           </label>
           <label>
@@ -458,7 +422,7 @@ class CharacterSheet extends React.Component {
               type="radio"
               value="2"
               checked={this.state.character.failedDeathSaves == 2}
-              onChange={this.handleChange("failedDeathSaves")}
+              onChange={this.handleChange('failedDeathSaves')}
             />
           </label>
           <label>
@@ -468,7 +432,7 @@ class CharacterSheet extends React.Component {
               type="radio"
               value="3"
               checked={this.state.character.failedDeathSaves == 3}
-              onChange={this.handleChange("failedDeathSaves")}
+              onChange={this.handleChange('failedDeathSaves')}
             />
           </label>
         </label>
@@ -477,16 +441,10 @@ class CharacterSheet extends React.Component {
   }
 
   renderCalculatedFields() {
-    return [
-      "Proficiency Bonus",
-      "Initiative",
-      "Passive Wisdom",
-      "Armor Class",
-      "Speed"
-    ].map((field, i) => (
+    return ['Proficiency Bonus', 'Initiative', 'Passive Wisdom', 'Armor Class', 'Speed'].map((field, i) => (
       <label key={i}>
         <h3>{field} </h3>
-        {this.state.character[camelCase(field)] >= 0 ? " +" : "   "}
+        {this.state.character[camelCase(field)] >= 0 ? ' +' : '   '}
         {this.state.character[camelCase(field)]}
       </label>
     ));
@@ -495,10 +453,7 @@ class CharacterSheet extends React.Component {
   renderAbilityScores() {
     const inputs = _ABILITIES.map((ability, i) => {
       const camel = camelCase(ability);
-      const modString =
-        this.state.character[`${camelCase(ability)}Modifier`] >= 0
-          ? "( +"
-          : "(  ";
+      const modString = this.state.character[`${camelCase(ability)}Modifier`] >= 0 ? '( +' : '(  ';
       return (
         <li key={i} className="justified">
           <label>
@@ -520,8 +475,8 @@ class CharacterSheet extends React.Component {
 
   renderSavingThrows() {
     const inputs = _ABILITIES.map((ability, i) => {
-      const camelThrow = camelCase(ability) + "SavingThrow";
-      const camelProf = camelCase(ability) + "SaveProficiency";
+      const camelThrow = camelCase(ability) + 'SavingThrow';
+      const camelProf = camelCase(ability) + 'SaveProficiency';
       return (
         <li key={i}>
           <label className="tooltip-container">
@@ -532,13 +487,9 @@ class CharacterSheet extends React.Component {
               value={camelProf}
             />
             {ability}
-            {this.state.character[camelThrow] >= 0 ? " +" : "   "}
+            {this.state.character[camelThrow] >= 0 ? ' +' : '   '}
             {this.state.character[camelThrow]}
-            <Tooltip
-              listItems={[
-                { key: "Source", val: this.state.character[camelProf].source }
-              ]}
-            />
+            <Tooltip listItems={[{ key: 'Source', val: this.state.character[camelProf].source }]} />
           </label>
         </li>
       );
@@ -549,7 +500,7 @@ class CharacterSheet extends React.Component {
   renderSkills() {
     const inputs = Object.keys(_SKILLS).map((skill, i) => {
       const camel = camelCase(skill);
-      const camelProf = camelCase(skill) + "Proficiency";
+      const camelProf = camelCase(skill) + 'Proficiency';
       return (
         <li key={i}>
           <label className="tooltip-container">
@@ -560,14 +511,14 @@ class CharacterSheet extends React.Component {
               value={camelProf}
             />
             {skill} ({_SKILLS[skill].slice(0, 3)})
-            {this.state.character[camel] >= 0 ? " +" : "   "}
+            {this.state.character[camel] >= 0 ? ' +' : '   '}
             {this.state.character[camel]}
             <Tooltip
               listItems={[
                 {
-                  key: "Source",
-                  val: this.state.character[camelProf].source
-                }
+                  key: 'Source',
+                  val: this.state.character[camelProf].source,
+                },
               ]}
             />
           </label>
@@ -583,42 +534,42 @@ class CharacterSheet extends React.Component {
         <h3>Money</h3>
         <div className="row">
           <label>
-            Copper:{" "}
+            Copper:{' '}
             <input
               type="number"
               min="0"
               value={this.state.character.copper}
-              onChange={this.handleChange("copper")}
+              onChange={this.handleChange('copper')}
               className="small-input"
             />
           </label>
           <label>
-            Silver:{" "}
+            Silver:{' '}
             <input
               type="number"
               min="0"
               value={this.state.character.silver}
-              onChange={this.handleChange("silver")}
+              onChange={this.handleChange('silver')}
               className="small-input"
             />
           </label>
           <label>
-            Gold:{" "}
+            Gold:{' '}
             <input
               type="number"
               min="0"
               value={this.state.character.gold}
-              onChange={this.handleChange("gold")}
+              onChange={this.handleChange('gold')}
               className="small-input"
             />
           </label>
           <label>
-            Platinum:{" "}
+            Platinum:{' '}
             <input
               type="number"
               min="0"
               value={this.state.character.platinum}
-              onChange={this.handleChange("platinum")}
+              onChange={this.handleChange('platinum')}
               className="small-input"
             />
           </label>
@@ -631,10 +582,7 @@ class CharacterSheet extends React.Component {
     return (
       <div className="backstory">
         <h3>Backstory</h3>
-        <textarea
-          onChange={this.handleChange("backstory")}
-          value={this.state.character.backstory}
-        />
+        <textarea onChange={this.handleChange('backstory')} value={this.state.character.backstory} />
       </div>
     );
   }
@@ -673,11 +621,7 @@ class CharacterSheet extends React.Component {
   renderEquipment() {
     return this.state.character.equipment.map((equipment, i) => {
       return equipment.editing ? (
-        <EquipmentForm
-          key={i}
-          item={equipment}
-          handleEquipmentSubmit={this.handleEquipmentSubmit.bind(this)}
-        />
+        <EquipmentForm key={i} item={equipment} handleEquipmentSubmit={this.handleEquipmentSubmit.bind(this)} />
       ) : (
         <Equipment
           key={i}
@@ -690,14 +634,18 @@ class CharacterSheet extends React.Component {
     });
   }
 
+  renderSpells() {
+    return <textarea onChange={this.handleChange('spells')} value={this.state.character.spells} />;
+  }
+
+  renderMisc() {
+    return <textarea onChange={this.handleChange('miscellaneous')} value={this.state.character.miscellaneous} />;
+  }
+
   renderWeapons() {
     return this.state.character.weapons.map((weapon, i) => {
       return weapon.editing ? (
-        <WeaponForm
-          key={i}
-          item={weapon}
-          handleWeaponSubmit={this.handleWeaponSubmit.bind(this)}
-        />
+        <WeaponForm key={i} item={weapon} handleWeaponSubmit={this.handleWeaponSubmit.bind(this)} />
       ) : (
         <Weapon
           key={i}
@@ -712,16 +660,10 @@ class CharacterSheet extends React.Component {
   }
 
   renderBonuses() {
-    const sortedBonuses = merge([], this.state.character.bonuses).sort(
-      sortByParams(1, "level", "source")
-    );
+    const sortedBonuses = merge([], this.state.character.bonuses).sort(sortByParams(1, 'level', 'source'));
     return sortedBonuses.map((bonus, i) => {
       return bonus.editing ? (
-        <BonusForm
-          key={i}
-          bonus={bonus}
-          handleBonusSubmit={this.handleBonusSubmit.bind(this)}
-        />
+        <BonusForm key={i} bonus={bonus} handleBonusSubmit={this.handleBonusSubmit.bind(this)} />
       ) : (
         <Bonus
           key={i}
@@ -739,7 +681,7 @@ class CharacterSheet extends React.Component {
       <button
         className="add-button"
         disabled={!this.state.character[category]}
-        onClick={e => {
+        onClick={(e) => {
           e.preventDefault();
           e.stopPropagation();
           this.addCharacterBonuses(category);
@@ -751,11 +693,11 @@ class CharacterSheet extends React.Component {
   }
 
   renderToggleButton(section) {
-    const symbol = section.includes("Form") ? ["⬏", "⬎"] : ["▼", "▲"];
+    const symbol = section.includes('Form') ? ['⬏', '⬎'] : ['▼', '▲'];
     return (
       <button
         className="hide-button"
-        onClick={e => {
+        onClick={(e) => {
           e.preventDefault();
           e.stopPropagation();
           this.props.toggleSection(section);
@@ -769,17 +711,9 @@ class CharacterSheet extends React.Component {
   render() {
     return (
       <main className="character-sheet">
-        <form
-          className="character-form"
-          onSubmit={this.handleSubmit.bind(this)}
-        >
+        <form className="character-form" onSubmit={this.handleSubmit.bind(this)}>
           <div className="mar-20">
-            <input
-              disabled={this.state.saved}
-              className="add-button"
-              type="submit"
-              value="💾 Save Character"
-            />
+            <input disabled={this.state.saved} className="add-button" type="submit" value="💾 Save Character" />
           </div>
           <div className="basics-and-scores row">
             <div className="col-50">
@@ -788,48 +722,40 @@ class CharacterSheet extends React.Component {
                 <div className="race">
                   {this.renderDropdownMenu(
                     this.props.races,
-                    this.state.character.race ? this.state.character.race : "",
-                    this.handleChange("race"),
-                    "Race"
+                    this.state.character.race ? this.state.character.race : '',
+                    this.handleChange('race'),
+                    'Race',
                   )}
-                  {this.renderAddBonusButton("race", "Race")}
+                  {this.renderAddBonusButton('race', 'Race')}
                 </div>
                 <div className="class">
                   {this.renderDropdownMenu(
                     this.props.charClasses,
-                    this.state.character.charClass
-                      ? this.state.character.charClass
-                      : "",
-                    this.handleChange("charClass"),
-                    "Class"
+                    this.state.character.charClass ? this.state.character.charClass : '',
+                    this.handleChange('charClass'),
+                    'Class',
                   )}
-                  {this.renderAddBonusButton("charClass", "Class")}
+                  {this.renderAddBonusButton('charClass', 'Class')}
                 </div>
                 <div className="background">
                   {this.renderDropdownMenu(
                     this.props.backgrounds,
-                    this.state.character.background
-                      ? this.state.character.background
-                      : "",
-                    this.handleChange("background"),
-                    "Background"
+                    this.state.character.background ? this.state.character.background : '',
+                    this.handleChange('background'),
+                    'Background',
                   )}
-                  {this.renderAddBonusButton("background", "Background")}
+                  {this.renderAddBonusButton('background', 'Background')}
                 </div>
-                <div className="alignment">
-                  {this.renderAlignments(this.state.character.alignment)}
-                </div>
+                <div className="alignment">{this.renderAlignments(this.state.character.alignment)}</div>
               </div>
               <div className="row blocks">
                 {this.renderHealth()}
                 <div className="armor">
                   {this.renderDropdownMenu(
                     this.props.armors,
-                    this.state.character.armor
-                      ? this.state.character.armor
-                      : "",
-                    this.handleChange("armor"),
-                    "Armor"
+                    this.state.character.armor ? this.state.character.armor : '',
+                    this.handleChange('armor'),
+                    'Armor',
                   )}
                 </div>
                 <div>
@@ -838,27 +764,21 @@ class CharacterSheet extends React.Component {
                     <input
                       type="checkbox"
                       value={this.state.character.shielded}
-                      onChange={this.handleChange("shielded")}
+                      onChange={this.handleChange('shielded')}
                     />
                   </label>
                 </div>
               </div>
               {this.renderMoney()}
               <div>
-                <h3>Appearance{this.renderToggleButton("appearance")}</h3>
-                <div className="row">
-                  {this.props.uiState.appearance
-                    ? this.renderAppearance()
-                    : null}
-                </div>
+                <h3>Appearance{this.renderToggleButton('appearance')}</h3>
+                <div className="row">{this.props.uiState.appearance ? this.renderAppearance() : null}</div>
               </div>
               {this.renderBackstory()}
             </div>
             <div className="col-50">
               <div className="col">
-                <div className="row blocks">
-                  {this.renderCalculatedFields()}
-                </div>
+                <div className="row blocks">{this.renderCalculatedFields()}</div>
                 <div className="scores row blocks">
                   <div className="col-30">
                     <h3>Ability Scores</h3>
@@ -882,41 +802,33 @@ class CharacterSheet extends React.Component {
             <h3>Weapons</h3>
             <div className="col">{this.renderWeapons()}</div>
             <div className="col">
-              <h4>Add Weapon {this.renderToggleButton("weaponForm")}</h4>
+              <h4>Add Weapon {this.renderToggleButton('weaponForm')}</h4>
               {this.props.uiState.weaponForm ? (
                 <WeaponForm
                   handleWeaponSubmit={this.handleWeaponSubmit.bind(this)}
                   item={{
-                    name: "",
-                    description: "",
+                    name: '',
+                    description: '',
                     bonusAmount: 0,
-                    modifier: "strength",
+                    modifier: 'strength',
                     damageRoll: 8,
                     proficiency: false,
-                    damageDice: 1
+                    damageDice: 1,
                   }}
                 />
               ) : null}
             </div>
           </div>
           <div className="proficiency-section col-60">
-            <h3>Proficiencies {this.renderToggleButton("proficiencies")}</h3>
-            <div className="row blocks">
-              {this.props.uiState.proficiencies
-                ? this.renderProficiencies()
-                : null}
-            </div>
+            <h3>Proficiencies {this.renderToggleButton('proficiencies')}</h3>
+            <div className="row blocks">{this.props.uiState.proficiencies ? this.renderProficiencies() : null}</div>
             {this.props.uiState.proficiencies ? (
               <div className="col">
-                <h4>
-                  Add Proficiency {this.renderToggleButton("proficiencyForm")}
-                </h4>
+                <h4>Add Proficiency {this.renderToggleButton('proficiencyForm')}</h4>
                 {this.props.uiState.proficiencyForm ? (
                   <ProficiencyForm
-                    handleProficiencySubmit={this.handleProficiencySubmit.bind(
-                      this
-                    )}
-                    item={{ name: "", type: "", level: 1 }}
+                    handleProficiencySubmit={this.handleProficiencySubmit.bind(this)}
+                    item={{ name: '', type: '', level: 1 }}
                   />
                 ) : null}
               </div>
@@ -924,47 +836,51 @@ class CharacterSheet extends React.Component {
           </div>
         </div>
         <div className="bonus-section">
-          <h3>
-            Traits, Bonuses, Feats, etc. {this.renderToggleButton("bonuses")}
-          </h3>
-          <div className="col blocks">
-            {this.props.uiState.bonuses ? this.renderBonuses() : null}
-          </div>
+          <h3>Traits, Bonuses, Feats, etc. {this.renderToggleButton('bonuses')}</h3>
+          <div className="col blocks">{this.props.uiState.bonuses ? this.renderBonuses() : null}</div>
           {this.props.uiState.bonuses ? (
             <div className="col">
-              <h4>Add Bonus {this.renderToggleButton("bonusForm")}</h4>
+              <h4>Add Bonus {this.renderToggleButton('bonusForm')}</h4>
               {this.props.uiState.bonusForm ? (
                 <BonusForm
                   handleBonusSubmit={this.handleBonusSubmit.bind(this)}
                   bonus={{
-                    name: "",
-                    description: "",
-                    source: "",
+                    name: '',
+                    description: '',
+                    source: '',
                     level: 1,
-                    field: "",
-                    bonusAmount: 0
+                    field: '',
+                    bonusAmount: 0,
                   }}
                 />
               ) : null}
             </div>
           ) : null}
         </div>
-        <div className="equipment-section">
-          <h3>Equipment {this.renderToggleButton("equipment")}</h3>
-          <div className="col">
-            {this.props.uiState.equipment ? this.renderEquipment() : null}
+        <div className="equip-spells-misc row block">
+          <div className="equipment-section col-30">
+            <h3>Equipment {this.renderToggleButton('equipment')}</h3>
+            <div className="col">{this.props.uiState.equipment ? this.renderEquipment() : null}</div>
+            {this.props.uiState.equipment ? (
+              <div className="col">
+                <h4>Add Equipment {this.renderToggleButton('equipmentForm')}</h4>
+                {this.props.uiState.equipmentForm ? (
+                  <EquipmentForm
+                    handleEquipmentSubmit={this.handleEquipmentSubmit.bind(this)}
+                    item={{ name: '', description: '', weight: 0, source: '' }}
+                  />
+                ) : null}
+              </div>
+            ) : null}
           </div>
-          {this.props.uiState.equipment ? (
-            <div className="col">
-              <h4>Add Equipment {this.renderToggleButton("equipmentForm")}</h4>
-              {this.props.uiState.equipmentForm ? (
-                <EquipmentForm
-                  handleEquipmentSubmit={this.handleEquipmentSubmit.bind(this)}
-                  item={{ name: "", description: "", weight: 0, source: "" }}
-                />
-              ) : null}
-            </div>
-          ) : null}
+          <div className="spell-section col-30">
+            <h3>Spells</h3>
+            <div className="col">{this.renderSpells()}</div>
+          </div>
+          <div className="misc-section col-30">
+            <h3>Miscellaneous</h3>
+            <div className="col">{this.renderMisc()}</div>
+          </div>
         </div>
       </main>
     );
@@ -974,12 +890,8 @@ class CharacterSheet extends React.Component {
 export default CharacterSheet;
 
 // TODO:
-// inventory
-// weapons
 // character image
 // refresh shouldn't redirect - because fetching user happens after component mount. try moving this to app load
 // add campaign (character can belong to campaign)
 // list more than name in character list
 // add uniqueness validation
-// add hit dice (number of dice, not die type)
-// sort bonuses by level

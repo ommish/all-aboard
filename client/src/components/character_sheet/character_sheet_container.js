@@ -72,6 +72,8 @@ const mapStateToProps = (state, ownProps) => {
     weapons: [],
     successfulDeathSaves: 0,
     failedDeathSaves: 0,
+    spells: '',
+    miscellaneous: '',
   };
   const editable = character ? character._user ===  state.session.currentUser.id : false;
   return {
