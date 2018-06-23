@@ -20,7 +20,7 @@ class EquipmentForm extends React.Component {
 
 	handleSubmit(e) {
 		e.preventDefault();
-		this.props.handleEquipmentSubmit(this.state);
+		this.props.handleSubmitItem(this.state, 'equipment');
 		if (!this.props.item._id)
 			this.setState({ name: '', weight: 0, source: '', description: '' });
 	}

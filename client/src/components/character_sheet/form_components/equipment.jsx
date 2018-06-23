@@ -1,14 +1,14 @@
 import React from 'react';
 import Tooltip from '../../helpers/tooltip';
 
-const Equipment = ({ type, item, handleRemoveItem, handleEditEquipment }) => {
+const Equipment = ({ item, handleRemoveItem, handleEditItem }) => {
 	return (
 		<div className="tooltip-container row">
 			<div>
 				{item.name}
 				<button
 					className="add-button tiny-button"
-					onClick={(e) => handleEditEquipment(item, type)}>
+					onClick={(e) => handleEditItem(item, 'equipment')}>
 					✎
 				</button>
 			</div>
@@ -21,7 +21,7 @@ const Equipment = ({ type, item, handleRemoveItem, handleEditEquipment }) => {
 			/>
 			<button
 				className="remove-button tiny-button"
-				onClick={handleRemoveItem(item._id, type)}>
+				onClick={handleRemoveItem(item._id, 'equipment')}>
 				✘
 			</button>
 		</div>

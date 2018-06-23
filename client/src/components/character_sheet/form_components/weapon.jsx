@@ -1,7 +1,7 @@
 import React from 'react';
 import Tooltip from '../../helpers/tooltip';
 
-const Weapon = ({ type, character, item, handleEditWeapon, handleRemoveItem }) => {
+const Weapon = ({ character, item, handleEditItem, handleRemoveItem }) => {
 	const attackBonus =
 		item.bonusAmount +
 		(character[`${item.modifier}Modifier`] || 0) +
@@ -23,12 +23,12 @@ const Weapon = ({ type, character, item, handleEditWeapon, handleRemoveItem }) =
 					<h4>{item.name}</h4>
 					<div className="row no-margin">
 						<button
-							onClick={() => handleEditWeapon(item)}
+							onClick={() => handleEditItem(item, 'weapons')}
 							className="add-button tiny-button">
 							✎
 						</button>
 						<button
-							onClick={handleRemoveItem(item._id, type)}
+							onClick={handleRemoveItem(item._id, 'weapons')}
 							className="remove-button tiny-button">
 							✘
 						</button>

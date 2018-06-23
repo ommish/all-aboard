@@ -1,5 +1,5 @@
 import React from 'react';
-import { camelCase, merge } from 'lodash';
+import { camelCase } from 'lodash';
 import { _SKILLS, _SAVES } from '../character_variables';
 
 class BonusForm extends React.Component {
@@ -45,7 +45,7 @@ class BonusForm extends React.Component {
 				onSubmit={(e) => {
 					e.preventDefault();
 					e.stopPropagation();
-					this.props.handleBonusSubmit(merge({}, this.state));
+					this.props.handleSubmitItem(this.state, 'bonuses');
 				}}>
 				<label>
 					Name

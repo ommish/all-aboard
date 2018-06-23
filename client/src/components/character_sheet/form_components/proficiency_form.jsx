@@ -22,8 +22,7 @@ class ProficiencyForm extends React.Component {
 
 	handleSubmit(e) {
 		e.preventDefault();
-		debugger;
-		this.props.handleProficiencySubmit(this.state);
+		this.props.handleSubmitItem(this.state, `${this.state.type}Proficiencies`);
 		if (!this.props.item._id) this.setState({ type: '', name: '', level: 1 });
 	}
 

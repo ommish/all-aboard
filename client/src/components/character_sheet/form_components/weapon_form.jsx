@@ -1,5 +1,5 @@
 import React from 'react';
-import { camelCase, merge } from 'lodash';
+import { camelCase } from 'lodash';
 import Tooltip from '../../helpers/tooltip';
 
 class WeaponForm extends React.Component {
@@ -60,7 +60,7 @@ class WeaponForm extends React.Component {
 				onSubmit={(e) => {
 					e.preventDefault();
 					e.stopPropagation();
-					this.props.handleWeaponSubmit(merge({}, this.state));
+					this.props.handleSubmitItem(this.state, 'weapons');
 				}}>
 				<Tooltip listItems={[{ key: 'Source', val: this.state.source }]} />
 				<label>

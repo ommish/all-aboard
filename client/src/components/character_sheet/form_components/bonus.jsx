@@ -1,7 +1,7 @@
 import React from 'react';
 import Tooltip from '../../helpers/tooltip';
 
-const Bonus = ({ bonus, handleEditBonus, handleRemoveItem }) => {
+const Bonus = ({ bonus, handleEditItem, handleRemoveItem }) => {
 	return (
 		<div className="col tooltip-container">
       <Tooltip
@@ -14,7 +14,7 @@ const Bonus = ({ bonus, handleEditBonus, handleRemoveItem }) => {
 				<h4>{bonus.name}</h4> (lvl. {bonus.level})
 				<div className="row no-margin">
 					<button
-						onClick={() => handleEditBonus(bonus)}
+						onClick={() => handleEditItem(bonus, 'bonuses')}
 						className="add-button tiny-button">
 						✎
 					</button>

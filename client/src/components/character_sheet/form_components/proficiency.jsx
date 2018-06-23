@@ -1,14 +1,14 @@
 import React from 'react';
 import Tooltip from '../../helpers/tooltip';
 
-const Proficiency = ({ type, item, handleRemoveItem, handleEditProficiency }) => {
+const Proficiency = ({ type, item, handleRemoveItem, handleEditItem }) => {
 	return (
 		<div className="tooltip-container row">
 			<div>
 				{item.name}
 				<button
 					className="add-button tiny-button"
-					onClick={(e) => handleEditProficiency(item, type)}>
+					onClick={(e) => handleEditItem(item, `${type}Proficiencies`)}>
 					✎
 				</button>
 			</div>

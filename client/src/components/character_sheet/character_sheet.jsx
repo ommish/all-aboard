@@ -31,6 +31,10 @@ class CharacterSheet extends React.Component {
       character: this.props.character,
       saved: true,
     };
+    this.handleSubmitItem = this.handleSubmitItem.bind(this);
+    this.handleEditItem = this.handleEditItem.bind(this);
+    this.handleRemoveItem = this.handleRemoveItem.bind(this);
+    this.handleSubmit = this.handleSubmit.bind(this);
   }
 
   componentDidMount() {
@@ -118,96 +122,26 @@ class CharacterSheet extends React.Component {
     };
   }
 
-  handleEditProficiency(editingProf, type) {
-    editingProf = merge({}, editingProf);
+  handleEditItem(editedItem, category) {
+    const itemCopy = merge({}, editedItem);
     const newState = merge({}, this.state);
     newState.saved = false;
-    const category = `${type}Proficiencies`;
-    const profIdx = newState.character[category].findIndex((prof) => prof._id === editingProf._id);
-    editingProf.editing = true;
-    newState.character[category][profIdx] = editingProf;
+    const itemIdx = newState.character[category].findIndex((item) => item._id === itemCopy._id);
+    itemCopy.editing = true;
+    newState.character[category][itemIdx] = itemCopy;
     this.setState(newState);
   }
 
-  handleEditBonus(editingBonus) {
-    editingBonus = merge({}, editingBonus);
+  handleSubmitItem(newItem, category) {
+    const itemCopy = merge({}, newItem);
     const newState = merge({}, this.state);
     newState.saved = false;
-    const bonusIdx = newState.character.bonuses.findIndex((bonus) => bonus._id === editingBonus._id);
-    editingBonus.editing = true;
-    newState.character.bonuses[bonusIdx] = editingBonus;
-    this.setState(newState);
-  }
-
-  handleEditEquipment(editingEquipment) {
-    editingEquipment = merge({}, editingEquipment);
-    const newState = merge({}, this.state);
-    newState.saved = false;
-    const equipIdx = newState.character.equipment.findIndex((equip) => equip._id === editingEquipment._id);
-    editingEquipment.editing = true;
-    newState.character.equipment[equipIdx] = editingEquipment;
-    this.setState(newState);
-  }
-
-  handleEditWeapon(editingWeapon) {
-    editingWeapon = merge({}, editingWeapon);
-    const newState = merge({}, this.state);
-    newState.saved = false;
-    const weaponIdx = newState.character.weapons.findIndex((weapon) => weapon._id === editingWeapon._id);
-    editingWeapon.editing = true;
-    newState.character.weapons[weaponIdx] = editingWeapon;
-    this.setState(newState);
-  }
-
-  handleProficiencySubmit(newProf) {
-    const newState = merge({}, this.state);
-    newState.saved = false;
-    const category = `${newProf.type}Proficiencies`;
-    if (newProf._id) {
-      const profIdx = newState.character[category].findIndex((prof) => prof._id === newProf._id);
-      newProf.editing = false;
-      newState.character[category][profIdx] = newProf;
+    if (itemCopy._id) {
+      const itemIdx = newState.character[category].findIndex((bonus) => bonus._id === itemCopy._id);
+      itemCopy.editing = false;
+      newState.character[category][itemIdx] = itemCopy;
     } else {
-      newState.character[category].push(newProf);
-    }
-    this.setState(newState, () => this.handleSubmit());
-  }
-
-  handleBonusSubmit(newBonus) {
-    const newState = merge({}, this.state);
-    newState.saved = false;
-    if (newBonus._id) {
-      const bonusIdx = newState.character.bonuses.findIndex((bonus) => bonus._id === newBonus._id);
-      newBonus.editing = false;
-      newState.character.bonuses[bonusIdx] = newBonus;
-    } else {
-      newState.character.bonuses.push(newBonus);
-    }
-    this.setState(newState, () => this.handleSubmit());
-  }
-
-  handleEquipmentSubmit(newEquip) {
-    const newState = merge({}, this.state);
-    newState.saved = false;
-    if (newEquip._id) {
-      const equipIdx = newState.character.equipment.findIndex((equip) => equip._id === newEquip._id);
-      newEquip.editing = false;
-      newState.character.equipment[equipIdx] = newEquip;
-    } else {
-      newState.character.equipment.push(newEquip);
-    }
-    this.setState(newState, () => this.handleSubmit());
-  }
-
-  handleWeaponSubmit(newWeapon) {
-    const newState = merge({}, this.state);
-    newState.saved = false;
-    if (newWeapon._id) {
-      const weaponIdx = newState.character.weapons.findIndex((weapon) => weapon._id === newWeapon._id);
-      newWeapon.editing = false;
-      newState.character.weapons[weaponIdx] = newWeapon;
-    } else {
-      newState.character.weapons.push(newWeapon);
+      newState.character[category].push(itemCopy);
     }
     this.setState(newState, () => this.handleSubmit());
   }
@@ -240,38 +174,29 @@ class CharacterSheet extends React.Component {
   }
 
   renderNameLevel() {
+    const { name, level } = this.state.character;
     return (
       <div className="row">
         <label>
           <h3>Name </h3>
-          <input required type="text" value={this.state.character.name} onChange={this.handleChange('name')} />
+          <input required type="text" value={name} onChange={this.handleChange('name')} />
         </label>
         <label>
           <h3>Level </h3>
-          <input
-            type="number"
-            value={this.state.character.level}
-            onChange={this.handleChange('level')}
-            min="1"
-            max="20"
-          />
+          <input type="number" value={level} onChange={this.handleChange('level')} min="1" max="20" />
         </label>
       </div>
     );
   }
 
   renderAppearance() {
+    const { character } = this.state;
     return _PHYSICAL_ATTRIBUTES.map((attr, i) => {
       const camel = camelCase(attr);
       return (
         <label key={i}>
           {attr}:
-          <input
-            className="small-input"
-            type="text"
-            value={this.state.character[camel]}
-            onChange={this.handleChange(camel)}
-          />
+          <input className="small-input" type="text" value={character[camel]} onChange={this.handleChange(camel)} />
         </label>
       );
     });
@@ -300,24 +225,15 @@ class CharacterSheet extends React.Component {
   }
 
   renderHealth() {
+    const {
+      character: { currentHealth, maxHealth },
+    } = this.state;
     return [
       <label key={1}>
         <h3>Health </h3>
-        <input
-          type="number"
-          min="0"
-          max="999"
-          value={this.state.character.currentHealth}
-          onChange={this.handleChange('currentHealth')}
-        />
+        <input type="number" min="0" max="999" value={currentHealth} onChange={this.handleChange('currentHealth')} />
         /
-        <input
-          type="number"
-          min="0"
-          max="999"
-          value={this.state.character.maxHealth}
-          onChange={this.handleChange('maxHealth')}
-        />
+        <input type="number" min="0" max="999" value={maxHealth} onChange={this.handleChange('maxHealth')} />
       </label>,
       this.renderHitDice(),
       this.renderDeathSaves(),
@@ -325,147 +241,88 @@ class CharacterSheet extends React.Component {
   }
 
   renderHitDice() {
-    const charClass = this.props.charClasses[this.state.character.charClass];
+    const { charClasses } = this.props;
+    const {
+      character: { charClass, hitDice },
+    } = this.state;
+    const charClassData = charClasses[charClass];
     return [
       <label key={2} className="tooltip-container">
         <h3>Hit Die</h3>
-        {charClass ? `d${charClass.hitDie}` : ''}
-        <Tooltip listItems={[{ key: 'Source', val: charClass ? charClass.name : '' }]} />
+        {charClassData ? `d${charClassData.hitDie}` : ''}
+        <Tooltip listItems={[{ key: 'Source', val: charClassData ? charClassData.name : '' }]} />
       </label>,
       <label key={3}>
         <h3>Hit Dice</h3>
-        <input
-          className="small-input"
-          type="number"
-          value={this.state.character.hitDice}
-          min="0"
-          onChange={this.handleChange('hitDice')}
-        />
+        <input className="small-input" type="number" value={hitDice} min="0" onChange={this.handleChange('hitDice')} />
         <Tooltip listItems={[{ key: 'Num', val: 'One per level' }]} />
       </label>,
     ];
   }
 
   renderDeathSaves() {
+    const {
+      character: { successfulDeathSaves, failedDeathSaves },
+    } = this.state;
     return (
       <div key={4} className="death-saves">
         <h3>Death Saves</h3>
         <label className="death-save-inputs">
           👍
-          <label>
-            0
-            <input
-              name="successfulDeathSaves"
-              type="radio"
-              value="0"
-              checked={this.state.character.successfulDeathSaves == 0}
-              onChange={this.handleChange('successfulDeathSaves')}
-            />
-          </label>
-          <label>
-            1
-            <input
-              name="successfulDeathSaves"
-              type="radio"
-              value="1"
-              checked={this.state.character.successfulDeathSaves == 1}
-              onChange={this.handleChange('successfulDeathSaves')}
-            />
-          </label>
-          <label>
-            2
-            <input
-              name="successfulDeathSaves"
-              type="radio"
-              value="2"
-              checked={this.state.character.successfulDeathSaves == 2}
-              onChange={this.handleChange('successfulDeathSaves')}
-            />
-          </label>
-          <label>
-            3
-            <input
-              name="successfulDeathSaves"
-              type="radio"
-              value="3"
-              checked={this.state.character.successfulDeathSaves == 3}
-              onChange={this.handleChange('successfulDeathSaves')}
-            />
-          </label>
+          {[0, 1, 2, 3].map((num) => (
+            <label key={`success${num}`}>
+              {num}
+              <input
+                name="successfulDeathSaves"
+                type="radio"
+                value={num}
+                checked={successfulDeathSaves == num}
+                onChange={this.handleChange('successfulDeathSaves')}
+              />
+            </label>
+          ))}
         </label>
         <label className="death-save-inputs">
           👎
-          <label>
-            0
-            <input
-              name="failedDeathSaves"
-              type="radio"
-              value="0"
-              checked={this.state.character.failedDeathSaves == 0}
-              onChange={this.handleChange('failedDeathSaves')}
-            />
-          </label>
-          <label>
-            1
-            <input
-              name="failedDeathSaves"
-              type="radio"
-              value="1"
-              checked={this.state.character.failedDeathSaves == 1}
-              onChange={this.handleChange('failedDeathSaves')}
-            />
-          </label>
-          <label>
-            2
-            <input
-              name="failedDeathSaves"
-              type="radio"
-              value="2"
-              checked={this.state.character.failedDeathSaves == 2}
-              onChange={this.handleChange('failedDeathSaves')}
-            />
-          </label>
-          <label>
-            3
-            <input
-              name="failedDeathSaves"
-              type="radio"
-              value="3"
-              checked={this.state.character.failedDeathSaves == 3}
-              onChange={this.handleChange('failedDeathSaves')}
-            />
-          </label>
+          {[0, 1, 2, 3].map((num) => (
+            <label key={`fail${num}`}>
+              {num}
+              <input
+                name="failedDeathSaves"
+                type="radio"
+                value={num}
+                checked={failedDeathSaves == num}
+                onChange={this.handleChange('failedDeathSaves')}
+              />
+            </label>
+          ))}
         </label>
       </div>
     );
   }
 
   renderCalculatedFields() {
-    return ['Proficiency Bonus', 'Initiative', 'Passive Wisdom', 'Armor Class', 'Speed'].map((field, i) => (
+    const { character } = this.state;
+    return ['Proficiency Bonus', 'Initiative', 'Passive Perception', 'Armor Class', 'Speed'].map((field, i) => (
       <label key={i}>
         <h3>{field} </h3>
-        {this.state.character[camelCase(field)] >= 0 ? ' +' : '   '}
-        {this.state.character[camelCase(field)]}
+        {character[camelCase(field)] >= 0 ? ' +' : '   '}
+        {character[camelCase(field)]}
       </label>
     ));
   }
 
   renderAbilityScores() {
+    const { character } = this.state;
     const inputs = _ABILITIES.map((ability, i) => {
       const camel = camelCase(ability);
-      const modString = this.state.character[`${camelCase(ability)}Modifier`] >= 0 ? '( +' : '(  ';
+      const modString = character[`${camelCase(ability)}Modifier`] >= 0 ? '( +' : '(  ';
       return (
         <li key={i} className="justified">
           <label>
             {ability}: {modString}
-            {this.state.character[`${camelCase(ability)}Modifier`]})
-            <input
-              type="number"
-              min="0"
-              max="30"
-              value={this.state.character[camel]}
-              onChange={this.handleChange(camel)}
-            />
+            {character[`${camelCase(ability)}Modifier`]})
+            <input type="number" min="0" max="30" value={character[camel]} onChange={this.handleChange(camel)} />
           </label>
         </li>
       );
@@ -474,6 +331,7 @@ class CharacterSheet extends React.Component {
   }
 
   renderSavingThrows() {
+    const { character } = this.state;
     const inputs = _ABILITIES.map((ability, i) => {
       const camelThrow = camelCase(ability) + 'SavingThrow';
       const camelProf = camelCase(ability) + 'SaveProficiency';
@@ -483,13 +341,13 @@ class CharacterSheet extends React.Component {
             <input
               type="checkbox"
               onChange={this.handleChange(camelProf)}
-              checked={this.state.character[camelProf].is}
+              checked={character[camelProf].is}
               value={camelProf}
             />
             {ability}
-            {this.state.character[camelThrow] >= 0 ? ' +' : '   '}
-            {this.state.character[camelThrow]}
-            <Tooltip listItems={[{ key: 'Source', val: this.state.character[camelProf].source }]} />
+            {character[camelThrow] >= 0 ? ' +' : '   '}
+            {character[camelThrow]}
+            <Tooltip listItems={[{ key: 'Source', val: character[camelProf].source }]} />
           </label>
         </li>
       );
@@ -498,6 +356,7 @@ class CharacterSheet extends React.Component {
   }
 
   renderSkills() {
+    const { character } = this.state;
     const inputs = Object.keys(_SKILLS).map((skill, i) => {
       const camel = camelCase(skill);
       const camelProf = camelCase(skill) + 'Proficiency';
@@ -507,17 +366,17 @@ class CharacterSheet extends React.Component {
             <input
               type="checkbox"
               onChange={this.handleChange(camelProf)}
-              checked={this.state.character[camelProf].is}
+              checked={character[camelProf].is}
               value={camelProf}
             />
             {skill} ({_SKILLS[skill].slice(0, 3)})
-            {this.state.character[camel] >= 0 ? ' +' : '   '}
-            {this.state.character[camel]}
+            {character[camel] >= 0 ? ' +' : '   '}
+            {character[camel]}
             <Tooltip
               listItems={[
                 {
                   key: 'Source',
-                  val: this.state.character[camelProf].source,
+                  val: character[camelProf].source,
                 },
               ]}
             />
@@ -529,60 +388,36 @@ class CharacterSheet extends React.Component {
   }
 
   renderMoney() {
+    const { character } = this.state;
     return (
       <div>
         <h3>Money</h3>
         <div className="row">
-          <label>
-            Copper:{' '}
-            <input
-              type="number"
-              min="0"
-              value={this.state.character.copper}
-              onChange={this.handleChange('copper')}
-              className="small-input"
-            />
-          </label>
-          <label>
-            Silver:{' '}
-            <input
-              type="number"
-              min="0"
-              value={this.state.character.silver}
-              onChange={this.handleChange('silver')}
-              className="small-input"
-            />
-          </label>
-          <label>
-            Gold:{' '}
-            <input
-              type="number"
-              min="0"
-              value={this.state.character.gold}
-              onChange={this.handleChange('gold')}
-              className="small-input"
-            />
-          </label>
-          <label>
-            Platinum:{' '}
-            <input
-              type="number"
-              min="0"
-              value={this.state.character.platinum}
-              onChange={this.handleChange('platinum')}
-              className="small-input"
-            />
-          </label>
+          {['copper', 'silver', 'gold', 'platinum'].map((currency, i) => (
+            <label key={i}>
+              {`${currency[0].toUpperCase()}${currency.slice(1)}: `}
+              <input
+                type="number"
+                min="0"
+                value={character[currency]}
+                onChange={this.handleChange(currency)}
+                className="small-input"
+              />
+            </label>
+          ))}
         </div>
       </div>
     );
   }
 
   renderBackstory() {
+    const {
+      character: { backstory },
+    } = this.state;
     return (
       <div className="backstory">
         <h3>Backstory</h3>
-        <textarea onChange={this.handleChange('backstory')} value={this.state.character.backstory} />
+        <textarea onChange={this.handleChange('backstory')} value={backstory} />
       </div>
     );
   }
@@ -593,19 +428,14 @@ class CharacterSheet extends React.Component {
       const proficiencies = this.state.character[`${camel}Proficiencies`];
       const proficienciesOfType = proficiencies.map((proficiency, j) => {
         return proficiency.editing ? (
-          <ProficiencyForm
-            key={j}
-            type={camel}
-            item={proficiency}
-            handleProficiencySubmit={this.handleProficiencySubmit.bind(this)}
-          />
+          <ProficiencyForm key={j} type={camel} item={proficiency} handleSubmitItem={this.handleSubmitItem} />
         ) : (
           <Proficiency
             key={j}
             type={camel}
             item={proficiency}
-            handleRemoveItem={this.handleRemoveItem.bind(this)}
-            handleEditProficiency={this.handleEditProficiency.bind(this)}
+            handleRemoveItem={this.handleRemoveItem}
+            handleEditItem={this.handleEditItem}
           />
         );
       });
@@ -621,66 +451,75 @@ class CharacterSheet extends React.Component {
   renderEquipment() {
     return this.state.character.equipment.map((equipment, i) => {
       return equipment.editing ? (
-        <EquipmentForm key={i} item={equipment} handleEquipmentSubmit={this.handleEquipmentSubmit.bind(this)} />
+        <EquipmentForm key={i} item={equipment} handleSubmitItem={this.handleSubmitItem} />
       ) : (
         <Equipment
           key={i}
           item={equipment}
-          type="equipment"
-          handleRemoveItem={this.handleRemoveItem.bind(this)}
-          handleEditEquipment={this.handleEditEquipment.bind(this)}
+          handleRemoveItem={this.handleRemoveItem}
+          handleEditItem={this.handleEditItem}
         />
       );
     });
   }
 
   renderSpells() {
-    return <textarea onChange={this.handleChange('spells')} value={this.state.character.spells} />;
+    const {
+      character: { spells },
+    } = this.state;
+    return <textarea onChange={this.handleChange('spells')} value={spells} />;
   }
 
   renderMisc() {
-    return <textarea onChange={this.handleChange('miscellaneous')} value={this.state.character.miscellaneous} />;
+    const {
+      character: { miscellaneous },
+    } = this.state;
+    return <textarea onChange={this.handleChange('miscellaneous')} value={miscellaneous} />;
   }
 
   renderWeapons() {
-    return this.state.character.weapons.map((weapon, i) => {
+    const { character } = this.state;
+    return character.weapons.map((weapon, i) => {
       return weapon.editing ? (
-        <WeaponForm key={i} item={weapon} handleWeaponSubmit={this.handleWeaponSubmit.bind(this)} />
+        <WeaponForm key={i} item={weapon} handleSubmitItem={this.handleSubmitItem} />
       ) : (
         <Weapon
           key={i}
           item={weapon}
-          type="weapons"
-          character={this.state.character}
-          handleRemoveItem={this.handleRemoveItem.bind(this)}
-          handleEditWeapon={this.handleEditWeapon.bind(this)}
+          character={character}
+          handleRemoveItem={this.handleRemoveItem}
+          handleEditItem={this.handleEditItem}
         />
       );
     });
   }
 
   renderBonuses() {
-    const sortedBonuses = merge([], this.state.character.bonuses).sort(sortByParams(1, 'level', 'source'));
+    const {
+      character: { bonuses },
+    } = this.state;
+    const sortedBonuses = merge([], bonuses).sort(sortByParams(1, 'level', 'source'));
     return sortedBonuses.map((bonus, i) => {
       return bonus.editing ? (
-        <BonusForm key={i} bonus={bonus} handleBonusSubmit={this.handleBonusSubmit.bind(this)} />
+        <BonusForm key={i} bonus={bonus} handleSubmitItem={this.handleSubmitItem} />
       ) : (
         <Bonus
           key={i}
           bonus={bonus}
           type="bonuses"
-          handleRemoveItem={this.handleRemoveItem.bind(this)}
-          handleEditBonus={this.handleEditBonus.bind(this)}
+          handleRemoveItem={this.handleRemoveItem}
+          handleEditItem={this.handleEditItem}
         />
       );
     });
   }
 
-  renderAddBonusButton(category, label) {
+  renderAddBonusButton(category) {
+    const { character } = this.state;
     return (
       <button
         className="add-button"
-        disabled={!this.state.character[category]}
+        disabled={!character[category]}
         onClick={(e) => {
           e.preventDefault();
           e.stopPropagation();
@@ -693,6 +532,7 @@ class CharacterSheet extends React.Component {
   }
 
   renderToggleButton(section) {
+    const { toggleSection, uiState } = this.props;
     const symbol = section.includes('Form') ? ['⬏', '⬎'] : ['▼', '▲'];
     return (
       <button
@@ -700,79 +540,70 @@ class CharacterSheet extends React.Component {
         onClick={(e) => {
           e.preventDefault();
           e.stopPropagation();
-          this.props.toggleSection(section);
+          toggleSection(section);
         }}
       >
-        {this.props.uiState[section] ? symbol[0] : symbol[1]}
+        {uiState[section] ? symbol[0] : symbol[1]}
       </button>
     );
   }
 
   render() {
+    const { races, charClasses, backgrounds, armors, uiState } = this.props;
+    const {
+      saved,
+      character: { race, charClass, background, armor, alignment, shielded },
+    } = this.state;
     return (
       <main className="character-sheet">
-        <form className="character-form" onSubmit={this.handleSubmit.bind(this)}>
+        <form className="character-form" onSubmit={this.handleSubmit}>
           <div className="mar-20">
-            <input disabled={this.state.saved} className="add-button" type="submit" value="💾 Save Character" />
+            <input disabled={saved} className="add-button" type="submit" value="💾 Save Character" />
           </div>
           <div className="basics-and-scores row">
             <div className="col-50">
               {this.renderNameLevel()}
               <div className="row blocks">
                 <div className="race">
-                  {this.renderDropdownMenu(
-                    this.props.races,
-                    this.state.character.race ? this.state.character.race : '',
-                    this.handleChange('race'),
-                    'Race',
-                  )}
-                  {this.renderAddBonusButton('race', 'Race')}
+                  {this.renderDropdownMenu(races, race ? race : '', this.handleChange('race'), 'Race')}
+                  {this.renderAddBonusButton('race')}
                 </div>
                 <div className="class">
                   {this.renderDropdownMenu(
-                    this.props.charClasses,
-                    this.state.character.charClass ? this.state.character.charClass : '',
+                    charClasses,
+                    charClass ? charClass : '',
                     this.handleChange('charClass'),
                     'Class',
                   )}
-                  {this.renderAddBonusButton('charClass', 'Class')}
+                  {this.renderAddBonusButton('charClass')}
                 </div>
                 <div className="background">
                   {this.renderDropdownMenu(
-                    this.props.backgrounds,
-                    this.state.character.background ? this.state.character.background : '',
+                    backgrounds,
+                    background ? background : '',
                     this.handleChange('background'),
                     'Background',
                   )}
-                  {this.renderAddBonusButton('background', 'Background')}
+                  {this.renderAddBonusButton('background')}
                 </div>
-                <div className="alignment">{this.renderAlignments(this.state.character.alignment)}</div>
+                <div className="alignment">{this.renderAlignments(alignment)}</div>
               </div>
               <div className="row blocks">
                 {this.renderHealth()}
                 <div className="armor">
-                  {this.renderDropdownMenu(
-                    this.props.armors,
-                    this.state.character.armor ? this.state.character.armor : '',
-                    this.handleChange('armor'),
-                    'Armor',
-                  )}
+                  {this.renderDropdownMenu(armors, armor ? armor : '', this.handleChange('armor'), 'Armor')}
                 </div>
                 <div>
                   <label>
                     <h3>Shield</h3>
-                    <input
-                      type="checkbox"
-                      value={this.state.character.shielded}
-                      onChange={this.handleChange('shielded')}
-                    />
+                    <input type="checkbox" checked={shielded} onChange={this.handleChange('shielded')} />
                   </label>
                 </div>
               </div>
               {this.renderMoney()}
               <div>
                 <h3>Appearance{this.renderToggleButton('appearance')}</h3>
-                <div className="row">{this.props.uiState.appearance ? this.renderAppearance() : null}</div>
+                <div className="row">{uiState.appearance ? this.renderAppearance() : null}</div>
               </div>
               {this.renderBackstory()}
             </div>
@@ -803,9 +634,9 @@ class CharacterSheet extends React.Component {
             <div className="col">{this.renderWeapons()}</div>
             <div className="col">
               <h4>Add Weapon {this.renderToggleButton('weaponForm')}</h4>
-              {this.props.uiState.weaponForm ? (
+              {uiState.weaponForm ? (
                 <WeaponForm
-                  handleWeaponSubmit={this.handleWeaponSubmit.bind(this)}
+                  handleSubmitItem={this.handleSubmitItem}
                   item={{
                     name: '',
                     description: '',
@@ -821,15 +652,12 @@ class CharacterSheet extends React.Component {
           </div>
           <div className="proficiency-section col-60">
             <h3>Proficiencies {this.renderToggleButton('proficiencies')}</h3>
-            <div className="row blocks">{this.props.uiState.proficiencies ? this.renderProficiencies() : null}</div>
-            {this.props.uiState.proficiencies ? (
+            <div className="row blocks">{uiState.proficiencies ? this.renderProficiencies() : null}</div>
+            {uiState.proficiencies ? (
               <div className="col">
                 <h4>Add Proficiency {this.renderToggleButton('proficiencyForm')}</h4>
-                {this.props.uiState.proficiencyForm ? (
-                  <ProficiencyForm
-                    handleProficiencySubmit={this.handleProficiencySubmit.bind(this)}
-                    item={{ name: '', type: '', level: 1 }}
-                  />
+                {uiState.proficiencyForm ? (
+                  <ProficiencyForm handleSubmitItem={this.handleSubmitItem} item={{ name: '', type: '', level: 1 }} />
                 ) : null}
               </div>
             ) : null}
@@ -837,13 +665,13 @@ class CharacterSheet extends React.Component {
         </div>
         <div className="bonus-section">
           <h3>Traits, Bonuses, Feats, etc. {this.renderToggleButton('bonuses')}</h3>
-          <div className="col blocks">{this.props.uiState.bonuses ? this.renderBonuses() : null}</div>
-          {this.props.uiState.bonuses ? (
+          <div className="col blocks">{uiState.bonuses ? this.renderBonuses() : null}</div>
+          {uiState.bonuses ? (
             <div className="col">
               <h4>Add Bonus {this.renderToggleButton('bonusForm')}</h4>
-              {this.props.uiState.bonusForm ? (
+              {uiState.bonusForm ? (
                 <BonusForm
-                  handleBonusSubmit={this.handleBonusSubmit.bind(this)}
+                  handleSubmitItem={this.handleSubmitItem}
                   bonus={{
                     name: '',
                     description: '',
@@ -860,13 +688,13 @@ class CharacterSheet extends React.Component {
         <div className="equip-spells-misc row block">
           <div className="equipment-section col-30">
             <h3>Equipment {this.renderToggleButton('equipment')}</h3>
-            <div className="col">{this.props.uiState.equipment ? this.renderEquipment() : null}</div>
-            {this.props.uiState.equipment ? (
+            <div className="col">{uiState.equipment ? this.renderEquipment() : null}</div>
+            {uiState.equipment ? (
               <div className="col">
                 <h4>Add Equipment {this.renderToggleButton('equipmentForm')}</h4>
-                {this.props.uiState.equipmentForm ? (
+                {uiState.equipmentForm ? (
                   <EquipmentForm
-                    handleEquipmentSubmit={this.handleEquipmentSubmit.bind(this)}
+                    handleSubmitItem={this.handleSubmitItem}
                     item={{ name: '', description: '', weight: 0, source: '' }}
                   />
                 ) : null}
