@@ -1,3 +1,4 @@
+.env
 config/dev.js
 config/pro.js
 node_modules/

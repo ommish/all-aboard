@@ -1,13 +1,13 @@
 const path = require('path');
-const variables = require('./config/keys');
-
+require('dotenv').config();
 const express = require('express');
 const app = express();
 
 const bodyParser = require('body-parser');
 
 const mongoose = require('mongoose');
-mongoose.connect(`${variables.DATABASE}`);
+
+mongoose.connect(process.env.DATABASE);
 require('./models/user');
 require('./models/proficiency');
 require('./models/equipment');
@@ -29,7 +29,7 @@ const passport = require('passport');
 app.use(
 	cookieSession({
 		maxAge: 30 * 24 * 60 * 60 * 1000,
-		keys: [variables.COOKIE_KEY]
+		keys: [process.env.COOKIE_KEY]
 	})
 );
 app.use(passport.initialize());
