@@ -10,6 +10,7 @@ import Equipment from './form_components/equipment';
 import EquipmentForm from './form_components/equipment_form';
 import Weapon from './form_components/weapon';
 import WeaponForm from './form_components/weapon_form';
+import Spells from './form_components/spells';
 import Tooltip from '../helpers/tooltip';
 import './character_sheet.css';
 import {
@@ -33,6 +34,7 @@ class CharacterSheet extends React.Component {
     };
     this.handleSubmitItem = this.handleSubmitItem.bind(this);
     this.handleEditItem = this.handleEditItem.bind(this);
+    this.handleEditSpell = this.handleEditSpell.bind(this);
     this.handleRemoveItem = this.handleRemoveItem.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
   }
@@ -129,6 +131,12 @@ class CharacterSheet extends React.Component {
     const itemIdx = newState.character[category].findIndex((item) => item._id === itemCopy._id);
     itemCopy.editing = true;
     newState.character[category][itemIdx] = itemCopy;
+    this.setState(newState);
+  }
+
+  handleEditSpell(spells) {
+    const newState = merge({}, this.state);
+    newState.character.spells = spells;
     this.setState(newState);
   }
 
@@ -467,7 +475,7 @@ class CharacterSheet extends React.Component {
     const {
       character: { spells },
     } = this.state;
-    return <textarea onChange={this.handleChange('spells')} value={spells} />;
+    return <Spells onChange={this.handleEditSpell} value={spells} />;
   }
 
   renderMisc() {
