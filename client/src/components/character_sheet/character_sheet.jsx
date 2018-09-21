@@ -136,6 +136,7 @@ class CharacterSheet extends React.Component {
 
   handleEditSpell(spells) {
     const newState = merge({}, this.state);
+    newState.saved = false;
     newState.character.spells = spells;
     this.setState(newState);
   }
@@ -694,7 +695,7 @@ class CharacterSheet extends React.Component {
           ) : null}
         </div>
         <div className="equip-spells-misc row block">
-          <div className="equipment-section col-30">
+          <div className="equipment-section col-25">
             <h3>Equipment {this.renderToggleButton('equipment')}</h3>
             <div className="col">{uiState.equipment ? this.renderEquipment() : null}</div>
             {uiState.equipment ? (
@@ -709,7 +710,7 @@ class CharacterSheet extends React.Component {
               </div>
             ) : null}
           </div>
-          <div className="spell-section col-30">
+          <div className="spell-section col-40">
             <h3>Spells</h3>
             <div className="col">{this.renderSpells()}</div>
           </div>

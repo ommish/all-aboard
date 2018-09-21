@@ -179,6 +179,10 @@ input[type="text"], input[type="number"], textarea, select {
   width: 10%;
 }
 
+.col-25 {
+  width: 25%;
+}
+
 .col-30 {
   width: 30%;
 }

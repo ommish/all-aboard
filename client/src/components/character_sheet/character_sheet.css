@@ -70,12 +70,13 @@
   padding-left: 20px;
 }
 
-label > input[type='checkbox']:first-child {
+label > input[type="checkbox"]:first-child {
   margin-right: 5px;
 }
 
 @media only screen and (max-width: 640px) {
-  .character-sheet .basics-and-scores.row > .col-50 {
+  .character-sheet .basics-and-scores.row > .col-50,
+  .character-sheet .basics-and-scores.row > .col-40 {
     width: 100%;
   }
 
@@ -86,20 +87,26 @@ label > input[type='checkbox']:first-child {
 }
 
 @media only screen and (max-width: 400px) {
-  .character-sheet .scores.row.blocks > .col-30 {
+  .character-sheet .scores.row.blocks > .col-40,
+  .character-sheet .scores.row.blocks > .col-30,
+  .character-sheet .scores.row.blocks > .col-25 {
     width: 100%;
   }
 }
 
 @media only screen and (max-width: 640px) {
   .character-sheet .weapons-and-profs > .col-60,
-  .character-sheet .weapons-and-profs > .col-30 {
+  .character-sheet .weapons-and-profs > .col-40,
+  .character-sheet .weapons-and-profs > .col-30,
+  .character-sheet .weapons-and-profs > .col-25 {
     width: 100%;
   }
 }
 
 @media only screen and (max-width: 640px) {
-  .character-sheet .equip-spells-misc > .col-30 {
+  .character-sheet .equip-spells-misc > .col-40,
+  .character-sheet .equip-spells-misc > .col-30,
+  .character-sheet .equip-spells-misc > .col-25 {
     width: 100%;
   }
 }
